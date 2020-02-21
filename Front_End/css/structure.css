@@ -88,3 +88,46 @@ nav > ul li:hover .sous{
     font-size: 12px;
 }
 /*fin des menu déroulant*/
+/*Début contenu page*/
+#section_logopedie{
+    width: 40%;
+    height: 70%;
+    background-color: red;
+    position: fixed;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+}
+.div_info_logopède{
+    width: 90%;
+    height: 35%;
+    background-color: aqua;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#section_news{
+    width: 40%;
+    height: 70%;
+    background-color: yellow;
+    position: fixed;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+}
+.div_news{
+    width: 90%;
+    height: 35%;
+    background-color: aqua;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.titre_section{
+    text-align: center;
+    text-decoration: underline;
+}
