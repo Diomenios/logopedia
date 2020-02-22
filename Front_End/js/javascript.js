@@ -16,4 +16,12 @@ function connexion(){
 					+'<hr class="my-4"></form></div></div></div></div>'
 	document.getElementById("boite").innerHTML = connect;
 }
-
+function InformationLogopede() {
+	var test = document.getElementById("section_logopedie")
+	var elmnt = document.getElementById("info_logopede");
+	var cln = elmnt.cloneNode(true);
+	var nombreLogo = 5;
+	for( let i = 0; i < nombreLogo; i++){
+	test.appendChild(cln);
+	}
+  }

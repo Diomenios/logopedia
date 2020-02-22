@@ -187,7 +187,18 @@ footer > p{
     height: 718px;
     background-color: red;
     overflow: auto;
-	position:fixed;
+    position: fixed;
+    top: 10%;
+}
+
+#info_logopede{
+  background-color: aqua;
+  border:1px solid black;
+  width: 80%;
+  height: 20%;
+  position: relative;
+  top: 5%;
+  left: 5%;
 }
 
 #section_news{
@@ -197,7 +208,8 @@ footer > p{
     height: 718px;
     background-color: yellow;	
     overflow: auto;
-	position: relative;
+  position: fixed;
+  top: 10%;
 	left:50%;
 }
 .div_news{
