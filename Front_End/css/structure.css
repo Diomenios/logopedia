@@ -189,6 +189,10 @@ footer > p{
   position: relative;
   top: 5%;
   left: 5%;
+  margin-bottom: 5%;
+}
+#informations{
+  float: left;
 }
 
 #section_news{
@@ -202,13 +206,15 @@ footer > p{
     overflow: auto;
 	float:left;
 }
-.div_news{
-    min-width:320px;
-	max-width:640px;
-    width:50%;
-    height: 35%;
-    background-color: aqua;
-    position: fixed;
+#news_site{
+  background-color: aqua;
+  border:1px solid black;
+  width: 80%;
+  height: 20%;
+  position: relative;
+  top: 5%;
+  left: 5%;
+  margin-bottom: 5%;
 }
 .titre_section{
     text-align: center;

@@ -16,12 +16,25 @@ function connexion(){
 					+'<hr class="my-4"></form></div></div></div></div>'
 	document.getElementById("boite").innerHTML = connect;
 }
+//var tabPhotoProfil = ["../img/photo_de profil_test.jpg","../img/photo_de profil_test2.jpg"];
 function InformationLogopede() {
-	var test = document.getElementById("section_logopedie")
+	var sectionLogo = document.getElementById("section_logopedie");
 	var elmnt = document.getElementById("info_logopede");
-	var cln = elmnt.cloneNode(true);
-	var nombreLogo = 5;
-	for( let i = 0; i < nombreLogo; i++){
-	test.appendChild(cln);
+	var nombreLogo = 5; // Modifier il faut remplacer 5 par un lien avec la BD
+	var i;
+	for( i = 0; i < nombreLogo; i++){
+		var cln = elmnt.cloneNode(true);
+		sectionLogo.appendChild(cln);
+	}
+  }
+
+  function NewSite() {
+	var sectionNews = document.getElementById("section_news");
+	var elmnt = document.getElementById("news_site");
+	var nombreLogo = 5; // Modifier il faut remplacer 5 par un lien avec la BD
+	var i;
+	for( i = 0; i < nombreLogo; i++){
+		var cln = elmnt.cloneNode(true);
+		sectionNews.appendChild(cln);
 	}
   }
