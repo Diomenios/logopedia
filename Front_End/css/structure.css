@@ -227,7 +227,8 @@ footer > p{
 	margin: 50px auto 70px;
 	left: 0;
 	right: 0;
-	width: 1300px;
+	min-width: 720px;
+  width: 60%
   height: 680px;
   overflow-x: auto;
   overflow-y: auto;
@@ -243,4 +244,3 @@ footer > p{
   display: block;
 
 }
-
