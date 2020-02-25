@@ -40,14 +40,15 @@ function InformationLogopede() {
   }
 
   function BoutonActivites() {
+	var nomActivité = ["Vocabulaire","Drag et Drop"] // Modofier avec la BD
 	var boite = document.getElementById("boite");
 	var elmnt = document.getElementById("bouton_activités");
-	var nombreBouton = 5-1; // Modifier il faut remplacer 5 par un lien avec la BD
+	var nombreBouton = 3-1; // Modifier il faut remplacer 5 par un lien avec la BD
 	var i;
 	for( i = 0; i < nombreBouton; i++){
 		var cln = elmnt.cloneNode(true);
 		cln.id = 'boutons'+ i;
-		cln.innerHTML = 'Activités '+ (i+2);
+		cln.innerHTML = nomActivité[i];
 		cln.style.width = "50%";
 		cln.style.height = "100px";
 		if(i % 2 != 0){
