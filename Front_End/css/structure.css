@@ -179,6 +179,7 @@ footer > p{
     background-color: red;
     overflow: auto;
     float:left;
+    margin-right: 1%;
 }
 
 #info_logopede{
@@ -228,6 +229,15 @@ footer > p{
 	margin: 50px auto 70px;
 	left: 0;
 	right: 0;
-	width: 1280px;
+	width: 1300px;
 	height: 680px;
+}
+#bouton_activités{
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  top: 40%;
+  left: 40%; 
+  margin-bottom: 5%;
+  transform: translate(-50%, -50%);
 }

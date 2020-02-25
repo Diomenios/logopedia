@@ -38,3 +38,30 @@ function InformationLogopede() {
 		sectionNews.appendChild(cln);
 	}
   }
+
+  function BoutonActivites() {
+	var boite = document.getElementById("boite");
+	var elmnt = document.getElementById("bouton_activités");
+	var nombreBouton = 5-1; // Modifier il faut remplacer 5 par un lien avec la BD
+	var i;
+	for( i = 0; i < nombreBouton; i++){
+		var cln = elmnt.cloneNode(true);
+		cln.id = 'boutons'+ i;
+		cln.innerHTML = 'Activités '+ (i+2);
+		cln.style.width = "200px";
+		cln.style.height = "100px";
+		if(i % 2 != 0){
+			cln.style.position = "relative";
+			cln.style.top = "30%";
+			cln.style.left = "31%";
+			cln.style.display = "block";
+		}
+		else{
+			cln.style.position = "relative";
+			cln.style.top = "20%";
+			cln.style.left = "60%";
+			cln.style.display = "block";
+		}
+		boite.appendChild(cln);
+	}
+}
