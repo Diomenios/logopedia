@@ -186,10 +186,9 @@ footer > p{
   border:1px solid black;
   width: 80%;
   height: 20%;
-  position: relative;
   top: 5%;
   left: 5%;
-  margin-bottom: 5%;
+  margin: 10%;
 }
 #informations{
   float: left;
@@ -202,7 +201,7 @@ footer > p{
     max-height:718px;
 	min-height:358px;
     height: 100%;
-    background-color: yellow;	
+    background-color: yellow;
     overflow: auto;
 	float:left;
 }
@@ -211,10 +210,9 @@ footer > p{
   border:1px solid black;
   width: 80%;
   height: 20%;
-  position: relative;
   top: 5%;
   left: 5%;
-  margin-bottom: 5%;
+  margin: 10%;
 }
 .titre_section{
     text-align: center;
