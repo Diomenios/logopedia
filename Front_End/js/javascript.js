@@ -48,19 +48,21 @@ function InformationLogopede() {
 		var cln = elmnt.cloneNode(true);
 		cln.id = 'boutons'+ i;
 		cln.innerHTML = 'Activités '+ (i+2);
-		cln.style.width = "200px";
+		cln.style.width = "50%";
 		cln.style.height = "100px";
 		if(i % 2 != 0){
-			cln.style.position = "relative";
-			cln.style.top = "30%";
-			cln.style.left = "31%";
+			cln.style.marginLeft = "auto";
+			cln.style.marginRight = "auto";
+			cln.style.marginBottom = "5%";
 			cln.style.display = "block";
+			cln.style.backgroundColor = "red";
 		}
 		else{
-			cln.style.position = "relative";
-			cln.style.top = "20%";
-			cln.style.left = "60%";
+			cln.style.marginLeft = "auto";
+			cln.style.marginRight = "auto";
 			cln.style.display = "block";
+			cln.style.marginBottom = "5%";
+			cln.style.backgroundColor = "green";
 		}
 		boite.appendChild(cln);
 	}
