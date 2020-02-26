@@ -68,3 +68,19 @@ function InformationLogopede() {
 		boite.appendChild(cln);
 	}
 }
+/*Partie pour l'activité orthographe*/
+function verifiacation() { // adapter au niv de la difficulté donc le nombre de distracteur 
+	var MotsActivité = document.getElementsByClassName("mots");
+	var boutonsActivité = document.getElementsByClassName("boutonMots");
+	
+	for(let j=0; j < MotsActivité.length; j++){
+		boutonsActivité[j].onclick = function() {
+			if(MotsActivité[j].innerHTML === "chat"){
+				alert(MotsActivité[j].innerHTML);
+			}
+			else{
+				alert("nop");
+			}
+		}
+	} 
+ };
