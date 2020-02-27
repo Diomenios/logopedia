@@ -69,13 +69,31 @@ function InformationLogopede() {
 	}
 }
 /*Partie pour l'activité orthographe*/
-function verifiacation() { // adapter au niv de la difficulté donc le nombre de distracteur 
+function chargementImageMot(){// adapter avec la base de donnés
+	var imageBaseDonnee = "chat.jpg"
+	var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee+'>';
+	var premierMot = ["cha","chat","sat","ca"];
+	document.getElementById("divImage").innerHTML = image;
+	for(let m = 0; m < premierMot.length; m++){
+		document.getElementsByClassName("zoneTexte")[m].innerHTML = premierMot[m];
+	}
+}
+
+function verifiacation() { // adapter au niv de la difficulté donc le nombre de distracteur voir si c'est possible
 	var boutonsActivité = document.getElementsByClassName("boutonMots");
+	var spanMots = document.getElementsByClassName("zoneTexte");
 	
 	for(let j=0; j < boutonsActivité.length; j++){
 		boutonsActivité[j].onclick = function() {
-			if(boutonsActivité[j].value === "chat"){
-				alert(boutonsActivité[j].value);
+			if(spanMots[j].innerHTML === "chat"){ // adapter pour faire tourner plusieur image et que le mot de comparaison change
+
+				var image = '<img id="imagesActivite" src="./img/chien.jpg">';
+				var premierMot = ["chien","chie","sien","cie"];
+				document.getElementById("divImage").innerHTML = image;
+				for(let m = 0; m < premierMot.length; m++){
+					document.getElementsByClassName("zoneTexte")[m].innerHTML = premierMot[m];
+				}
+				document.getElementById("divImage").innerHTML = image;
 			}
 			else{
 				alert("nop");
