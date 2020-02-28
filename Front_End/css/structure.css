@@ -208,6 +208,7 @@ footer > p{
     margin-left: auto;
     margin-right: auto;
     float: right;
+	
   }
 #news_site{
   background-color: aqua;
@@ -260,9 +261,6 @@ height: 14px;
 }
 
 /*Css Page activité orthographe*/
-#boite{
-  display: inline;
-}
 #divImage{
   width: 400px;
   height: 360px;
