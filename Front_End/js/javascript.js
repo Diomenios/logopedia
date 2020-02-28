@@ -69,13 +69,24 @@ function InformationLogopede() {
 	}
 }
 /*Partie pour l'activité orthographe*/
+function lancerActivités(){
+	var divParametres = document.getElementById("divParametre");
+	var divActivités = document.getElementById("divActivités");
+
+	divParametres.style.display ="none";
+	divActivités.style.display ="block";
+}
+var indiceImages = 0;
+var indiceMots = 0;
+var motBaseDonnee = [["cha","chat","sat","ca"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["chie","hamster","sien","cie"],["chie","cheval","sien","cie"]]; // lier BD
+var imageBaseDonnee = ["chat.jpg","chien.jpg","elephant.jpg","hamster.jpg","cheval.jpg"] //lie BD
+
+
 function chargementImageMot(){// adapter avec la base de donnés
-	var imageBaseDonnee = "chat.jpg" //lie BD
-	var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee+'>';
-	var premierMot = ["cha","chat","sat","ca"]; // lier BD
+	var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee[indiceImages]+'>';
 	document.getElementById("divImage").innerHTML = image;
-	for(let m = 0; m < premierMot.length; m++){
-		document.getElementsByClassName("zoneTexte")[m].innerHTML = premierMot[m];
+	for(let m = 0; m < motBaseDonnee[indiceMots].length; m++){
+		document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
 	}
 }
 
@@ -85,19 +96,15 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 	
 	for(let j=0; j < boutonsActivité.length; j++){
 		boutonsActivité[j].onclick = function() {
-			if(spanMots[j].innerHTML === "chat"){ // adapter pour faire tourner plusieur image et que le mot de comparaison change
-
-				var image = '<img id="imagesActivite" src="./img/chien.jpg">'; //lie BD
-				var premierMot = ["chien","chie","sien","cie"]; //lie BD
-				document.getElementById("divImage").innerHTML = image;
-				for(let m = 0; m < premierMot.length; m++){
-					document.getElementsByClassName("zoneTexte")[m].innerHTML = premierMot[m];
-				}
-				document.getElementById("divImage").innerHTML = image;
+			if(spanMots[j].innerHTML === motBaseDonnee[indiceMots][1]){ // adapter pour faire tourner plusieur image et que le mot de comparaison change
+				console.log("test")
+				 indiceImages ++;
+				 indiceMots ++;
+				 chargementImageMot()
 			}
 			else{
 				alert("nop");
 			}
 		}
-	} 
+	}
  };
