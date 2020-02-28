@@ -70,9 +70,9 @@ function InformationLogopede() {
 }
 /*Partie pour l'activité orthographe*/
 function chargementImageMot(){// adapter avec la base de donnés
-	var imageBaseDonnee = "chat.jpg"
+	var imageBaseDonnee = "chat.jpg" //lie BD
 	var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee+'>';
-	var premierMot = ["cha","chat","sat","ca"];
+	var premierMot = ["cha","chat","sat","ca"]; // lier BD
 	document.getElementById("divImage").innerHTML = image;
 	for(let m = 0; m < premierMot.length; m++){
 		document.getElementsByClassName("zoneTexte")[m].innerHTML = premierMot[m];
@@ -87,8 +87,8 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 		boutonsActivité[j].onclick = function() {
 			if(spanMots[j].innerHTML === "chat"){ // adapter pour faire tourner plusieur image et que le mot de comparaison change
 
-				var image = '<img id="imagesActivite" src="./img/chien.jpg">';
-				var premierMot = ["chien","chie","sien","cie"];
+				var image = '<img id="imagesActivite" src="./img/chien.jpg">'; //lie BD
+				var premierMot = ["chien","chie","sien","cie"]; //lie BD
 				document.getElementById("divImage").innerHTML = image;
 				for(let m = 0; m < premierMot.length; m++){
 					document.getElementsByClassName("zoneTexte")[m].innerHTML = premierMot[m];
