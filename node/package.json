@@ -1,0 +1,12 @@
+{
+    "name": "todolist",
+    "version": "0.1.0",
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "ejs": "^3.0.1",
+        "express": "^4.17.1",
+        "mariadb": "^2.2.0"
+    },
+    "author": "Diomenios <loui.arys@gmail.com>",
+    "description": "Un petit site web pour les logopèdes"
+}
