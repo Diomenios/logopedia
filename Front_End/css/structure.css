@@ -304,3 +304,14 @@ height: 14px;
 #divActivités{
   display: none;
 }
+#divResultat{
+  width: 200px;
+  height: 100px;
+  background-color: aqua;
+  border: 2px solid black;
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
+}

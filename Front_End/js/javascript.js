@@ -78,15 +78,23 @@ function lancerActivités(){
 }
 var indiceImages = 0;
 var indiceMots = 0;
-var motBaseDonnee = [["cha","chat","sat","ca"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["chie","hamster","sien","cie"],["chie","cheval","sien","cie"]]; // lier BD
+var compteurResultat = 0;
+var motBaseDonnee = [["cha","chat","sat","ca"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["amster","hamster","hamstairr","hamstère"],["chevalle","cheval","ceval","heval"]]; // lier BD
 var imageBaseDonnee = ["chat.jpg","chien.jpg","elephant.jpg","hamster.jpg","cheval.jpg"] //lie BD
 
 
 function chargementImageMot(){// adapter avec la base de donnés
-	var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee[indiceImages]+'>';
-	document.getElementById("divImage").innerHTML = image;
-	for(let m = 0; m < motBaseDonnee[indiceMots].length; m++){
-		document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
+	if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
+		var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee[indiceImages]+'>';
+		document.getElementById("divImage").innerHTML = image;
+		for(let m = 0; m < motBaseDonnee[indiceMots].length; m++){
+			document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
+		}
+	}else{
+		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span><br><a href="activite.html"><button>Home</button></a></div>'
+		document.getElementById("boite").innerHTML = boutonRetour;
+
+
 	}
 }
 
@@ -96,14 +104,18 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 	
 	for(let j=0; j < boutonsActivité.length; j++){
 		boutonsActivité[j].onclick = function() {
-			if(spanMots[j].innerHTML === motBaseDonnee[indiceMots][1]){ // adapter pour faire tourner plusieur image et que le mot de comparaison change
-				console.log("test")
-				 indiceImages ++;
-				 indiceMots ++;
-				 chargementImageMot()
-			}
-			else{
-				alert("nop");
+			if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
+				if((spanMots[j].innerHTML === motBaseDonnee[indiceMots][1])){ 
+					// adapter pour faire tourner plusieur image et que le mot de comparaison change
+					indiceImages ++;
+					indiceMots ++;
+					compteurResultat++;
+					chargementImageMot()
+				}
+				else{
+					indiceImages ++;
+					indiceMots ++;
+					chargementImageMot()			}
 			}
 		}
 	}
