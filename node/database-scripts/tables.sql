@@ -17,7 +17,9 @@ CREATE TABLE Types(
 
 CREATE TABLE Images(
   image_id INT AUTO_INCREMENT NOT NULL,
-  image MEDIUMBLOB NOT NULL,
+  image_nom VARCHAR(200) NOT NULL,
+  image_original_nom VARCHAR(150),
+  image_extension VARCHAR(10) NOT NULL,
   type_id INT NOT NULL,
   PRIMARY KEY(image_id),
   FOREIGN KEY(type_id)

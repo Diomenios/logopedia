@@ -69,17 +69,54 @@ function InformationLogopede() {
 	}
 }
 /*Partie pour l'activité orthographe*/
-function verifiacation() { // adapter au niv de la difficulté donc le nombre de distracteur 
+function lancerActivités(){
+	var divParametres = document.getElementById("divParametre");
+	var divActivités = document.getElementById("divActivités");
+
+	divParametres.style.display ="none";
+	divActivités.style.display ="block";
+}
+var indiceImages = 0;
+var indiceMots = 0;
+var compteurResultat = 0;
+var motBaseDonnee = [["cha","chat","sat","ca"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["amster","hamster","hamstairr","hamstère"],["chevalle","cheval","ceval","heval"]]; // lier BD
+var imageBaseDonnee = ["chat.jpg","chien.jpg","elephant.jpg","hamster.jpg","cheval.jpg"] //lie BD
+
+
+function chargementImageMot(){// adapter avec la base de donnés
+	if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
+		var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee[indiceImages]+'>';
+		document.getElementById("divImage").innerHTML = image;
+		for(let m = 0; m < motBaseDonnee[indiceMots].length; m++){
+			document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
+		}
+	}else{
+		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span><br><a href="activite.html"><button>Home</button></a></div>'
+		document.getElementById("boite").innerHTML = boutonRetour;
+
+
+	}
+}
+
+function verifiacation() { // adapter au niv de la difficulté donc le nombre de distracteur voir si c'est possible
 	var boutonsActivité = document.getElementsByClassName("boutonMots");
+	var spanMots = document.getElementsByClassName("zoneTexte");
 	
 	for(let j=0; j < boutonsActivité.length; j++){
 		boutonsActivité[j].onclick = function() {
-			if(boutonsActivité[j].value === "chat"){
-				alert(boutonsActivité[j].value);
-			}
-			else{
-				alert("nop");
+			if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
+				if((spanMots[j].innerHTML === motBaseDonnee[indiceMots][1])){ 
+					// adapter pour faire tourner plusieur image et que le mot de comparaison change
+					indiceImages ++;
+					indiceMots ++;
+					compteurResultat++;
+					chargementImageMot()
+				}
+				else{
+					indiceImages ++;
+					indiceMots ++;
+					chargementImageMot()			}
 			}
 		}
-	} 
+	}
  };

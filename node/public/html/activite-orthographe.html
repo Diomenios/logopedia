@@ -49,10 +49,40 @@
 				</div>
 			</nav>
 		</header>
-        <body onload="BoutonActivites()">
-			<section class="main_Box" id="boite">
+        <body onload="verifiacation()">
+			<section class="main_Box" >
 
-				<button id ="bouton_activités">Orthorgraphe</button>
+				<div id="boite">
+					<div id="divParametre">
+						<select name="patient" id="activite-select">
+							<option value="">--Choisisez un patient--</option>
+							<option value="">Emile</option>
+							<option value="">Louis</option>
+							<option value="">Martin</option>
+							<option value="">Arthur</option>
+						</select><br>
+
+						<select name="niveau" id="activite-select">
+							<option value="">--Choisisez un niveau--</option>
+							<option value="">1</option>
+							<option value="">2</option>
+							<option value="">3</option>
+							<option value="">4</option>
+						</select><br>
+
+						<button onclick="lancerActivités(),chargementImageMot()" id="activite-select">Commencer</button>
+					</div>
+					<div id="divActivités">
+						<div id="divImage"></div>
+
+						<div id="divBouton">
+							<button class="boutonMots" ><span class="zoneTexte"></span></button>
+							<button class="boutonMots" ><span class="zoneTexte"></span></button>
+							<button class="boutonMots" ><span class="zoneTexte"></span></button>
+							<button class="boutonMots" ><span class="zoneTexte"></span></button>
+						</div>
+					</div>
+				</div>
 
 			</section>
         </body>
