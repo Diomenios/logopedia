@@ -76,30 +76,41 @@ function lancerActivités(){
 	divParametres.style.display ="none";
 	divActivités.style.display ="block";
 }
+var boutonsActivité = document.getElementsByClassName("boutonMots");
+var feedBackActivites = "<h2>FeedBack de l'activité</h2><br>";
 var indiceImages = 0;
 var indiceMots = 0;
 var compteurResultat = 0;
-var motBaseDonnee = [["cha","chat","sat","ca"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["amster","hamster","hamstairr","hamstère"],["chevalle","cheval","ceval","heval"]]; // lier BD
+var motBaseDonnee = [["cha","chat","sat","ca"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["amster","hamster","hamstaire","hamstère"],["chevalle","cheval","ceval","heval"]]; // lier BD
 var imageBaseDonnee = ["chat.jpg","chien.jpg","elephant.jpg","hamster.jpg","cheval.jpg"] //lie BD
 
 
 function chargementImageMot(){// adapter avec la base de donnés
+	var boutonSuivant = ''
+	for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet d'activé le bouton
+		boutonsActivité[p].disabled = false;
+	}
+	document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
 	if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
 		var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee[indiceImages]+'>';
 		document.getElementById("divImage").innerHTML = image;
 		for(let m = 0; m < motBaseDonnee[indiceMots].length; m++){
+			for(let n =0; n < 4; n++){
+			boutonsActivité[n].style.backgroundColor = "white"
+			boutonsActivité[n].style.border = "1px solid black"
+			}
 			document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
+
 		}
 	}else{
-		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span><br><a href="activite.html"><button>Home</button></a></div>'
+		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span>'
+		+'<br><span>'+feedBackActivites+'</span>'
+		+'<br><a href="activite.html"><button>Home</button></a></div>'
 		document.getElementById("boite").innerHTML = boutonRetour;
-
-
 	}
 }
 
 function verifiacation() { // adapter au niv de la difficulté donc le nombre de distracteur voir si c'est possible
-	var boutonsActivité = document.getElementsByClassName("boutonMots");
 	var spanMots = document.getElementsByClassName("zoneTexte");
 	
 	for(let j=0; j < boutonsActivité.length; j++){
@@ -110,13 +121,29 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 					indiceImages ++;
 					indiceMots ++;
 					compteurResultat++;
-					chargementImageMot()
+					boutonsActivité[1].style.backgroundColor = "green";
+					var boutonSuivant = '<button id=suivant onclick=chargementImageMot()>Suivant</button>';
+					document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
+					for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet de désactiver le bouton
+						boutonsActivité[p].disabled = true;
+					}
+					feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML}' <br>`;
 				}
 				else{
 					indiceImages ++;
 					indiceMots ++;
-					chargementImageMot()			}
+					boutonsActivité[j].style.border = "2px solid red"
+					boutonsActivité[1].style.backgroundColor = "green"
+					var boutonSuivant = '<button id=suivant onclick=chargementImageMot()>Suivant</button>'
+					document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
+					for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet de désactiver le bouton
+						boutonsActivité[p].disabled = true;
+					}
+					feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML} '
+					la réponse '${motBaseDonnee[indiceMots-1][1]}' <br>`;
+					}
 			}
 		}
 	}
  };
+ //-----------------------------------------------
