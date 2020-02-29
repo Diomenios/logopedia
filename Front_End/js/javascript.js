@@ -100,7 +100,6 @@ function chargementImageMot(){// adapter avec la base de donnés
 			boutonsActivité[n].style.border = "1px solid black"
 			}
 			document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
-
 		}
 	}else{
 		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span>'
@@ -126,6 +125,7 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 					document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
 					for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet de désactiver le bouton
 						boutonsActivité[p].disabled = true;
+						boutonsActivité[p].style.color = "black";
 					}
 					feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML}' <br>`;
 				}
@@ -138,6 +138,8 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 					document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
 					for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet de désactiver le bouton
 						boutonsActivité[p].disabled = true;
+						boutonsActivité[p].style.color = "black";
+
 					}
 					feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML} '
 					la réponse '${motBaseDonnee[indiceMots-1][1]}' <br>`;
