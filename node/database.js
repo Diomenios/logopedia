@@ -56,6 +56,28 @@ database.get('/image_nom', function(req, res) {
   });
 })
 
+.get('/mots', (req, res) => {
+  if (req.query.type === undefined) {
+    sendMessage("veuillez introduire le type des mots que vous désirez récupérer", res);
+  }
+  else {
+    conn.query("SELECT type_id from Types WHERE type_nom = ?",[req.query.type], (err, rows) => {
+      if (rows.length == 0) {
+        sendMessage('type inconnu', res);
+      }
+      else{
+        conn.query("SELECT mot, distracteur FROM Mots WHERE type_id = ?", [rows[0].type_id], (err, rows) => {
+          if (err) {
+            throw err;
+          }
+          res.set('Content-Type', 'application/json');
+          res.send(rows);
+        });
+      }
+    });
+  }
+})
+
 .get('/input', (req, res) =>{
   if (req.query.url === undefined || req.query.type === undefined) {
     res.set('Content-Type', 'text/plain');
@@ -155,6 +177,11 @@ function readAndSendImage(guid, extension, res){
       res.send(data);
     }
   });
+}
+
+function sendMessage(message, res){
+  res.set('Content-Type', 'text/plain');
+  res.send(message);
 }
 
 module.exports = database;
