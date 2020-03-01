@@ -12,27 +12,7 @@ const conn = mariadb.createConnection({host:process.env.HOST, user:process.env.U
 
 const PATH = __dirname + '/public/';
 
-
-/*conn.query("SELECT 1 as val", (err, rows) => {
-    if(err) throw err;
-     console.log(rows); //[ {val: 1}, meta: ... ]
-     conn.query("INSERT INTO Classes(classe_nom) value (?)", ["rat"], (err, res) => {
-       if(err){
-         throw err;
-       }
-       console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
-       conn.end();
-     });
- });
-/*pool.getConnection()
-.then(conn =>{
-  conn.query("Select * from Classes")
-  .then((rows) => {
-    res.set('Content-Type', 'application/json');
-    res.send(rows);
-    conn.end();
-  })
-});*/
+/***************************  Zone de routing  ********************************/
 
 database.get('/image_nom', function(req, res) {
   if (req.query.nom === undefined) {
@@ -41,6 +21,39 @@ database.get('/image_nom', function(req, res) {
   else {
     getImageWithOriginalName(req.query.nom, res);
   }
+})
+
+.get('/image', (req, res) => {
+  if (req.query.guid === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire un GUID pour retrouver l\'image !');
+  }
+  else {
+    var parsing = req.query.guid.split(".");
+    readAndSendImage(req.query.guid, parsing[parsing.length-1], res);
+  }
+})
+
+.get('/images', (req, res) => {
+  if (req.query.type === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire un type !');
+  }
+  conn.query("SELECT type_id from Types WHERE type_nom = ?",[req.query.type], (err, rows) => {
+    if (rows.length == 0) {
+      res.set('Content-Type', 'text/plain');
+      res.send('type inconnu');
+    }
+    else{
+      conn.query("SELECT image_nom from Images WHERE type_id = ?",[rows[0].type_id], (err, rows) => {
+        if (err) {
+          throw err;
+        }
+        res.set('Content-Type', 'application/json');
+        res.send(rows);
+      });
+    }
+  });
 })
 
 .get('/input', (req, res) =>{
@@ -77,25 +90,9 @@ database.get('/image_nom', function(req, res) {
         });
     });
   }
-})
-
-.get('/mime', (req, res) =>{
-  if (req.query.url === undefined) {
-    throw 'veuillez entrer l\'url de l\'image à télécharger';
-  }
-  else{
-    var requestSettings = {
-          url: req.query.url,
-          method: 'GET',
-          encoding: null
-    };
-
-    request(requestSettings, function(error, response, body) {
-      res.set('Content-Type', 'text/plain');
-      res.send('image sauvegardée sous le nom de : ' + mime.extension(response.headers['content-type']));
-    });
-  }
 });
+
+/******************************  Zone des fonctions  **************************/
 
 function insertImage(name, type, nom_origine, extension){
   if (nom_origine === undefined) {
@@ -148,4 +145,36 @@ function getImageWithOriginalName(nom, res) {
   });
 }
 
+function readAndSendImage(guid, extension, res){
+  fs.readFile(__dirname+'/public/images/'+ guid, function(err, data){
+    if (err) {
+      throw err;
+    }
+    else{
+      res.set('Content-Type', 'image/'+ extension);
+      res.send(data);
+    }
+  });
+}
+
 module.exports = database;
+
+/**********************  Zone des codes de testing  *************************/
+
+/*.get('/mime', (req, res) =>{
+  if (req.query.url === undefined) {
+    throw 'veuillez entrer l\'url de l\'image à télécharger';
+  }
+  else{
+    var requestSettings = {
+          url: req.query.url,
+          method: 'GET',
+          encoding: null
+    };
+
+    request(requestSettings, function(error, response, body) {
+      res.set('Content-Type', 'text/plain');
+      res.send('image sauvegardée sous le nom de : ' + mime.extension(response.headers['content-type']));
+    });
+  }
+});*/
