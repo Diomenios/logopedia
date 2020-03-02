@@ -81,12 +81,9 @@ var feedBackActivites = "<h2>FeedBack de l'activité</h2><br>";
 var indiceImages = 0;
 var indiceMots = 0;
 var compteurResultat = 0;
-//Doubler le tableau car seule solution pour résoudre le problème de verification
+var motCorrect = ["chat","chien","elephant","hamster","cheval"]; // lier BD
 var motBaseDonnee = [["cha","chat","sat","cat"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["amster","hamster","hamstaire","hamstère"],["chevalle","cheval","ceval","heval"]]; // lier BD
-var motBaseDonnee2 = [["cha","chat","sat","cat"],["chie","chien","sien","cie"],["elephan","elephant","elefant","elephent"],["amster","hamster","hamstaire","hamstère"],["chevalle","cheval","ceval","heval"]]; // lier BD
-
 var imageBaseDonnee = ["chat.jpg","chien.jpg","elephant.jpg","hamster.jpg","cheval.jpg"] //lie BD
-var copieMotBaseDonnee = motBaseDonnee2.slice();
 
 function shuffle(array) {
 	for (let i = array.length - 1; i > 0; i--) {
@@ -102,15 +99,15 @@ function chargementImageMot(){// adapter avec la base de donnés
 	}
 	document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
 	if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
-		shuffle(copieMotBaseDonnee[indiceMots]);
+		shuffle(motBaseDonnee[indiceMots]);
 		var image = '<img id= imagesActivite src=./img/'+imageBaseDonnee[indiceImages]+'>';
 		document.getElementById("divImage").innerHTML = image;
-		for(let m = 0; m < copieMotBaseDonnee[indiceMots].length; m++){
+		for(let m = 0; m < motBaseDonnee[indiceMots].length; m++){
 			for(let n =0; n < 4; n++){
 			boutonsActivité[n].style.backgroundColor = "white"
 			boutonsActivité[n].style.border = "1px solid black"
 			}
-			document.getElementsByClassName("zoneTexte")[m].innerHTML = copieMotBaseDonnee[indiceMots][m];
+			document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
 		}
 	}else{
 		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span>'
@@ -126,7 +123,7 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 	for(let j=0; j < boutonsActivité.length; j++){
 		boutonsActivité[j].onclick = function() {
 			if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
-				if((spanMots[j].innerHTML == motBaseDonnee[indiceMots][1])){
+				if((spanMots[j].innerHTML == motCorrect[indiceMots])){
 					// adapter pour faire tourner plusieur image et que le mot de comparaison change
 					indiceImages ++;
 					indiceMots ++;
@@ -144,7 +141,7 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 				else{
 					boutonsActivité[j].style.border = "2px solid red"
 					for( let k=0; k < spanMots.length; k++){
-						if(spanMots[k].innerHTML == motBaseDonnee[indiceMots][1]){
+						if(spanMots[k].innerHTML == motCorrect[indiceMots]){
 							boutonsActivité[k].style.backgroundColor = "green"
 						}
 					}
