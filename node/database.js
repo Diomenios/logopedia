@@ -3,10 +3,10 @@ var express = require('express');
 var fs = require('fs');
 var request = require('request');
 var mariadb = require('mariadb/callback');
-var app = express();
 var mime = require('mime-types');
 var uuidv5 = require('uuidv5');
 
+var app = express();
 var database = express.Router();
 const conn = mariadb.createConnection({host:process.env.HOST, user:process.env.USERNAME, password:process.env.PASSWORD, database:process.env.DATABASE});
 
@@ -16,14 +16,14 @@ const PATH = __dirname + '/public/';
 
 database.get('/image_nom', function(req, res) {
   if (req.query.nom === undefined) {
-    throw 'veuillez entrer le nom de l\'image';
+    sendMessage('Veuillez entrer le nom de l\'image', res);
   }
   else {
     getImageWithOriginalName(req.query.nom, res);
   }
-})
+});
 
-.get('/image', (req, res) => {
+database.get('/image', (req, res) => {
   if (req.query.guid === undefined) {
     res.set('Content-Type', 'text/plain');
     res.send('Veuillez introduire un GUID pour retrouver l\'image !');
@@ -35,17 +35,17 @@ database.get('/image_nom', function(req, res) {
 })
 
 .get('/images', (req, res) => {
-  if (req.query.type === undefined) {
+  if (req.query.classe === undefined) {
     res.set('Content-Type', 'text/plain');
-    res.send('Veuillez introduire un type !');
+    res.send('Veuillez introduire une classe !');
   }
-  conn.query("SELECT type_id from Types WHERE type_nom = ?",[req.query.type], (err, rows) => {
+  conn.query("SELECT classe_id from Classes WHERE classe_nom = ?",[req.query.classe], (err, rows) => {
     if (rows.length == 0) {
       res.set('Content-Type', 'text/plain');
-      res.send('type inconnu');
+      res.send('classe inconnue');
     }
     else{
-      conn.query("SELECT image_nom from Images WHERE type_id = ?",[rows[0].type_id], (err, rows) => {
+      conn.query("SELECT DISTINCT image_nom, image_id from Images INNER JOIN Types WHERE classe_id = ?",[rows[0].classe_id], (err, rows) => {
         if (err) {
           throw err;
         }
