@@ -1,6 +1,7 @@
 'use strict'
 
 let REFERENCE_IMAGES_SAVE;
+let MOTS_NUMBER = 4;
 let image = new Image();
 let mots;
 let nextImage = new Image();
@@ -8,7 +9,7 @@ let nextMots;
 let boolean = false;
 var feedBackActivites = "<h2>FeedBack de l'activité</h2><br>";
 var indiceImages = 0;
-var compteurResultat = 0;
+var score = 0;
 let buttonsId = document.getElementsByClassName("boutonMots");
 let imageId;
 
@@ -25,15 +26,34 @@ function shuffle(array) {
 	  let j = Math.floor(Math.random() * (i + 1));
 	  [array[i], array[j]] = [array[j], array[i]];
 	}
-  }
+}
 
-function chargementImageMot(){// adapter avec la base de donnés
+function validateShuffleMots(listMots){
+	let itsTrue =  false;
+	for (let i = 0; i < MOTS_NUMBER; i++) {
+		if (listMots[i].distracteur == "1") {
+			itsTrue = true;
+		}
+	}
+	if (!itsTrue) {
+		for (var i = MOTS_NUMBER; i < listMots.length; i++) {
+			if (listMots[i].distracteur == "1") {
+				listMots[Math.floor(Math.random() * (MOTS_NUMBER-1))] = listMots[i];
+			}
+		}
+	}
+}
+
+function chargementImageMot(button){// adapter avec la base de donnés
 	try {
+		button.disabled= true;
 		getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
 		getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
 	} catch (error) {
 		if(error == "TypeError: REFERENCE_IMAGES_SAVE[indiceImages] is undefined"){
-			document.getElementById("divActivités").innerHTML = "FINI";
+			let doc = document.getElementById("divActivités");
+			doc.innerHTML = "Votre score : " + score + "/" + REFERENCE_IMAGES_SAVE.length;
+			doc.style.margin = 'auto';
 		}
 		else{
 			console.log(error);
@@ -52,9 +72,9 @@ function verification(button){
 		if(button.value == "1"){
 			// adapter pour faire tourner plusieur image et que le mot de comparaison change
 			indiceImages ++;
-			compteurResultat++;
+			score++;
 			button.style.backgroundColor = "green";
-			var boutonSuivant = '<button id=suivant onclick=chargementImageMot()>Suivant</button>';
+			var boutonSuivant = '<button id=suivant onclick=chargementImageMot(this)>Suivant</button>';
 			document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
 			for( let p=0; p < buttonsId.length; p++){ // boucle qui permet de désactiver le bouton
 				buttonsId[p].disabled = true;
@@ -74,7 +94,7 @@ function verification(button){
 				}
 			}
 			indiceImages ++;
-			var boutonSuivant = '<button id=suivant onclick=chargementImageMot()>Suivant</button>'
+			var boutonSuivant = '<button id=suivant onclick=chargementImageMot(this)>Suivant</button>'
 			document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
 			for( let p=0; p < buttonsId.length; p++){ // boucle qui permet de désactiver le bouton
 				buttonsId[p].disabled = true;
@@ -108,6 +128,8 @@ function loadingDatabase(classe) {
  	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
              mots = JSON.parse(this.responseText);
+						 shuffle(mots);
+						 validateShuffleMots(mots);
 						 fillButtons(mots);
         }
      };
@@ -160,10 +182,9 @@ function loadingDatabase(classe) {
  }
 
 function fillButtons(nouveauxMots){
-	console.log("length : "+ buttonsId.length);
+
 	for (let i = 0; i < buttonsId.length; i++) {
 		buttonsId[i].innerHTML = nouveauxMots[i].mot;
 		buttonsId[i].value = nouveauxMots[i].distracteur;
-		console.log("value :" +	 buttonsId[i].value);
 	}
 }
