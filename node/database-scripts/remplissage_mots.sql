@@ -21,57 +21,57 @@ VALUES
 ('maci', 0, 3);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('cheval', 1, 4),
-('cheuval', 0, 4),
-('chevale', 0, 4),
-('cheuvale', 0, 4),
-('cheuvall', 0, 4);
+('cheval', 1, 7),
+('cheuval', 0, 7),
+('chevale', 0, 7),
+('cheuvale', 0, 7),
+('cheuvall', 0, 7);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('souris', 1, 5),
-('souri', 0, 5),
-('soury', 0, 5),
-('sorry', 0, 5),
-('sourri', 0, 5);
+('souris', 1, 8),
+('souri', 0, 8),
+('soury', 0, 8),
+('sorry', 0, 8),
+('sourri', 0, 8);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('lapin', 1, 6),
-('lappin', 0, 6),
-('lapyn', 0, 6),
-('lappyn', 0, 6),
-('la pin', 0, 6);
+('lapin', 1, 9),
+('lappin', 0, 9),
+('lapyn', 0, 9),
+('lappyn', 0, 9),
+('la pin', 0, 9);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('hamster', 1, 7),
-('hamstair', 0, 7),
-('amster', 0, 7),
-('hamstair', 0, 7),
-('hamstere', 0, 7);
+('hamster', 1, 10),
+('hamstair', 0, 10),
+('amster', 0, 10),
+('hamstair', 0, 10),
+('hamstere', 0, 10);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('cochon', 1, 8),
-('cochonn', 0, 8),
-('cauchon', 0, 8),
-('cauchonn', 0, 8),
-('kochon', 0, 8);
+('cochon', 1, 11),
+('cochonn', 0, 11),
+('cauchon', 0, 11),
+('cauchonn', 0, 11),
+('kochon', 0, 11);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('pissenlit', 1, 9),
-('pisenlit', 0, 9),
-('pissanli', 0, 9),
-('pisenli', 0, 9),
-('pissanlit', 0, 9);
+('pissenlit', 1, 4),
+('pisenlit', 0, 4),
+('pissanli', 0, 4),
+('pisenli', 0, 4),
+('pissanlit', 0, 4);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('tournessol', 1, 10),
-('tournessolle', 0, 10),
-('tournnessol', 0, 10),
-('tournnessolle', 0, 10),
-('tournesol', 0, 10);
+('tournessol', 1, 5),
+('tournessolle', 0, 5),
+('tournnessol', 0, 5),
+('tournnessolle', 0, 5),
+('tournesol', 0, 5);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('marguerite', 1, 11),
-('marrguerite', 0, 11),
-('margerite', 0, 11),
-('margueryte', 0, 11),
-('marguerit', 0, 11);
+('marguerite', 1, 6),
+('marrguerite', 0, 6),
+('margerite', 0, 6),
+('margueryte', 0, 6),
+('marguerit', 0, 6);

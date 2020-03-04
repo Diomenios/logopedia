@@ -85,57 +85,9 @@ function verification(button){
 		}
 	}
 }
-
-/*function verification() { // adapter au niv de la difficulté donc le nombre de distracteur voir si c'est possible
-	var spanMots = document.getElementsByClassName("zoneTexte");
-
-	for(let j=0; j < boutonsActivité.length; j++){
-		boutonsActivité[j].onclick = function() {
-			if((indiceImages < imageBaseDonnee.length) && (indiceMots < motBaseDonnee.length)){
-				if((spanMots[j].innerHTML == motCorrect[indiceMots])){
-					// adapter pour faire tourner plusieur image et que le mot de comparaison change
-					indiceImages ++;
-					indiceMots ++;
-					compteurResultat++;
-					boutonsActivité[j].style.backgroundColor = "green";
-					var boutonSuivant = '<button id=suivant onclick=chargementImageMot()>Suivant</button>';
-					document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
-					for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet de désactiver le bouton
-						boutonsActivité[p].disabled = true;
-						boutonsActivité[p].style.color = "black";
-					}
-					feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML}' <br>`;
-				}
-
-				else{
-					boutonsActivité[j].style.border = "2px solid red"
-					for( let k=0; k < spanMots.length; k++){
-						if(spanMots[k].innerHTML == motCorrect[indiceMots]){
-							boutonsActivité[k].style.backgroundColor = "green"
-						}
-					}
-					indiceImages ++;
-					indiceMots ++;
-					var boutonSuivant = '<button id=suivant onclick=chargementImageMot()>Suivant</button>'
-					document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
-					for( let p=0; p < boutonsActivité.length; p++){ // boucle qui permet de désactiver le bouton
-						boutonsActivité[p].disabled = true;
-						boutonsActivité[p].style.color = "black";
-					}
-					feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML} '
-					la réponse '${motBaseDonnee[indiceMots-1][1]}' <br>`;
-					}
-			}
-		}
-	}
-}*/
-
- function loadingDatabase(classe) {
+function loadingDatabase(classe) {
 
  	let xhttp = new XMLHttpRequest();
-	console.log(buttonsId);
-	console.log(boolean);
-	//getButtonsID();
 	generateImageHtml("divImage");
 
  	xhttp.onreadystatechange = function() {
@@ -157,7 +109,6 @@ function verification(button){
          if (this.readyState == 4 && this.status == 200) {
              mots = JSON.parse(this.responseText);
 						 fillButtons(mots);
- 						console.log("mots de l'image : " + this.responseText);
         }
      };
  	xhttp.open("GET", "https://localhost/api/mots?type="+type, true);
@@ -168,15 +119,12 @@ function verification(button){
  	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
-				 if (this.readyState == 4 && this.status == 200) {
+			 if (this.readyState == 4 && this.status == 200) {
 					image.src = this.responseText;
 					image.onload = function(){
 						document.getElementById('imagesActivite').src = image.src;
 						document.getElementById("divImage").style.visibility = 'visible';
-						console.log("affiché");
-						console.log(boolean);
 					}
-					console.log("chemin de l'image : " + this.responseText);
 				}
 	};
 	/*if (next) {
