@@ -34,6 +34,17 @@ database.get('/image', (req, res) => {
   }
 })
 
+database.get('/image_path', (req, res) => {
+  if (req.query.guid === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire un GUID pour retrouver l\'image !');
+  }
+  else {
+    res.set('Content-Type', 'text/plain');
+    res.send('/static/images/'+req.query.guid);
+  }
+})
+
 .get('/images', (req, res) => {
   if (req.query.classe === undefined) {
     res.set('Content-Type', 'text/plain');
@@ -45,7 +56,7 @@ database.get('/image', (req, res) => {
       res.send('classe inconnue');
     }
     else{
-      conn.query("SELECT DISTINCT image_nom, image_id from Images INNER JOIN Types WHERE classe_id = ?",[rows[0].classe_id], (err, rows) => {
+      conn.query("SELECT DISTINCT image_nom, image_id, Images.type_id from Images INNER JOIN Types WHERE classe_id = ?",[rows[0].classe_id], (err, rows) => {
         if (err) {
           throw err;
         }
@@ -61,19 +72,12 @@ database.get('/image', (req, res) => {
     sendMessage("veuillez introduire le type des mots que vous désirez récupérer", res);
   }
   else {
-    conn.query("SELECT type_id from Types WHERE type_nom = ?",[req.query.type], (err, rows) => {
-      if (rows.length == 0) {
-        sendMessage('type inconnu', res);
+    conn.query("SELECT mot, distracteur FROM Mots WHERE type_id = ?", [req.query.type], (err, rows) => {
+      if (err) {
+        throw err;
       }
-      else{
-        conn.query("SELECT mot, distracteur FROM Mots WHERE type_id = ?", [rows[0].type_id], (err, rows) => {
-          if (err) {
-            throw err;
-          }
-          res.set('Content-Type', 'application/json');
-          res.send(rows);
-        });
-      }
+      res.set('Content-Type', 'application/json');
+      res.send(rows);
     });
   }
 })
@@ -205,3 +209,25 @@ module.exports = database;
     });
   }
 });*/
+
+/*.get('/mots', (req, res) => {
+  if (req.query.type === undefined) {
+    sendMessage("veuillez introduire le type des mots que vous désirez récupérer", res);
+  }
+  else {
+    conn.query("SELECT type_id from Types WHERE type_nom = ?",[req.query.type], (err, rows) => {
+      if (rows.length == 0) {
+        sendMessage('type inconnu', res);
+      }
+      else{
+        conn.query("SELECT mot, distracteur FROM Mots WHERE type_id = ?", [rows[0].type_id], (err, rows) => {
+          if (err) {
+            throw err;
+          }
+          res.set('Content-Type', 'application/json');
+          res.send(rows);
+        });
+      }
+    });
+  }
+})*/

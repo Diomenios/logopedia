@@ -68,3 +68,4 @@ function InformationLogopede() {
 		boite.appendChild(cln);
 	}
 }
+/*Partie pour l'activité orthographe*/

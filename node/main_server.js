@@ -21,6 +21,10 @@ app.get('/', function(req, res) {
 .get('/activites/activite-orthographe', function(req, res) {
     res.sendFile('/public/html/activite-orthographe.html', {root: __dirname });
 })
+.get('/activites/test', function(req, res) {
+    res.sendFile('/public/html/test.html', {root: __dirname });
+})
+
 // ... Tout le code de gestion des routes (app.get) se trouve au-dessus
 .use('/static', express.static('public'))
 

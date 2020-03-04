@@ -49,7 +49,7 @@
 				</div>
 			</nav>
 		</header>
-        <body onload="verifiacation()">
+        <body>
 			<section class="main_Box" >
 
 				<div id="boite">
@@ -70,17 +70,18 @@
 							<option value="">4</option>
 						</select><br>
 
-						<button onclick="loadingDatabase('animaux')" id="activite-select">Commencer</button>
+						<button onclick="lancerActivités(), loadingDatabase('animaux')" id="activite-select">Commencer</button>
 					</div>
 					<div id="divActivités">
 						<div id="divImage"></div>
 
 						<div id="divBouton">
-							<button class="boutonMots" ><span class="zoneTexte"></span></button>
-							<button class="boutonMots" ><span class="zoneTexte"></span></button>
-							<button class="boutonMots" ><span class="zoneTexte"></span></button>
-							<button class="boutonMots" ><span class="zoneTexte"></span></button>
+							<button class="boutonMots" value="1" id="prout" onclick="verification(this)"><span class="zoneTexte"></span></button>
+							<button class="boutonMots" value="0" id="Martin" onclick="verification(this)"><span class="zoneTexte"></span></button>
+							<button class="boutonMots" value="0" id="Louis" onclick="verification(this)"><span class="zoneTexte"></span></button>
+							<button class="boutonMots" value="0" id="Emile" onclick="verification(this)"><span class="zoneTexte"></span></button>
 						</div>
+						<div id=divBoutonSuivant></div>
 					</div>
 				</div>
 
