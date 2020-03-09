@@ -1,0 +1,42 @@
+/*CSS Page Resultat de l'activité*/
+#recherchePatients{
+    width: 300px;
+    height: 150px;
+    background-color: bisque;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #inputRecherche{
+    width: 50%;
+    height: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+  }
+  #patients{
+    width: 500px;
+    height: 500px;
+    background-color: cyan;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-y: scroll;
+  }
+  #listePatient{
+    list-style: none;
+  }
+  #resultatsGraph{
+    width: 800px;
+    height: 600px;
+    /*background-color: darkgreen ;*/
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+  }
+  #divBoutonResultats{
+    max-width: 500px;
+    margin-left: -110px;
+    /*margin-bottom: 50px;*/
+  }
