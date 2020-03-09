@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr-BE">
+
+        <head>
+            <title>Logopédie</title>
+            <meta charset="utf-8">
+			<script src="js/javascript.js"></script>
+
+			<!-- Required meta tags -->
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">			
+			
+			<!-- Bootstrap CSS -->
+			<link href="css\bootstrap.css" rel="stylesheet">
+			<link rel="stylesheet" type = "text/css" href="css\structure.css" />			
+			<link rel="stylesheet" type = "text/css" href="css\resultat.css" />
+			
+			<!--Vue js-->
+			<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+
+			<!--Chart js-->
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+			
+        </head>
+		<header>
+			<!-- Navigation -->
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+				<div class="container">
+					<a class="navbar-brand" href="#">Logopédie</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarResponsive">
+					
+					
+						<ul class="navbar-nav ml-auto">
+						<li class="nav-item active">					
+							<a class="nav-link" href="#">Acceuil
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="activite.html">Activités</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Résultats</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Agenda</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link"><button type="button" onclick="connexion();" class="btn btn-primary btn-sm">Connexion</button></a>
+						</li>
+						
+						</ul>
+					</div>
+				</div>	
+			</nav>	
+		</header>
+		<body onload="créationListePatient(), goResultats()">
+			
+			<section class="main_Box" id="boite">
+			<div id="divPatient">
+				<div id="recherchePatients">
+
+					<center><lable>Veuillez introduire le nom d'un patient !</lable>
+
+					<input id="inputRecherche" placeholder="Nom du patient" v-model="message"><br>
+
+					<p id="nomPatient">{{ message }}</p>
+
+					<input type="submit" value="Rechercher" onclick="recherche()"/>
+					<input type="button" value="Annuler" onclick="créationListePatient()"/></center>
+				
+				</div>
+
+				<div id="patients"></div>
+			</div>
+
+				<div id="resultatsGraph">
+					<div id="divBoutonResultats">
+					<button id="boutonResultatTexte">Résultats</button>
+					<button id="boutonResultatGraph1">Graphique 1</button>
+					<button id="boutonResultatGraph2">Graphique 2</button>
+					<button id="boutonRetour">Retour liste Patients</button>
+					</div>
+
+					<div id="resultatTexte">Texte</div>
+					<canvas id="graphique1" width="800" height="450">Graphique 1</canvas>
+					<canvas id="graphique2" width="800" height="450">Graphique 2</canvas>
+				</div>
+
+				<script src="js/resultats.js"></script>
+
+			</section>
+		</body>
+		
+
+        <footer>
+            <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
+        </footer>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</html>
