@@ -2,6 +2,7 @@ var tabListePatients = [
 {nom:"A", prenom:"Emile", age:24},
 {nom:"Arys", prenom:"Louis", age:24},
 {nom:"Perdaens", prenom:"Martin", age:24},
+{nom:"Dujardin", prenom:"Martin", age:24},
 {nom:"Perdaens", prenom:"Céline", age:22}
 ];
 
@@ -15,9 +16,9 @@ var recherchePatients = new Vue({
 
 function créationListePatient(){
 /*Création de la liste*/
-let listePatient = '<ul>';
+let listePatient = '<ul id="ligneListe">';
 for(searchPatient of tabListePatients){
-    listePatient += '<li id="ligneListe">'+`${searchPatient.prenom} ${searchPatient.nom}`+'</li>';
+    listePatient += '<li>'+`${searchPatient.prenom} ${searchPatient.nom}`+'</li>';
 }
 listePatient += '</ul>';
 document.getElementById("patients").innerHTML = listePatient;
@@ -29,16 +30,16 @@ function recherche(){
     alert("Veuillez introduire quelque chose svp")
   }
   else{
-    listePatient = '<ul>';
+    listePatient = '<ul id="ligneListe">';
     let patientExiste = false;
     for(patient of tabListePatients){
       if(patient.nom == inputRecherche || patient.prenom == inputRecherche){
-        listePatient += '<li id="ligneListe">'+ patient.prenom +' '+ patient.nom+'</li>';
+        listePatient += '<li>'+ patient.prenom +' '+ patient.nom+'</li>';
         patientExiste = true;
       }
     }
     if (!patientExiste) {
-      listePatient += '<li id="ligneListe">'+ 'LE PATIENT N\'EXISTE PAS' +'</li>';
+      listePatient += '<li>'+ 'LE PATIENT N\'EXISTE PAS' +'</li>';
     }
     listePatient += '</ul>'
     document.getElementById("patients").innerHTML = listePatient;
