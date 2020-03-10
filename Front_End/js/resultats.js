@@ -1,7 +1,8 @@
 var tabListePatients = [
 {nom:"A", prenom:"Emile", age:24},
 {nom:"Arys", prenom:"Louis", age:24},
-{nom:"Perdaens", prenom:"Martin", age:24}
+{nom:"Perdaens", prenom:"Martin", age:24},
+{nom:"Perdaens", prenom:"Céline", age:22}
 ];
 
 var recherchePatients = new Vue({
@@ -34,11 +35,10 @@ function recherche(){
       if(patient.nom == inputRecherche || patient.prenom == inputRecherche){
         listePatient += '<li id="ligneListe">'+ patient.prenom +' '+ patient.nom+'</li>';
         patientExiste = true;
-        break;
       }
     }
     if (!patientExiste) {
-      listePatient += '<li id="ligneListe">'+ 'EXISTE PAS' +'</li>';
+      listePatient += '<li id="ligneListe">'+ 'LE PATIENT N\'EXISTE PAS' +'</li>';
     }
     listePatient += '</ul>'
     document.getElementById("patients").innerHTML = listePatient;
