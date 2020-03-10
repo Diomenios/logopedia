@@ -23,7 +23,7 @@
     margin-right: auto;
     overflow-y: scroll;
   }
-  #listePatient{
+  #ligneListe{
     list-style: none;
   }
   #resultatsGraph{

@@ -1,4 +1,8 @@
-var tabListePatients = ['Emile C','Louis C','Martin C','Emile A','Louis A','Martin A','Emile B','Louis B','Martin B','Emile C','Louis C','Martin C'];
+var tabListePatients = [
+{nom:"A", prenom:"Emile", age:24},
+{nom:"Arys", prenom:"Louis", age:24},
+{nom:"Perdaens", prenom:"Martin", age:24}
+];
 
 var recherchePatients = new Vue({
   el: '#recherchePatients',
@@ -10,37 +14,41 @@ var recherchePatients = new Vue({
 
 function créationListePatient(){
 /*Création de la liste*/
-let listePatient = '<ul id="listePatient">';
-for(let i=0; i < tabListePatients.length; i++){
-    listePatient += '<li>'+tabListePatients[i]+'</li>';
+let listePatient = '<ul>';
+for(searchPatient of tabListePatients){
+    listePatient += '<li id="ligneListe">'+`${searchPatient.prenom} ${searchPatient.nom}`+'</li>';
 }
 listePatient += '</ul>';
 document.getElementById("patients").innerHTML = listePatient;
 }
 /*Fonction pour faire la recheche dans la liste*/
 function recherche(){
-  inputRecherche = document.getElementById("inputRecherche");
-  if(inputRecherche.value === ''){
+  inputRecherche = document.getElementById("inputRecherche").value;
+  if(inputRecherche === ''){
     alert("Veuillez introduire quelque chose svp")
   }
   else{
-    let foundPatient = tabListePatients.find(element => element == inputRecherche.value);
-    if(foundPatient === undefined){
-      listePatient = '<ul id="listePatient"><li>Patient n\'existe pas </li></ul>';
-    }
-    else{
-      listePatient = '<ul id="listePatient">'
-      for(let m = 0; m < tabListePatients.length; m++){
-        if(tabListePatients[m] == inputRecherche.value){
-          listePatient += '<li>'+tabListePatients[m]+'</li>';
-        }
+    listePatient = '<ul>';
+    let patientExiste = false;
+    for(patient of tabListePatients){
+      if(patient.nom == inputRecherche || patient.prenom == inputRecherche){
+        listePatient += '<li id="ligneListe">'+ patient.prenom +' '+ patient.nom+'</li>';
+        patientExiste = true;
+        break;
       }
-      listePatient += '</ul>'
-
     }
+    if (!patientExiste) {
+      listePatient += '<li id="ligneListe">'+ 'EXISTE PAS' +'</li>';
+    }
+    listePatient += '</ul>'
     document.getElementById("patients").innerHTML = listePatient;
   }
 }
+
+
+
+
+
 function viderInputRecherche(){
   inputRecherche = document.getElementById('inputRecherche');
   inputRecherche.value = '';
@@ -48,7 +56,7 @@ function viderInputRecherche(){
 
 function goResultats(){
   $(document).ready(function(){
-    $('#listePatient').click(function(){
+    $('#ligneListe').click(function(){
         $('#resultatsGraph').show();
         $('#divPatient').hide();
         $('#resultatTexte').show();
