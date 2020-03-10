@@ -1,4 +1,4 @@
-var tabListePatients = ['Emile A','Louis A','Martin A','Emile B','Louis B','Martin B','Emile C','Louis C','Martin C'];
+var tabListePatients = ['Emile C','Louis C','Martin C','Emile A','Louis A','Martin A','Emile B','Louis B','Martin B','Emile C','Louis C','Martin C'];
 
 var recherchePatients = new Vue({
   el: '#recherchePatients',
@@ -29,10 +29,21 @@ function recherche(){
       listePatient = '<ul id="listePatient"><li>Patient n\'existe pas </li></ul>';
     }
     else{
-      listePatient = '<ul id="listePatient"><li>'+foundPatient+'</li></ul>';
+      listePatient = '<ul id="listePatient">'
+      for(let m = 0; m < tabListePatients.length; m++){
+        if(tabListePatients[m] == inputRecherche.value){
+          listePatient += '<li>'+tabListePatients[m]+'</li>';
+        }
+      }
+      listePatient += '</ul>'
+
     }
     document.getElementById("patients").innerHTML = listePatient;
   }
+}
+function viderInputRecherche(){
+  inputRecherche = document.getElementById('inputRecherche');
+  inputRecherche.value = '';
 }
 
 function goResultats(){

@@ -71,7 +71,7 @@
 					<p id="nomPatient">{{ message }}</p>
 
 					<input type="submit" value="Rechercher" onclick="recherche()"/>
-					<input type="button" value="Annuler" onclick="créationListePatient()"/></center>
+					<input type="button" value="Annuler" onclick="créationListePatient(),viderInputRecherche()"/></center>
 				
 				</div>
 
@@ -83,7 +83,7 @@
 					<button id="boutonResultatTexte">Résultats</button>
 					<button id="boutonResultatGraph1">Graphique 1</button>
 					<button id="boutonResultatGraph2">Graphique 2</button>
-					<button id="boutonRetour">Retour liste Patients</button>
+					<button id="boutonRetour" onclick="viderInputRecherche()">Retour liste Patients</button>
 					</div>
 
 					<div id="resultatTexte">Texte</div>

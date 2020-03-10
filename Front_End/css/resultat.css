@@ -38,5 +38,6 @@
   #divBoutonResultats{
     max-width: 500px;
     margin-left: -110px;
+    margin-bottom: 20px;
     /*margin-bottom: 50px;*/
   }
