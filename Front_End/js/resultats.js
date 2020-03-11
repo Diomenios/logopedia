@@ -1,6 +1,6 @@
 let tabListePatients = [
-  {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,8,10,9]},
-  {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,0,0]},
+{id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,14,10,9], activitesTentatives:[1,4,10,5]},
+{id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,0,0]},
 {id:2, nom:"Arys", prenom:"Martin", age:24, activites:[12,8,0,0]},
 {id:3, nom:"Perdaens", prenom:"Martin", age:24, activites:[12,8,0,0]},
 {id:4, nom:"Dujardin", prenom:"Martin", age:24, activites:[12,8,0,0]},
@@ -24,6 +24,17 @@ var recherchePatients = new Vue({
   }
 })
 // Mettre en place un système qui permet de verifier si le patient est dans la liste avant de cliquer sur le bouton recherche
+//Pas fini à améliorer.
+let inputRecherche = document.getElementById('inputRecherche').value;
+let nomPatient = document.getElementById('nomPatient');
+for(Existepatient of tabListePatients){
+  if(Existepatient.nom == inputRecherche || Existepatient.prenom == inputRecherche){
+    nomPatient.style.color = "green";
+  }
+  else{
+    nomPatient.style.color = "red";
+  }
+}
 
 // Fonction qui permet de crée la liste avec les patients
 function créationListePatient(){ 
@@ -68,7 +79,7 @@ function viderInputRecherche(){
 function goResultats(){
 
   let tabListePatients = [ // J'ai mis le tableau la de manière temporaire car quand il ne se trouve pas dans la fonction rien ne s'affiche dans les graph
-    {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,14,10,9]},
+    {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,14,10,9], activitesTentatives:[1,4,10,5]},
     {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,4,0]},
     {id:2, nom:"Arys", prenom:"Martin", age:24, activites:[12,8,0,9]},
     {id:3, nom:"Perdaens", prenom:"Martin", age:24, activites:[12,8,3,0]},
@@ -98,7 +109,7 @@ function goResultats(){
       <table id="tableResultats">
       <thead>
       <tr>
-      <th> Activité 1</th>
+      <th> Activité 1 </th>
       <th> Activité 2 </th>
       <th> Activité 3 </th>
       <th> Activité 4 </th>
@@ -133,7 +144,7 @@ function goResultats(){
       datasets: [{
         label: "Tentatives aux différents activités",
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-        data: tabListePatients[compteurPatientResultats].activites
+        data: tabListePatients[compteurPatientResultats].activitesTentatives
       }]
     },
     options: {}
@@ -147,7 +158,7 @@ new Chart(document.getElementById("graphique2"), {
     labels: ["Activité 1", "Activité 2", "Activité 3", "Activité 4"],
     datasets: [
       {
-        label: "Population (millions)",
+        label: ["Activité 1", "Activité 2", "Activité 3", "Activité 4"],
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
         data: tabListePatients[compteurPatientResultats].activites
       }
