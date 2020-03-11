@@ -26,10 +26,12 @@
   #ligneListe{
     list-style: none;
   }
+  #ligneListe:hover{
+    cursor: pointer;
+  }
   #resultatsGraph{
     width: 800px;
     height: 600px;
-    /*background-color: darkgreen ;*/
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
@@ -37,6 +39,34 @@
   }
   #divBoutonResultats{
     max-width: 500px;
-    margin-left: -110px;
+    margin-left: -250px;
     margin-bottom: 20px;
   }
+  #graphique1{
+    max-width: 500px;
+    max-height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #graphique2{
+    max-width: 800px;
+    max-height: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #infoPatient{
+    color: red;
+  }
+  #tableResultats{
+    text-align: center;
+    border: 2px solid black;
+  }
+  #tableResultats th,#tableResultats td{
+    text-align: center;
+    border: 2px solid black;
+  }
+  h3{
+    text-decoration: underline;
+    margin-bottom: 50px;
+  }
+  

@@ -1,10 +1,21 @@
-var tabListePatients = [
-{nom:"A", prenom:"Emile", age:24},
-{nom:"Arys", prenom:"Louis", age:24},
-{nom:"Perdaens", prenom:"Martin", age:24},
-{nom:"Dujardin", prenom:"Martin", age:24},
-{nom:"Perdaens", prenom:"Céline", age:22}
+let tabListePatients = [
+  {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,8,10,9]},
+  {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,0,0]},
+{id:2, nom:"Arys", prenom:"Martin", age:24, activites:[12,8,0,0]},
+{id:3, nom:"Perdaens", prenom:"Martin", age:24, activites:[12,8,0,0]},
+{id:4, nom:"Dujardin", prenom:"Martin", age:24, activites:[12,8,0,0]},
+{id:5, nom:"Perdaens", prenom:"Céline", age:22, activites:[12,8,0,0]},
+{id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,0,0]}
 ];
+//tirer tableau des patients par ordre alphabétique
+function compareName(a,b){
+  if(a.nom > b.nom) return 1;
+  if(a.nom < b.nom) return -1;
+  if(a.prenom > b.prenom) return 1;
+  if(a.prenom < b.prenom) return -1;
+  return 0;
+  }
+  tabListePatients.sort(compareName);
 
 var recherchePatients = new Vue({
   el: '#recherchePatients',
@@ -14,8 +25,8 @@ var recherchePatients = new Vue({
 })
 // Mettre en place un système qui permet de verifier si le patient est dans la liste avant de cliquer sur le bouton recherche
 
-function créationListePatient(){
-/*Création de la liste*/
+// Fonction qui permet de crée la liste avec les patients
+function créationListePatient(){ 
 let listePatient = '<ul id="ligneListe">';
 for(searchPatient of tabListePatients){
     listePatient += '<li>'+`${searchPatient.prenom} ${searchPatient.nom}`+'</li>';
@@ -23,6 +34,7 @@ for(searchPatient of tabListePatients){
 listePatient += '</ul>';
 document.getElementById("patients").innerHTML = listePatient;
 }
+
 /*Fonction pour faire la recheche dans la liste*/
 function recherche(){
   inputRecherche = document.getElementById("inputRecherche").value;
@@ -46,50 +58,73 @@ function recherche(){
   }
 }
 
-
-
-
-
+//Fonction qui permet de vider l'input après la recherche
 function viderInputRecherche(){
   inputRecherche = document.getElementById('inputRecherche');
   inputRecherche.value = '';
 }
 
+//Fonction qui permet de faire le switch entre la liste et les différentes forment de résiltats
 function goResultats(){
+
+  let tabListePatients = [ // J'ai mis le tableau la de manière temporaire car quand il ne se trouve pas dans la fonction rien ne s'affiche dans les graph
+    {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,14,10,9]},
+    {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,4,0]},
+    {id:2, nom:"Arys", prenom:"Martin", age:24, activites:[12,8,0,9]},
+    {id:3, nom:"Perdaens", prenom:"Martin", age:24, activites:[12,8,3,0]},
+    {id:4, nom:"Dujardin", prenom:"Martin", age:24, activites:[12,8,7,0]},
+    {id:5, nom:"Perdaens", prenom:"Céline", age:22, activites:[12,8,14,0]},
+    {id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,0,10]}
+    ];
+
   $(document).ready(function(){
     $('#ligneListe').click(function(){
         $('#resultatsGraph').show();
         $('#divPatient').hide();
-        $('#resultatTexte').show();
-        $('#graphique2').hide();
-        $('#graphique1').hide();
     });
-
-    $('#boutonResultatTexte').click(function(){
-      $('#resultatTexte').show();
-      $('#graphique2').hide();
-      $('#graphique1').hide();
-  }); 
-
-   $('#boutonResultatGraph1').click(function(){
-      $('#resultatTexte').hide();
-      $('#graphique2').hide();
-      $('#graphique1').show();
-  });
-
-  $('#boutonResultatGraph2').click(function(){
-    $('#resultatTexte').hide();
-    $('#graphique2').show();
-    $('#graphique1').hide();
-  });
 
     $('#boutonRetour').click(function(){
-      $('#resultatTexte').hide();
+      $('#resultatsGraph').hide();
       $('#divPatient').show();
-    });
-
   });
+  });
+    /*-------------------------------------------------------
+  Partie résultats texte*/
 
+  let resultats = '<p>';
+  let compteurPatientResultats = 0
+  //for( let compteurPatientResultats = 0; compteurPatientResultats < tabListePatients.length; compteurPatientResultats++){
+      resultats += `<h3>Patient: <span id="infoPatient">${tabListePatients[compteurPatientResultats].prenom} ${tabListePatients[compteurPatientResultats].nom}</span></h3>
+      <table id="tableResultats">
+      <thead>
+      <tr>
+      <th> Activité 1</th>
+      <th> Activité 2 </th>
+      <th> Activité 3 </th>
+      <th> Activité 4 </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td>${tabListePatients[compteurPatientResultats].activites[0]}</td>
+      <td>${tabListePatients[compteurPatientResultats].activites[1]}</td>
+      <td>${tabListePatients[compteurPatientResultats].activites[2]}</td>
+      <td>${tabListePatients[compteurPatientResultats].activites[3]}</td>
+      </tr>
+      </tbody> 
+      </table>`;
+  //}
+
+  resultats += '</p>'
+  +'<h3>Nombre de tentatives par activités:</h3>'
+  +'<canvas id="graphique1"></canvas>'
+  +'<h3>Points par activités:</h3>'
+  +'<canvas id="graphique2"></canvas>';
+
+  document.getElementById("resultatTexteGraph").innerHTML = resultats;
+
+  /*-------------------------------------------------------
+  Partie résultats Graphiques*/
   //partie pour le graph en formage
   new Chart(document.getElementById("graphique1"), {
     type: 'pie',
@@ -98,15 +133,10 @@ function goResultats(){
       datasets: [{
         label: "Tentatives aux différents activités",
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-        data: [10,15,5,2]
+        data: tabListePatients[compteurPatientResultats].activites
       }]
     },
-    options: {
-      title: {
-        display: true,
-        text: 'Tentatives aux différents activités'
-      }
-    }
+    options: {}
 });// fin du graph en fromage ici
 
   //partie pour le graph en bar
@@ -114,21 +144,25 @@ function goResultats(){
 new Chart(document.getElementById("graphique2"), {
   type: 'bar',
   data: {
-    labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+    labels: ["Activité 1", "Activité 2", "Activité 3", "Activité 4"],
     datasets: [
       {
         label: "Population (millions)",
-        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-        data: [2478,5267,734,784,433]
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
+        data: tabListePatients[compteurPatientResultats].activites
       }
     ]
   },
   options: {
-    legend: { display: false },
-    title: {
-      display: true,
-      text: 'Points par activités'
-    }
+    responsive: true,
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    },
+    legend: { display: false }
   }
 }); // fin du graph bat ici
 
