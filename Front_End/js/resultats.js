@@ -77,16 +77,25 @@ function viderInputRecherche(){
 
 //Fonction qui permet de faire le switch entre la liste et les différentes forment de résiltats
 function goResultats(){
-
+  //TODO
   let tabListePatients = [ // J'ai mis le tableau la de manière temporaire car quand il ne se trouve pas dans la fonction rien ne s'affiche dans les graph
     {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,14,10,9], activitesTentatives:[1,4,10,5]},
-    {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,4,0]},
-    {id:2, nom:"Arys", prenom:"Martin", age:24, activites:[12,8,0,9]},
-    {id:3, nom:"Perdaens", prenom:"Martin", age:24, activites:[12,8,3,0]},
-    {id:4, nom:"Dujardin", prenom:"Martin", age:24, activites:[12,8,7,0]},
-    {id:5, nom:"Perdaens", prenom:"Céline", age:22, activites:[12,8,14,0]},
-    {id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,0,10]}
+    {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,4,0], activitesTentatives:[1,4,10,5]},
+    {id:2, nom:"Arys", prenom:"Martin", age:24, activites:[12,18,0,9], activitesTentatives:[1,4,10,5]},
+    {id:3, nom:"Perdaens", prenom:"Martin", age:24, activites:[12,13,3,0], activitesTentatives:[1,4,10,5]},
+    {id:4, nom:"Dujardin", prenom:"Martin", age:24, activites:[12,9,7,0], activitesTentatives:[1,4,10,5]},
+    {id:5, nom:"Perdaens", prenom:"Céline", age:22, activites:[12,1,14,0], activitesTentatives:[1,4,10,5]},
+    {id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,17,10], activitesTentatives:[1,4,10,5]}
     ];
+
+    let compteurPatientResultats;
+    $("#ligneListe li").click(function () {
+      patient = this.textContent;
+      for(indicepatient of tabListePatients){
+        if(indicepatient.nom == patient.split(' ')[1] && indicepatient.prenom == patient.split(' ')[0]){
+          compteurPatientResultats = indicepatient.id
+          }
+      }
 
   $(document).ready(function(){
     $('#ligneListe').click(function(){
@@ -103,8 +112,6 @@ function goResultats(){
   Partie résultats texte*/
 
   let resultats = '<p>';
-  let compteurPatientResultats = 0
-  //for( let compteurPatientResultats = 0; compteurPatientResultats < tabListePatients.length; compteurPatientResultats++){
       resultats += `<h3>Patient: <span id="infoPatient">${tabListePatients[compteurPatientResultats].prenom} ${tabListePatients[compteurPatientResultats].nom}</span></h3>
       <table id="tableResultats">
       <thead>
@@ -158,7 +165,7 @@ new Chart(document.getElementById("graphique2"), {
     labels: ["Activité 1", "Activité 2", "Activité 3", "Activité 4"],
     datasets: [
       {
-        label: ["Activité 1", "Activité 2", "Activité 3", "Activité 4"],
+        label: "Point des différentes activités",
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
         data: tabListePatients[compteurPatientResultats].activites
       }
@@ -175,6 +182,6 @@ new Chart(document.getElementById("graphique2"), {
     },
     legend: { display: false }
   }
-}); // fin du graph bat ici
-
+  }); // fin du graph bat ici
+});
 }
