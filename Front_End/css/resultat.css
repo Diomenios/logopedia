@@ -25,6 +25,7 @@
   }
   #ligneListe{
     list-style: none;
+    text-align: center;
   }
   #ligneListe:hover{
     cursor: pointer;

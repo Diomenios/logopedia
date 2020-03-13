@@ -58,7 +58,7 @@
 				</div>	
 			</nav>	
 		</header>
-		<body onload="créationListePatient(), goResultats()">
+		<body onload="goResultats()">
 			
 			<section class="main_Box" id="boite">
 			<div id="divPatient">
@@ -71,11 +71,17 @@
 					<p id="nomPatient">{{ message }}</p>
 
 					<input type="submit" value="Rechercher" onclick="recherche()"/>
-					<input type="button" value="Annuler" onclick="créationListePatient(),viderInputRecherche()"/></center>
+					<input type="button" value="Annuler" onclick="viderInputRecherche()"/></center>
 				
 				</div>
 
-				<div id="patients"></div>
+				<div id="patients">
+						<ul id="ligneListe">
+						  <li v-for="todo in todos">
+							{{ todo.text }}
+						  </li>
+						</ul>
+				</div>
 			</div>
 
 				<div id="resultatsGraph">

@@ -7,6 +7,7 @@ let tabListePatients = [
 {id:5, nom:"Perdaens", prenom:"Céline", age:22, activites:[12,8,0,0]},
 {id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,0,0]}
 ];
+
 //tirer tableau des patients par ordre alphabétique
 function compareName(a,b){
   if(a.nom > b.nom) return 1;
@@ -25,6 +26,7 @@ var recherchePatients = new Vue({
 })
 // Mettre en place un système qui permet de verifier si le patient est dans la liste avant de cliquer sur le bouton recherche
 //Pas fini à améliorer.
+/*
 let inputRecherche = document.getElementById('inputRecherche').value;
 let nomPatient = document.getElementById('nomPatient');
 for(Existepatient of tabListePatients){
@@ -34,16 +36,19 @@ for(Existepatient of tabListePatients){
   else{
     nomPatient.style.color = "red";
   }
-}
+}*/
 
-// Fonction qui permet de crée la liste avec les patients
-function créationListePatient(){ 
-let listePatient = '<ul id="ligneListe">';
-for(searchPatient of tabListePatients){
-    listePatient += '<li>'+`${searchPatient.prenom} ${searchPatient.nom}`+'</li>';
-}
-listePatient += '</ul>';
-document.getElementById("patients").innerHTML = listePatient;
+
+//Création de la liste de patient avec Vue js
+var patients = new Vue({
+  el: '#patients',
+  data: {
+    todos: []
+  }
+})
+
+for( listePatient of tabListePatients){
+  patients.todos.push({ text:`${listePatient.prenom} ${listePatient .nom}`})
 }
 
 /*Fonction pour faire la recheche dans la liste*/
@@ -88,13 +93,14 @@ function goResultats(){
     {id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,17,10], activitesTentatives:[1,4,10,5]}
     ];
 
-    let compteurPatientResultats;
+    //TODO problème au niv de récupére l'id
+    let compteurPatientResultats = 0;
     $("#ligneListe li").click(function () {
       patient = this.textContent;
       for(indicepatient of tabListePatients){
-        if(indicepatient.nom == patient.split(' ')[1] && indicepatient.prenom == patient.split(' ')[0]){
+        if(indicepatient.nom == patient.split(' ')[1]){
           compteurPatientResultats = indicepatient.id
-          }
+        }
       }
 
   $(document).ready(function(){
