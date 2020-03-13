@@ -1,3 +1,5 @@
+//TODO IL faut retravailler le code car il y a des truc qui fonctionne pas correctement
+
 let tabListePatients = [
 {id:0, nom:"Pham", prenom:"Anh-Emile", age:24, activites:[12,14,10,9], activitesTentatives:[1,4,10,5]},
 {id:1, nom:"Arys", prenom:"Louis", age:24, activites:[12,8,0,0]},
@@ -24,22 +26,9 @@ var recherchePatients = new Vue({
     message: ''
   }
 })
-// Mettre en place un système qui permet de verifier si le patient est dans la liste avant de cliquer sur le bouton recherche
-//Pas fini à améliorer.
-/*
-let inputRecherche = document.getElementById('inputRecherche').value;
-let nomPatient = document.getElementById('nomPatient');
-for(Existepatient of tabListePatients){
-  if(Existepatient.nom == inputRecherche || Existepatient.prenom == inputRecherche){
-    nomPatient.style.color = "green";
-  }
-  else{
-    nomPatient.style.color = "red";
-  }
-}*/
-
 
 //Création de la liste de patient avec Vue js
+function creationListe(){
 var patients = new Vue({
   el: '#patients',
   data: {
@@ -51,6 +40,8 @@ for( listePatient of tabListePatients){
   patients.todos.push({ text:`${listePatient.prenom} ${listePatient .nom}`})
 }
 
+}
+
 /*Fonction pour faire la recheche dans la liste*/
 function recherche(){
   inputRecherche = document.getElementById("inputRecherche").value;
@@ -58,7 +49,7 @@ function recherche(){
     alert("Veuillez introduire quelque chose svp")
   }
   else{
-    listePatient = '<ul id="ligneListe">';
+    listePatient = '<ul id="ligneListe" onclick="goResultats()">';
     let patientExiste = false;
     for(patient of tabListePatients){
       if(patient.nom == inputRecherche || patient.prenom == inputRecherche){
@@ -75,6 +66,7 @@ function recherche(){
 }
 
 //Fonction qui permet de vider l'input après la recherche
+//TODO la liste ne remet pas par défaut quand on clique sur le bouton 
 function viderInputRecherche(){
   inputRecherche = document.getElementById('inputRecherche');
   inputRecherche.value = '';
@@ -93,10 +85,13 @@ function goResultats(){
     {id:6, nom:"Perdaens", prenom:"Olivier", age:22, activites:[12,8,17,10], activitesTentatives:[1,4,10,5]}
     ];
 
-    //TODO problème au niv de récupére l'id
+    //TODO problème au niv de récupére l'id ???????????????????????????????????
     let compteurPatientResultats = 0;
     $("#ligneListe li").click(function () {
       patient = this.textContent;
+      console.log(tabListePatients[0].nom)
+      console.log(patient.split(' ')[1])
+      console.log(tabListePatients[0].nom === patient.split(' ')[1])
       for(indicepatient of tabListePatients){
         if(indicepatient.nom == patient.split(' ')[1]){
           compteurPatientResultats = indicepatient.id
