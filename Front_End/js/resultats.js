@@ -20,51 +20,45 @@ function compareName(a,b){
   }
   tabListePatients.sort(compareName);
 
-var recherchePatients = new Vue({
-  el: '#recherchePatients',
-  data: {
-    message: ''
-  }
-})
-
 //Création de la liste de patient avec Vue js
-function creationListe(){
-var patients = new Vue({
-  el: '#patients',
+var vuePatients = new Vue({
+  el: '#divPatient',
   data: {
-    todos: []
-  }
-})
-
-for( listePatient of tabListePatients){
-  patients.todos.push({ text:`${listePatient.prenom} ${listePatient .nom}`})
-}
-
-}
-
-/*Fonction pour faire la recheche dans la liste*/
-function recherche(){
-  inputRecherche = document.getElementById("inputRecherche").value;
-  if(inputRecherche === ''){
-    alert("Veuillez introduire quelque chose svp")
-  }
-  else{
-    listePatient = '<ul id="ligneListe" onclick="goResultats()">';
-    let patientExiste = false;
-    for(patient of tabListePatients){
-      if(patient.nom == inputRecherche || patient.prenom == inputRecherche){
-        listePatient += '<li>'+ patient.prenom +' '+ patient.nom+'</li>';
-        patientExiste = true;
+    message: '',
+    patients: []
+  },
+    methods: {
+          recheche: function () {            
+            /*Fonction pour faire la recheche dans la liste*/
+            if(this.message === ''){
+              alert("Veuillez introduire quelque chose svp")
+            }
+            else{
+              listePatient = '<ul id="ligneListe" onclick="goResultats()">';
+              let patientExiste = false;
+              for(patient of tabListePatients){
+                if(patient.nom == this.message || patient.prenom == this.message){
+                  listePatient += '<li>'+ patient.prenom +' '+ patient.nom+'</li>';
+                  patientExiste = true;
+                }
+              }
+              if (!patientExiste) {
+                listePatient += '<li>'+ 'LE PATIENT N\'EXISTE PAS' +'</li>';
+              }
+              listePatient += '</ul>'
+              document.getElementById("patients").innerHTML = listePatient;
+            }
+          }
       }
-    }
-    if (!patientExiste) {
-      listePatient += '<li>'+ 'LE PATIENT N\'EXISTE PAS' +'</li>';
-    }
-    listePatient += '</ul>'
-    document.getElementById("patients").innerHTML = listePatient;
-  }
-}
+    })
 
+  for( listePatient of tabListePatients){
+    vuePatients.patients.push({ text:`${listePatient.prenom} ${listePatient .nom}`})
+  }
+
+
+
+/*
 //Fonction qui permet de vider l'input après la recherche
 //TODO la liste ne remet pas par défaut quand on clique sur le bouton 
 function viderInputRecherche(){
@@ -89,8 +83,9 @@ function goResultats(){
     let compteurPatientResultats = 0;
     $("#ligneListe li").click(function () {
       patient = this.textContent;
-      console.log(tabListePatients[0].nom)
-      console.log(patient.split(' ')[1])
+      console.log(patient)
+      console.log(tabListePatients[0].nom+'prout')
+      console.log(patient.split(' ')[1].replace("\n","")+'prout')
       console.log(tabListePatients[0].nom === patient.split(' ')[1])
       for(indicepatient of tabListePatients){
         if(indicepatient.nom == patient.split(' ')[1]){
@@ -109,8 +104,8 @@ function goResultats(){
       $('#divPatient').show();
   });
   });
-    /*-------------------------------------------------------
-  Partie résultats texte*/
+  //-------------------------------------------------------
+  //Partie résultats texte
 
   let resultats = '<p>';
       resultats += `<h3>Patient: <span id="infoPatient">${tabListePatients[compteurPatientResultats].prenom} ${tabListePatients[compteurPatientResultats].nom}</span></h3>
@@ -142,8 +137,8 @@ function goResultats(){
 
   document.getElementById("resultatTexteGraph").innerHTML = resultats;
 
-  /*-------------------------------------------------------
-  Partie résultats Graphiques*/
+  //-------------------------------------------------------
+  //Partie résultats Graphiques
   //partie pour le graph en formage
   new Chart(document.getElementById("graphique1"), {
     type: 'pie',
@@ -185,4 +180,4 @@ new Chart(document.getElementById("graphique2"), {
   }
   }); // fin du graph bat ici
 });
-}
+}*/
