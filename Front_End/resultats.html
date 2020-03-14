@@ -69,12 +69,12 @@
 					<p id="nomPatient">{{ message }}</p>
 
 					<input type="submit" value="Rechercher" v-on:click="recheche"/>
-					<input type="button" value="Annuler" onclick="viderInputRecherche(),creationListe()"/></center>
+					<input type="button" value="Annuler" v-on:click="annuler"/></center>
 				
 				</div>
 
 				<div id="patients">
-						<ul id="ligneListe" onclick="goResultats()">
+						<ul id="ligneListe">
 						  <li v-for="patient in patients">
 							{{ patient.text }}
 						  </li>

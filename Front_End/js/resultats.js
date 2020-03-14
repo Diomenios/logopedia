@@ -48,7 +48,13 @@ var vuePatients = new Vue({
               listePatient += '</ul>'
               document.getElementById("patients").innerHTML = listePatient;
             }
-          }
+          },
+         annuler: function (){
+           //Fonction qui permet de vider l'input après la recherche
+           inputRecherche = document.getElementById('inputRecherche');
+           inputRecherche.value = '';
+           this.message = '';
+         }
       }
     })
 
@@ -59,12 +65,7 @@ var vuePatients = new Vue({
 
 
 /*
-//Fonction qui permet de vider l'input après la recherche
-//TODO la liste ne remet pas par défaut quand on clique sur le bouton 
-function viderInputRecherche(){
-  inputRecherche = document.getElementById('inputRecherche');
-  inputRecherche.value = '';
-}
+
 
 //Fonction qui permet de faire le switch entre la liste et les différentes forment de résiltats
 function goResultats(){
