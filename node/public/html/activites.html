@@ -4,7 +4,8 @@
         <head>
             <title>Logopédie</title>
             <meta charset="utf-8">
-			<script src="/static/js/javascript.js"></script>
+      <script src="/static/js/vue.js"></script>
+			<script src="/static/js/activites.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -49,12 +50,13 @@
 				</div>
 			</nav>
 		</header>
-        <!-- TODO <body onload="BoutonActivites()"> -->
-        <body>
-			<section class="main_Box" id="boite">
+        <body onload="init()">
+			<section class="main_Box">
+        <div id="activities-buttons" v-bind:style="{visibility : hidden}" class="cached">
 
-				<a href="activites/activite-orthographe"><button id ="bouton_activités">Orthorgraphe</button></a>
+          <a v-for="button in buttons" v-bind:href="button.url"><button v-bind:id ="button.id">{{button.name}}</button></a>
 
+        </div>
 			</section>
         </body>
 

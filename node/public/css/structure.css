@@ -23,8 +23,11 @@ footer > p{
     color: black;
 }
 
-/*Partie pour le menu haut de page*/ /*#8b9dfe*/
 
+/*Partie pour le menu haut de page*/ /*#8b9dfe*/
+.cached{
+  visibility: hidden;
+}
 .sous li{
     float: none;
     width: 100%;
