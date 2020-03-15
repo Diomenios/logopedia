@@ -74,20 +74,23 @@
 				</div>
 
 				<div id="patients">
-						<ul id="ligneListe">
-						  <li v-for="patient in patients">
-							{{ patient.text }}
+						<ul id="ligneListe" >
+						  <li v-for="patient in patients" v-on:click="resultats">
+							{{patient.text}}
 						  </li>
 						</ul>
 				</div>
-			</div> <!--fin du divPatient-->
 
 				<div id="resultatsGraph">
 					<div id="divBoutonResultats">
-					<button id="boutonRetour" onclick="viderInputRecherche()">Retour liste Patients</button>
+					<button id="boutonRetour">Retour liste Patients</button>
 					</div>
-
 					<div id="resultatTexteGraph"></div>
+					</div><!--fin du resultatsGraph-->
+
+			</div> <!--fin du divPatient-->
+
+
 
 				</div>
 
