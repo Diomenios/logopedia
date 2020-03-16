@@ -2,8 +2,7 @@
 #section_logopedie{
 	min-width:320px;
 	max-width:640px;
-    width:50%;
-    max-height:718px;
+    width:49%;
 	min-height:358px;
     height: 100%;
     background-color: red;
@@ -23,14 +22,13 @@
   margin: 10%;
 }
 #informations{
-  float: left;
+
 }
 
 #section_news{
 	min-width:320px;
 	max-width:640px;
-    width:50%;
-    max-height:718px;
+    width:49%;
 	min-height:358px;
     height: 100%;
     background-color: yellow;

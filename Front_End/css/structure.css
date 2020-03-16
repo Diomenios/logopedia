@@ -23,6 +23,22 @@ footer > p{
     color: black;
 }
 
+.titre_section{
+    text-align: center;
+    text-decoration: underline;
+}
+.main_Box{
+    display: center;
+    justify-content: center;
+    align-items: center;
+	border:1px solid black;
+	margin: 50px auto 70px;
+	min-width: 720px;
+  width: 69%;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
 /*Partie pour le menu haut de page*/ /*#8b9dfe*/
 
 .sous li{
@@ -168,24 +184,6 @@ footer > p{
   }
 }
 
-.titre_section{
-    text-align: center;
-    text-decoration: underline;
-}
-.main_Box{
-    display: center;
-    justify-content: center;
-    align-items: center;
-	border:1px solid black;
-	margin: 50px auto 70px;
-	left: 0;
-	right: 0;
-	min-width: 720px;
-  width: 69%;
-  height: 680px;
-  overflow-x: auto;
-  overflow-y: auto;
-}
 ::-webkit-scrollbar{
   width: 14px;
 height: 14px;
