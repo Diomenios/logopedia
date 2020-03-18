@@ -7,7 +7,7 @@ header{
 }
 
 body{
-    background-color: whitesmoke;
+    background-color: rgb(187, 210, 225);
 	padding-top: 56px;
 }
 
@@ -31,7 +31,7 @@ footer > p{
     display: center;
     justify-content: center;
     align-items: center;
-	border:1px solid black;
+	/*border:1px solid black;*/
 	margin: 50px auto 70px;
 	min-width: 720px;
   width: 69%;
