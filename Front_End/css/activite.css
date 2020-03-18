@@ -50,7 +50,7 @@
 #divResultat{
   width: 100%;
   height: 500px;
-  background-color: aqua;
+  background-color: rgb(0, 191, 255);
   border: 2px solid black;
   margin-left: auto;
   margin-right: auto;
@@ -76,12 +76,13 @@
 #bouton_activités{
   width: 50%;
   height: 100px;
-  background-color: red;
+  background-color: whitesmoke;
   margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 5%;
   display: block;
+   border-radius: 2rem;
 
 }
 
