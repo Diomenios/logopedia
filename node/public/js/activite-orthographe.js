@@ -2,6 +2,7 @@
 
 let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER = 4;
+let
 let image = new Image();
 let mots;
 let nextImage = new Image();
@@ -12,6 +13,20 @@ var indiceImages = 0;
 var score = 0;
 let buttonsId = document.getElementsByClassName("boutonMots");
 let imageId;
+let mvButtons;
+
+
+function loadVue(nombreBoutons){
+	for (let i = 0; i < nombreBoutons; i++) {
+	}
+
+	mvButtons = new Vue({
+		el:"#boutonsMots",
+		data{
+			increment:MOTS_NUMBER;
+		}
+	});
+}
 
 function lancerActivités(){
 	var divParametres = document.getElementById("divParametre");

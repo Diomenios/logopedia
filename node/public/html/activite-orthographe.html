@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="fr-BE">
 
-        <head>
+    <head>
             <title>Logopédie</title>
             <meta charset="utf-8">
+      <script src="/static/js/vue.js"></script>
 			<script src="/static/js/activite-orthographe.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
@@ -13,7 +14,7 @@
 			<link href="/static/css/bootstrap.css" rel="stylesheet">
             <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
 
-        </head>
+    </head>
 		<header>
 			<!-- Navigation -->
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -49,45 +50,25 @@
 				</div>
 			</nav>
 		</header>
-        <body>
+    <body onload="loadVue()">
 			<section class="main_Box" >
 
 				<div id="boite">
 					<div id="divParametre">
-            <!-- TODO
-						<select name="patient" id="activite-select">
-							<option value="">--Choisisez un patient--</option>
-							<option value="">Emile</option>
-							<option value="">Louis</option>
-							<option value="">Martin</option>
-							<option value="">Arthur</option>
-						</select><br>
-
-						<select name="niveau" id="activite-select">
-							<option value="">--Choisisez un niveau--</option>
-							<option value="">1</option>
-							<option value="">2</option>
-							<option value="">3</option>
-							<option value="">4</option>
-						</select><br> -->
-
 						<button onclick="lancerActivités(), loadingDatabase('animaux')" id="activite-select">Commencer</button>
 					</div>
 					<div id="divActivités">
 						<div id="divImage"></div>
 
-						<div id="divBouton">
-							<button class="boutonMots" value="1" id="prout" onclick="verification(this)"><span class="zoneTexte"></span></button>
-							<button class="boutonMots" value="0" id="Martin" onclick="verification(this)"><span class="zoneTexte"></span></button>
-							<button class="boutonMots" value="0" id="Louis" onclick="verification(this)"><span class="zoneTexte"></span></button>
-							<button class="boutonMots" value="0" id="Emile" onclick="verification(this)"><span class="zoneTexte"></span></button>
+						<div id="boutonsMots">
+							<button v-for="n in increment" class="boutonMots" v-on:click="verification(this)"><span class="zoneTexte"></span></button>
 						</div>
-						<div id=divBoutonSuivant></div>
+
 					</div>
 				</div>
 
 			</section>
-        </body>
+    </body>
 
         <footer>
             <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>

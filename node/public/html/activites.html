@@ -50,15 +50,19 @@
 				</div>
 			</nav>
 		</header>
-        <body onload="init()">
-			<section class="main_Box">
+    <body onload="init()">
+
+      <section class="main_Box">
+
         <div id="activities-buttons" v-bind:style="{visibility : hidden}" class="cached">
 
           <a v-for="button in buttons" v-bind:href="button.url"><button v-bind:id ="button.id">{{button.name}}</button></a>
 
         </div>
-			</section>
-        </body>
+
+      </section>
+
+    </body>
 
         <footer>
             <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
