@@ -37,7 +37,14 @@ function loadVue(){
 			listeMots:mots_Tests
 		},
 		methods:{
-			test: verification
+			test: verification,
+			reInit: function(){
+				for (let i = 0; i < this.listeMots.length; i++) {
+					this.listeMots[i].tvalue = false;
+					this.listeMots[i].fvalue = false;
+					this.listeMots[i].disabled = false;
+				}
+			}
 		}
 	});
 
@@ -88,8 +95,8 @@ function validateShuffleMots(listMots){
 }
 
 function chargementImageMot(){// adapter avec la base de donnés
-		/*try {
-		button.disabled= true;
+		try {
+		mvNextButton.display="none";
 		getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
 		getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
 	} catch (error) {
@@ -102,12 +109,7 @@ function chargementImageMot(){// adapter avec la base de donnés
 			console.log(error);
 		}
 	}
-	for (let i = 0; i < buttonsId.length; i++) {
-		buttonsId[i].style.backgroundColor = "white"
-		buttonsId[i].style.border = "1px solid black"
-		buttonsId[i].disabled = false;
-	}
-	*/
+	mvButtons.reInit();
 }
 
 function verification(item, listeItems){
@@ -143,46 +145,6 @@ function verification(item, listeItems){
 		console.log(mvNextButton.visible);
 	}
 }
-
-/*function verification(button){
-	console.log(button)
-	if(indiceImages < REFERENCE_IMAGES_SAVE.length){
-		if(button.value == "1"){
-			// adapter pour faire tourner plusieur image et que le mot de comparaison change
-			indiceImages ++;
-			score++;
-			button.style.backgroundColor = "green";
-			var boutonSuivant = '<button id=suivant onclick=chargementImageMot(this)>Suivant</button>';
-			document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
-			for( let p=0; p < buttonsId.length; p++){ // boucle qui permet de désactiver le bouton
-				buttonsId[p].disabled = true;
-				buttonsId[p].style.color = "black";
-			}
-			feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${button.innerHTML}' <br>`;
-		}
-		else{
-
-			let reponse;
-
-			button.style.border = "2px solid red"
-			for( let k=0; k < buttonsId.length; k++){
-				if(buttonsId[k].value == "1"){
-					buttonsId[k].style.backgroundColor = "green"
-					reponse = buttonsId[k].innerHTML;
-				}
-			}
-			indiceImages ++;
-			var boutonSuivant = '<button id=suivant onclick=chargementImageMot(this)>Suivant</button>'
-			document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
-			for( let p=0; p < buttonsId.length; p++){ // boucle qui permet de désactiver le bouton
-				buttonsId[p].disabled = true;
-				buttonsId[p].style.color = "black";
-			}
-			feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${button.innerHTML} '
-			la réponse '${reponse}' <br>`;
-		}
-	}
-}*/
 
 function loadingDatabase(classe) {
 
@@ -264,8 +226,7 @@ function fillButtons(nouveauxMots){
 
 	for (let i = 0; i < buttonsId.length; i++) {
 		mots_Tests[i].mot = nouveauxMots[i].mot;
-		//buttonsId[i].innerHTML = nouveauxMots[i].mot;
-		//buttonsId[i].value = nouveauxMots[i].distracteur;
+		mots_Tests[i].value = nouveauxMots[i].distracteur;
 	}
 	console.log(mots_Tests[0].mot);
 }
