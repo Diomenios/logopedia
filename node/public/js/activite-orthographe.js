@@ -2,9 +2,9 @@
 
 let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER = 4;
-let
 let image = new Image();
 let mots;
+let mots_Tests;
 let nextImage = new Image();
 let nextMots;
 let boolean = false;
@@ -13,17 +13,45 @@ var indiceImages = 0;
 var score = 0;
 let buttonsId = document.getElementsByClassName("boutonMots");
 let imageId;
+
 let mvButtons;
+let mvNextButton;
 
+function loadVueObjects(){
+	let objReturn=new Array();
 
-function loadVue(nombreBoutons){
-	for (let i = 0; i < nombreBoutons; i++) {
+	for(let i = 0 ; i < MOTS_NUMBER ; i++){
+		objReturn.push({mot:"", value:"", tvalue:false, fvalue:false, disabled:false});
 	}
+	objReturn[0].value = 1;
+	return objReturn;
+}
+
+function loadVue(){
+
+	mots_Tests = loadVueObjects();
 
 	mvButtons = new Vue({
 		el:"#boutonsMots",
-		data{
-			increment:MOTS_NUMBER;
+		data:{
+			listeMots:mots_Tests
+		},
+		methods:{
+			test: verification
+		}
+	});
+
+	mvNextButton = new Vue({
+		el:"#nextButton",
+		data:{
+			message : "Image suivante",
+			display: "none"
+		},
+		methods:{
+			next: chargementImageMot,
+			active: function () {
+				this.display="block";
+			}
 		}
 	});
 }
@@ -59,8 +87,8 @@ function validateShuffleMots(listMots){
 	}
 }
 
-function chargementImageMot(button){// adapter avec la base de donnés
-	try {
+function chargementImageMot(){// adapter avec la base de donnés
+		/*try {
 		button.disabled= true;
 		getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
 		getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
@@ -79,10 +107,45 @@ function chargementImageMot(button){// adapter avec la base de donnés
 		buttonsId[i].style.border = "1px solid black"
 		buttonsId[i].disabled = false;
 	}
+	*/
 }
 
-function verification(button){
-	console.log(button.value)
+function verification(item, listeItems){
+	if(indiceImages < REFERENCE_IMAGES_SAVE.length){
+		if(item.value == "1"){
+			score++;
+			for (let i = 0; i < listeItems.length; i++) {
+				if (listeItems[i].value == 1) {
+					listeItems[i].tvalue=true;
+				}
+				listeItems[i].disabled=true;
+			}
+			feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${item.mot}' <br>`;
+		}
+		else{
+
+			for (let i = 0; i < listeItems.length; i++) {
+				if (listeItems[i].value == 1) {
+					listeItems[i].tvalue=true;
+				}
+				else {
+					listeItems[i].fvalue = true;
+				}
+				listeItems[i].disabled=true;
+			}
+
+			let reponse;
+			feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${item.mot} '
+			la réponse '${reponse}' <br>`;
+		}
+		indiceImages ++;
+		mvNextButton.active();
+		console.log(mvNextButton.visible);
+	}
+}
+
+/*function verification(button){
+	console.log(button)
 	if(indiceImages < REFERENCE_IMAGES_SAVE.length){
 		if(button.value == "1"){
 			// adapter pour faire tourner plusieur image et que le mot de comparaison change
@@ -119,7 +182,8 @@ function verification(button){
 			la réponse '${reponse}' <br>`;
 		}
 	}
-}
+}*/
+
 function loadingDatabase(classe) {
 
  	let xhttp = new XMLHttpRequest();
@@ -199,7 +263,9 @@ function loadingDatabase(classe) {
 function fillButtons(nouveauxMots){
 
 	for (let i = 0; i < buttonsId.length; i++) {
-		buttonsId[i].innerHTML = nouveauxMots[i].mot;
-		buttonsId[i].value = nouveauxMots[i].distracteur;
+		mots_Tests[i].mot = nouveauxMots[i].mot;
+		//buttonsId[i].innerHTML = nouveauxMots[i].mot;
+		//buttonsId[i].value = nouveauxMots[i].distracteur;
 	}
+	console.log(mots_Tests[0].mot);
 }

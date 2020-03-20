@@ -1,0 +1,28 @@
+.show_button{
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: block;
+  border: 2px solid black;
+}
+
+.true_button{
+  background-color: green;
+  disabled: true;
+  color: black;
+  border: 2px solid green;
+}
+
+.false_button{
+  disabled: true;
+  color: black;
+  border: 2px solid red;
+}
+
+#nextButton{
+  width: 200px;
+  height: 50px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}

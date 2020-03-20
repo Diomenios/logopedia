@@ -12,7 +12,9 @@
 
 			<!-- Bootstrap CSS -->
 			<link href="/static/css/bootstrap.css" rel="stylesheet">
-            <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
+      <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
+      <link rel="stylesheet" type = "text/css" href="/static/css/activite-orthographe.css" />
+
 
     </head>
 		<header>
@@ -50,19 +52,25 @@
 				</div>
 			</nav>
 		</header>
-    <body onload="loadVue()">
+    <body>
 			<section class="main_Box" >
 
 				<div id="boite">
-					<div id="divParametre">
-						<button onclick="lancerActivités(), loadingDatabase('animaux')" id="activite-select">Commencer</button>
+
+          <div id="divParametre">
+						<button onclick="lancerActivités(), loadingDatabase('animaux'), loadVue()" id="activite-select">Commencer</button>
 					</div>
-					<div id="divActivités">
+
+          <div id="divActivités">
 						<div id="divImage"></div>
 
 						<div id="boutonsMots">
-							<button v-for="n in increment" class="boutonMots" v-on:click="verification(this)"><span class="zoneTexte"></span></button>
+							<button v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
 						</div>
+
+            <div id="nextButton">
+              <button class="show_button" v-bind:style="{display: display} " v-on:click="active()"> {{message}} </button>
+            </div>
 
 					</div>
 				</div>
