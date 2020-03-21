@@ -1,40 +1,29 @@
 'use strict'
 
 let REFERENCE_IMAGES_SAVE;
-let MOTS_NUMBER = 4;
+let MOTS_NUMBER = 5;
 let image = new Image();
 let mots;
-let mots_Tests;
+let listeObjBoutons;
 let nextImage = new Image();
 let nextMots;
-let boolean = false;
-var feedBackActivites = "<h2>FeedBack de l'activité</h2><br>";
-var indiceImages = 0;
-var score = 0;
-let buttonsId = document.getElementsByClassName("boutonMots");
-let imageId;
+let indiceImages = 0;
+let score = 0;
 
 let mvButtons;
 let mvNextButton;
 
-function loadVueObjects(){
-	let objReturn=new Array();
-
-	for(let i = 0 ; i < MOTS_NUMBER ; i++){
-		objReturn.push({mot:"", value:"", tvalue:false, fvalue:false, disabled:false});
-	}
-	objReturn[0].value = 1;
-	return objReturn;
-}
+/***********************  VUE pour l'exercice  ********************************/
 
 function loadVue(){
 
-	mots_Tests = loadVueObjects();
+	listeObjBoutons = loadVueObjects();
 
 	mvButtons = new Vue({
 		el:"#boutonsMots",
 		data:{
-			listeMots:mots_Tests
+			listeMots:listeObjBoutons,
+			size: MOTS_NUMBER
 		},
 		methods:{
 			test: verification,
@@ -62,6 +51,20 @@ function loadVue(){
 		}
 	});
 }
+
+/*************************  VUE fonctions d'aide  *****************************/
+
+function loadVueObjects(){
+	let objReturn=new Array();
+
+	for(let i = 0 ; i < MOTS_NUMBER ; i++){
+		objReturn.push({mot:"", value:"", tvalue:false, fvalue:false, disabled:false});
+	}
+	return objReturn;
+}
+
+
+/**************************  fonctions JS  ************************************/
 
 function lancerActivités(){
 	var divParametres = document.getElementById("divParametre");
@@ -122,7 +125,6 @@ function verification(item, listeItems){
 				}
 				listeItems[i].disabled=true;
 			}
-			feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${item.mot}' <br>`;
 		}
 		else{
 
@@ -135,16 +137,34 @@ function verification(item, listeItems){
 				}
 				listeItems[i].disabled=true;
 			}
-
-			let reponse;
-			feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${item.mot} '
-			la réponse '${reponse}' <br>`;
 		}
 		indiceImages ++;
 		mvNextButton.active();
 		console.log(mvNextButton.visible);
 	}
 }
+
+function generateImageHtml(divId){
+
+	let image = '<img id= imagesActivite src= "">';
+	let documentId = document.getElementById(divId);
+
+
+	documentId.innerHTML = image;
+	documentId.style.visibility = 'hidden';
+}
+
+function fillButtons(nouveauxMots){
+
+ for (let i = 0; i < MOTS_NUMBER; i++) {
+	 listeObjBoutons[i].mot = nouveauxMots[i].mot;
+	 listeObjBoutons[i].value = nouveauxMots[i].distracteur;
+ }
+ console.log(listeObjBoutons[0].mot);
+}
+
+
+/***********************  fonctions de GET database  **************************/
 
 function loadingDatabase(classe) {
 
@@ -211,22 +231,3 @@ function loadingDatabase(classe) {
  	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
   xhttp.send();
  }
-
- function generateImageHtml(divId){
-
-	 let image = '<img id= imagesActivite src= "">';
-	 let documentId = document.getElementById(divId);
-
-
-	 documentId.innerHTML = image;
-	 documentId.style.visibility = 'hidden';
- }
-
-function fillButtons(nouveauxMots){
-
-	for (let i = 0; i < buttonsId.length; i++) {
-		mots_Tests[i].mot = nouveauxMots[i].mot;
-		mots_Tests[i].value = nouveauxMots[i].distracteur;
-	}
-	console.log(mots_Tests[0].mot);
-}

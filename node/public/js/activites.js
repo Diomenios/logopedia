@@ -5,7 +5,7 @@ const BUTTONS =[{url: "activites/activite-orthographe", id:"bouton_activités", 
 let vm;
 
 function init(){
-  
+
   vm = new Vue({
     el:"#activities-buttons",
     data:{

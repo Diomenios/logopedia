@@ -1,3 +1,17 @@
+.boutonMots{
+  width: 45%;
+  height: 45%;
+  float: left;
+  margin: 5px;
+  border: 1px solid black;
+}
+.boutonMotsEtendu{
+  width: 30%;
+  height: 45%;
+  float: left;
+  margin: 5px;
+  border: 1px solid black;
+}
 .show_button{
   width: 100%;
   height: 100%;
@@ -25,4 +39,16 @@
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
+}
+
+#boutonsMots{
+  width: 500px;
+  height: 150px;
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }

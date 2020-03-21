@@ -2,8 +2,8 @@
 <html lang="fr-BE">
 
     <head>
-            <title>Logopédie</title>
-            <meta charset="utf-8">
+      <title>Logopédie</title>
+      <meta charset="utf-8">
       <script src="/static/js/vue.js"></script>
 			<script src="/static/js/activite-orthographe.js"></script>
 			<!-- Required meta tags -->
@@ -23,10 +23,9 @@
 				<div class="container">
 					<a class="navbar-brand" href="#">Logopédie</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
+					       <span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarResponsive">
-
 
 						<ul class="navbar-nav ml-auto">
 						<li class="nav-item active">
@@ -62,10 +61,13 @@
 					</div>
 
           <div id="divActivités">
-						<div id="divImage"></div>
 
-						<div id="boutonsMots">
-							<button v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
+            <div id="divImage">
+            </div>
+
+            <div id="boutonsMots">
+							<button v-if="size > 4" v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMotsEtendu" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
+              <button v-else v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
 						</div>
 
             <div id="nextButton">
@@ -78,10 +80,12 @@
 			</section>
     </body>
 
-        <footer>
-            <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
-        </footer>
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <footer>
+        <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 </html>
