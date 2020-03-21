@@ -9,7 +9,8 @@
         "mime-types": "^2.1.26",
         "request": "^2.88.2",
         "uuid": "^7.0.1",
-        "uuidv5": "^1.0.0"
+        "uuidv5": "^1.0.0",
+        "vue": "^2.6.11"
     },
     "author": "Diomenios <loui.arys@gmail.com>",
     "description": "Un petit site web pour les logopèdes"

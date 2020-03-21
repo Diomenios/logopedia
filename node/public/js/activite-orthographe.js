@@ -1,17 +1,70 @@
 'use strict'
 
 let REFERENCE_IMAGES_SAVE;
-let MOTS_NUMBER = 4;
+let MOTS_NUMBER = 5;
 let image = new Image();
 let mots;
+let listeObjBoutons;
 let nextImage = new Image();
 let nextMots;
-let boolean = false;
-var feedBackActivites = "<h2>FeedBack de l'activité</h2><br>";
-var indiceImages = 0;
-var score = 0;
-let buttonsId = document.getElementsByClassName("boutonMots");
-let imageId;
+let indiceImages = 0;
+let score = 0;
+
+let mvButtons;
+let mvNextButton;
+
+/***********************  VUE pour l'exercice  ********************************/
+
+function loadVue(){
+
+	listeObjBoutons = loadVueObjects();
+
+	mvButtons = new Vue({
+		el:"#boutonsMots",
+		data:{
+			listeMots:listeObjBoutons,
+			size: MOTS_NUMBER
+		},
+		methods:{
+			test: verification,
+			reInit: function(){
+				for (let i = 0; i < this.listeMots.length; i++) {
+					this.listeMots[i].tvalue = false;
+					this.listeMots[i].fvalue = false;
+					this.listeMots[i].disabled = false;
+				}
+			}
+		}
+	});
+
+	mvNextButton = new Vue({
+		el:"#nextButton",
+		data:{
+			message : "Image suivante",
+			display: "none"
+		},
+		methods:{
+			next: chargementImageMot,
+			active: function () {
+				this.display="block";
+			}
+		}
+	});
+}
+
+/*************************  VUE fonctions d'aide  *****************************/
+
+function loadVueObjects(){
+	let objReturn=new Array();
+
+	for(let i = 0 ; i < MOTS_NUMBER ; i++){
+		objReturn.push({mot:"", value:"", tvalue:false, fvalue:false, disabled:false});
+	}
+	return objReturn;
+}
+
+
+/**************************  fonctions JS  ************************************/
 
 function lancerActivités(){
 	var divParametres = document.getElementById("divParametre");
@@ -44,9 +97,9 @@ function validateShuffleMots(listMots){
 	}
 }
 
-function chargementImageMot(button){// adapter avec la base de donnés
-	try {
-		button.disabled= true;
+function chargementImageMot(){// adapter avec la base de donnés
+		try {
+		mvNextButton.display="none";
 		getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
 		getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
 	} catch (error) {
@@ -59,52 +112,60 @@ function chargementImageMot(button){// adapter avec la base de donnés
 			console.log(error);
 		}
 	}
-	for (let i = 0; i < buttonsId.length; i++) {
-		buttonsId[i].style.backgroundColor = "white"
-		buttonsId[i].style.border = "1px solid black"
-		buttonsId[i].disabled = false;
-	}
+	mvButtons.reInit();
 }
 
-function verification(button){
-	console.log(button.value)
+function verification(item, listeItems){
 	if(indiceImages < REFERENCE_IMAGES_SAVE.length){
-		if(button.value == "1"){
-			// adapter pour faire tourner plusieur image et que le mot de comparaison change
-			indiceImages ++;
+		if(item.value == "1"){
 			score++;
-			button.style.backgroundColor = "green";
-			var boutonSuivant = '<button id=suivant onclick=chargementImageMot(this)>Suivant</button>';
-			document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
-			for( let p=0; p < buttonsId.length; p++){ // boucle qui permet de désactiver le bouton
-				buttonsId[p].disabled = true;
-				buttonsId[p].style.color = "black";
+			for (let i = 0; i < listeItems.length; i++) {
+				if (listeItems[i].value == 1) {
+					listeItems[i].tvalue=true;
+				}
+				listeItems[i].disabled=true;
 			}
-			feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${button.innerHTML}' <br>`;
 		}
 		else{
 
-			let reponse;
-
-			button.style.border = "2px solid red"
-			for( let k=0; k < buttonsId.length; k++){
-				if(buttonsId[k].value == "1"){
-					buttonsId[k].style.backgroundColor = "green"
-					reponse = buttonsId[k].innerHTML;
+			for (let i = 0; i < listeItems.length; i++) {
+				if (listeItems[i].value == 1) {
+					listeItems[i].tvalue=true;
 				}
+				else {
+					listeItems[i].fvalue = true;
+				}
+				listeItems[i].disabled=true;
 			}
-			indiceImages ++;
-			var boutonSuivant = '<button id=suivant onclick=chargementImageMot(this)>Suivant</button>'
-			document.getElementById("divBoutonSuivant").innerHTML = boutonSuivant;
-			for( let p=0; p < buttonsId.length; p++){ // boucle qui permet de désactiver le bouton
-				buttonsId[p].disabled = true;
-				buttonsId[p].style.color = "black";
-			}
-			feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${button.innerHTML} '
-			la réponse '${reponse}' <br>`;
 		}
+		indiceImages ++;
+		mvNextButton.active();
+		console.log(mvNextButton.visible);
 	}
 }
+
+function generateImageHtml(divId){
+
+	let image = '<img id= imagesActivite src= "">';
+	let documentId = document.getElementById(divId);
+
+
+	documentId.innerHTML = image;
+	documentId.style.visibility = 'hidden';
+}
+
+function fillButtons(nouveauxMots){
+
+ for (let i = 0; i < MOTS_NUMBER; i++) {
+	 listeObjBoutons[i].mot = nouveauxMots[i].mot;
+	 listeObjBoutons[i].value = nouveauxMots[i].distracteur;
+ }
+ console.log(listeObjBoutons[0].mot);
+}
+
+
+/***********************  fonctions de GET database  **************************/
+
 function loadingDatabase(classe) {
 
  	let xhttp = new XMLHttpRequest();
@@ -170,21 +231,3 @@ function loadingDatabase(classe) {
  	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
   xhttp.send();
  }
-
- function generateImageHtml(divId){
-
-	 let image = '<img id= imagesActivite src= "">';
-	 let documentId = document.getElementById(divId);
-
-
-	 documentId.innerHTML = image;
-	 documentId.style.visibility = 'hidden';
- }
-
-function fillButtons(nouveauxMots){
-
-	for (let i = 0; i < buttonsId.length; i++) {
-		buttonsId[i].innerHTML = nouveauxMots[i].mot;
-		buttonsId[i].value = nouveauxMots[i].distracteur;
-	}
-}

@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="fr-BE">
 
-        <head>
-            <title>Logopédie</title>
-            <meta charset="utf-8">
+    <head>
+      <title>Logopédie</title>
+      <meta charset="utf-8">
+      <script src="/static/js/vue.js"></script>
 			<script src="/static/js/activite-orthographe.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
@@ -11,19 +12,20 @@
 
 			<!-- Bootstrap CSS -->
 			<link href="/static/css/bootstrap.css" rel="stylesheet">
-            <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
+      <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
+      <link rel="stylesheet" type = "text/css" href="/static/css/activite-orthographe.css" />
 
-        </head>
+
+    </head>
 		<header>
 			<!-- Navigation -->
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 				<div class="container">
 					<a class="navbar-brand" href="#">Logopédie</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
+					       <span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarResponsive">
-
 
 						<ul class="navbar-nav ml-auto">
 						<li class="nav-item active">
@@ -49,50 +51,41 @@
 				</div>
 			</nav>
 		</header>
-        <body>
+    <body>
 			<section class="main_Box" >
 
 				<div id="boite">
-					<div id="divParametre">
-            <!-- TODO
-						<select name="patient" id="activite-select">
-							<option value="">--Choisisez un patient--</option>
-							<option value="">Emile</option>
-							<option value="">Louis</option>
-							<option value="">Martin</option>
-							<option value="">Arthur</option>
-						</select><br>
 
-						<select name="niveau" id="activite-select">
-							<option value="">--Choisisez un niveau--</option>
-							<option value="">1</option>
-							<option value="">2</option>
-							<option value="">3</option>
-							<option value="">4</option>
-						</select><br> -->
-
-						<button onclick="lancerActivités(), loadingDatabase('animaux')" id="activite-select">Commencer</button>
+          <div id="divParametre">
+						<button onclick="lancerActivités(), loadingDatabase('animaux'), loadVue()" id="activite-select">Commencer</button>
 					</div>
-					<div id="divActivités">
-						<div id="divImage"></div>
 
-						<div id="divBouton">
-							<button class="boutonMots" value="1" id="prout" onclick="verification(this)"><span class="zoneTexte"></span></button>
-							<button class="boutonMots" value="0" id="Martin" onclick="verification(this)"><span class="zoneTexte"></span></button>
-							<button class="boutonMots" value="0" id="Louis" onclick="verification(this)"><span class="zoneTexte"></span></button>
-							<button class="boutonMots" value="0" id="Emile" onclick="verification(this)"><span class="zoneTexte"></span></button>
+          <div id="divActivités">
+
+            <div id="divImage">
+            </div>
+
+            <div id="boutonsMots">
+							<button v-if="size > 4" v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMotsEtendu" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
+              <button v-else v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
 						</div>
-						<div id=divBoutonSuivant></div>
+
+            <div id="nextButton">
+              <button class="show_button" v-bind:style="{display: display} " v-on:click="next()"> {{message}} </button>
+            </div>
+
 					</div>
 				</div>
 
 			</section>
-        </body>
+    </body>
 
-        <footer>
-            <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
-        </footer>
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <footer>
+        <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 </html>
