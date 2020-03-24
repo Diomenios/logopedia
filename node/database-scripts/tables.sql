@@ -38,3 +38,9 @@ CREATE TABLE Mots(
     ON UPDATE CASCADE ON DELETE RESTRICT,
   CONSTRAINT true_boolean CHECK(distracteur = 0 OR distracteur = 1)
 );
+
+CREATE TABLE Difficultes(
+  nom varchar(30) NOT NULL,
+  nombre_mots INT NOT NULL UNIQUE,
+  PRIMARY KEY(nom)
+);

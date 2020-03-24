@@ -51,13 +51,20 @@
 				</div>
 			</nav>
 		</header>
-    <body>
+    <body onload="onload()">
 			<section class="main_Box" >
 
 				<div id="boite">
+          <div id="divParametre" v-bind:style={display:display}>
+						<button onclick="lancerActivités(), loadingDatabase('animaux'), loadVue()" id="activiteSelect">Commencer</button>
 
-          <div id="divParametre">
-						<button onclick="lancerActivités(), loadingDatabase('animaux'), loadVue()" id="activite-select">Commencer</button>
+            <select>
+                <option v-for="classe in classes" v-bind:value="classe.classe_id" class="selectOptions">{{classe.classe_nom}}</option>
+            </select>
+
+            <select>
+                <option v-for="difficulte in difficulties" v-bind:value="difficulte.nombre_mots" class="selectOptions">{{difficulte.nom}}</option>
+            </select>
 					</div>
 
           <div id="divActivités">
@@ -66,12 +73,12 @@
             </div>
 
             <div id="boutonsMots">
-							<button v-if="size > 4" v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMotsEtendu" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
-              <button v-else v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{true_button: item.tvalue, false_button: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
+							<button v-if="size > 4" v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{trueButton: item.tvalue, falseButton: item.fvalue}" class="boutonMotsEtendu" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
+              <button v-else v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{trueButton: item.tvalue, falseButton: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
 						</div>
 
             <div id="nextButton">
-              <button class="show_button" v-bind:style="{display: display} " v-on:click="next()"> {{message}} </button>
+              <button class="showButton" v-bind:style="{display: display} " v-on:click="next()"> {{message}} </button>
             </div>
 
 					</div>

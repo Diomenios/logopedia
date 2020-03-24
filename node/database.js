@@ -56,7 +56,8 @@ database.get('/image_path', (req, res) => {
       res.send('classe inconnue');
     }
     else{
-      conn.query("SELECT DISTINCT image_nom, image_id, Images.type_id from Images INNER JOIN Types WHERE classe_id = ?",[rows[0].classe_id], (err, rows) => {
+      conn.query("SELECT image_nom, image_id, Images.type_id, classe_id from Images INNER JOIN Types ON Images.type_id = Types.type_id WHERE classe_id = ?",
+                    [rows[0].classe_id], (err, rows) => {
         if (err) {
           throw err;
         }
@@ -64,6 +65,26 @@ database.get('/image_path', (req, res) => {
         res.send(rows);
       });
     }
+  });
+})
+
+.get('/classes', (req, res) => {
+  conn.query("SELECT * FROM Classes", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.set('Content-Type', 'application/json');
+    res.send(rows);
+  });
+})
+
+.get('/difficultes', (req, res) => {
+  conn.query("SELECT * FROM Difficultes", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.set('Content-Type', 'application/json');
+    res.send(rows);
   });
 })
 

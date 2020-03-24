@@ -9,7 +9,10 @@ let nextImage = new Image();
 let nextMots;
 let indiceImages = 0;
 let score = 0;
+let difficulties=[];
+let classes=[];
 
+let mvOptions;
 let mvButtons;
 let mvNextButton;
 
@@ -37,7 +40,7 @@ function loadVue(){
 		}
 	});
 
-	mvNextButton = new Vue({
+mvNextButton = new Vue({
 		el:"#nextButton",
 		data:{
 			message : "Image suivante",
@@ -48,6 +51,21 @@ function loadVue(){
 			active: function () {
 				this.display="block";
 			}
+		}
+	});
+}
+
+function onload(){
+
+	getAllClasses();
+	getAllDifficultes();
+
+	mvOptions = new Vue({
+		el:"#divParametre",
+		data:{
+			classes: classes,
+			difficulties: difficulties,
+			display:"none"
 		}
 	});
 }
@@ -165,6 +183,45 @@ function fillButtons(nouveauxMots){
 
 
 /***********************  fonctions de GET database  **************************/
+
+function getAllClasses(){
+
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+					 console.log("reçu")
+        	let returnValues = JSON.parse(this.responseText);
+
+					for(let i = 0; i<returnValues.length ; i++){
+						classes.push(returnValues[i]);
+					}
+					console.log("fini");
+					mvOptions.display = "flex";
+        }
+  };
+
+ 	xhttp.open("GET", "https://localhost/api/classes", true);
+  xhttp.send();
+}
+
+function getAllDifficultes(){
+
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+        	let returnValues = JSON.parse(this.responseText);
+
+					for(let i = 0; i<returnValues.length ; i++){
+						difficulties.push(returnValues[i]);
+					}
+        }
+  };
+
+ 	xhttp.open("GET", "https://localhost/api/difficultes", true);
+  xhttp.send();
+}
 
 function loadingDatabase(classe) {
 
