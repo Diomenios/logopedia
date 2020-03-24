@@ -23,6 +23,24 @@ footer > p{
     color: black;
 }
 
+.titre_section{
+    text-align: center;
+    text-decoration: underline;
+}
+.main_Box{
+    display: center;
+    justify-content: center;
+    align-items: center;
+	/*order:1px solid black;*/
+	margin: 50px auto 70px;
+	left: 0;
+	right: 0;
+	min-width: 720px;
+  width: 69%;
+  height: 680px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
 /*Partie pour le menu haut de page*/ /*#8b9dfe*/
 .cached{
@@ -172,72 +190,8 @@ footer > p{
   }
 }
 
-/*Début contenu page*/
-#section_logopedie{
-	min-width:320px;
-	max-width:640px;
-    width:50%;
-    max-height:718px;
-	min-height:358px;
-    height: 100%;
-    overflow: auto;
-    margin-left: auto;
-    margin-right: auto;
-    float: left;
-}
 
-#info_logopede{
-  border:1px solid black;
-  width: 80%;
-  height: 20%;
-  top: 5%;
-  left: 5%;
-  margin: 10%;
-}
-#informations{
-  float: left;
-}
 
-#section_news{
-	min-width:320px;
-	max-width:640px;
-    width:50%;
-    max-height:718px;
-	min-height:358px;
-    height: 100%;
-    overflow: auto;
-    margin-left: auto;
-    margin-right: auto;
-    float: right;
-
-  }
-#news_site{
-  /*background-color: aqua;*/
-  border:1px solid black;
-  width: 80%;
-  height: 20%;
-  top: 5%;
-  left: 5%;
-  margin: 10%;
-}
-.titre_section{
-    text-align: center;
-    text-decoration: underline;
-}
-.main_Box{
-    display: center;
-    justify-content: center;
-    align-items: center;
-	/*order:1px solid black;*/
-	margin: 50px auto 70px;
-	left: 0;
-	right: 0;
-	min-width: 720px;
-  width: 69%;
-  height: 680px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
 ::-webkit-scrollbar{
   width: 14px;
 height: 14px;
@@ -249,40 +203,4 @@ height: 14px;
   background-color: rgb(30, 33, 33);
   border: 1.5px solid whitesmoke;
 }
-#bouton_activités{
-  width: 50%;
-  height: 100px;
-  margin-top: 5%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 5%;
-  display: block;
 
-}
-
-/*Css Page activité orthographe*/
-#divImage{
-  width: 400px;
-  height: 360px;
-  border: 2px solid black;
-  margin-top: 2%;
-  margin-left: auto;
-  margin-right: auto;
-}
-#imagesActivite{
-  width: 100%;
-  height: 100%;
-}
-#divActivités{
-  display: none;
-}
-#divResultat{
-  width: 1000px;
-  height: 500px;
-  border: 2px solid black;
-  margin-top: 5%;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  text-align: center;
-}

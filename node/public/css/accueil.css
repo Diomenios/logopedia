@@ -1,0 +1,52 @@
+/*CSS Page accueil avec News et Info*/
+#section_logopedie{
+	min-width:320px;
+	max-width:640px;
+    width:49%;
+	min-height:358px;
+    height: 100%;
+    background-color: white;
+    overflow: auto;
+    margin-left: auto;
+    margin-right: auto;
+    float: left;
+	border-radius: 1rem;
+}
+
+#info_logopede{
+  background-color: aqua;
+  border:1px solid black;
+  width: 80%;
+  height: 20%;
+  top: 5%;
+  left: 5%;
+  margin: 10%;
+}
+#informations{
+
+}
+
+#section_news{
+	min-width:320px;
+	max-width:640px;
+    width:49%;
+	min-height:358px;
+    height: 100%;
+    background-color: white;
+    overflow: auto;
+    margin-left: auto;
+    margin-right: auto;
+    float: right;
+	border-radius: 1rem;
+  }
+
+#news_site{
+  background-color: aqua;
+  border:1px solid black;
+  width: 80%;
+  height: 20%;
+  top: 5%;
+  left: 5%;
+  margin: 10%;
+}
+
