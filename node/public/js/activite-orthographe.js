@@ -1,7 +1,8 @@
 'use strict'
 
 let REFERENCE_IMAGES_SAVE;
-let MOTS_NUMBER = 5;
+let MOTS_NUMBER;
+let MAX_IMAGES;
 let image = new Image();
 let mots;
 let listeObjBoutons;
@@ -26,10 +27,11 @@ function loadVue(){
 		el:"#boutonsMots",
 		data:{
 			listeMots:listeObjBoutons,
-			size: MOTS_NUMBER
+			size: MOTS_NUMBER,
+			etendu: (MOTS_NUMBER>4)
 		},
 		methods:{
-			test: verification,
+			testAnswer: verification,
 			reInit: function(){
 				for (let i = 0; i < this.listeMots.length; i++) {
 					this.listeMots[i].tvalue = false;
@@ -64,7 +66,10 @@ function onload(){
 		el:"#divParametre",
 		data:{
 			classes: classes,
+			selectClasse:"",
 			difficulties: difficulties,
+			selectDifficulte:"",
+			messageError:"",
 			display:"none"
 		}
 	});
@@ -145,20 +150,16 @@ function verification(item, listeItems){
 			}
 		}
 		else{
-
+			item.fvalue = true;
 			for (let i = 0; i < listeItems.length; i++) {
 				if (listeItems[i].value == 1) {
 					listeItems[i].tvalue=true;
-				}
-				else {
-					listeItems[i].fvalue = true;
 				}
 				listeItems[i].disabled=true;
 			}
 		}
 		indiceImages ++;
 		mvNextButton.active();
-		console.log(mvNextButton.visible);
 	}
 }
 
@@ -178,7 +179,31 @@ function fillButtons(nouveauxMots){
 	 listeObjBoutons[i].mot = nouveauxMots[i].mot;
 	 listeObjBoutons[i].value = nouveauxMots[i].distracteur;
  }
- console.log(listeObjBoutons[0].mot);
+}
+
+function testOptions(){
+	if (mvOptions.selectClasse === "" || mvOptions.selectDifficulte === "") {
+		let count = 0;
+		if (mvOptions.selectClasse === "") {
+				mvOptions.messageError = "Veuillez sélectionner une catégorie d'images pour le test";
+				count++;
+		}
+		if (mvOptions.selectDifficulte === "") {
+			if (count == 0) {
+				mvOptions.messageError = "Veuillez sélectionner la difficulté du test";
+			}
+			else {
+				mvOptions.messageError += "\n Veuillez sélectionner la difficulté du test";
+			}
+			count++;
+		}
+	}
+	else {
+		MOTS_NUMBER = mvOptions.selectDifficulte;
+		lancerActivités();
+		loadingDatabase(mvOptions.selectClasse);
+		loadVue();
+	}
 }
 
 
@@ -190,13 +215,11 @@ function getAllClasses(){
 
 	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
-					 console.log("reçu")
         	let returnValues = JSON.parse(this.responseText);
 
 					for(let i = 0; i<returnValues.length ; i++){
 						classes.push(returnValues[i]);
 					}
-					console.log("fini");
 					mvOptions.display = "flex";
         }
   };
@@ -223,7 +246,7 @@ function getAllDifficultes(){
   xhttp.send();
 }
 
-function loadingDatabase(classe) {
+function loadingDatabase(classeId) {
 
  	let xhttp = new XMLHttpRequest();
 	generateImageHtml("divImage");
@@ -236,7 +259,7 @@ function loadingDatabase(classe) {
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/images?classe="+classe, true);
+ 	xhttp.open("GET", "https://localhost/api/classe_images?classe_id="+classeId, true);
   xhttp.send();
  }
 

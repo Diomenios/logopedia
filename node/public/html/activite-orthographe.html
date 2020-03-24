@@ -56,15 +56,19 @@
 
 				<div id="boite">
           <div id="divParametre" v-bind:style={display:display}>
-						<button onclick="lancerActivités(), loadingDatabase('animaux'), loadVue()" id="activiteSelect">Commencer</button>
-
-            <select>
+            <select v-model="selectClasse">
+                <option disabled value="">Catégorie</option>
                 <option v-for="classe in classes" v-bind:value="classe.classe_id" class="selectOptions">{{classe.classe_nom}}</option>
             </select>
 
-            <select>
+            <select v-model="selectDifficulte">
+                <option disabled value="">Difficulté</option>
                 <option v-for="difficulte in difficulties" v-bind:value="difficulte.nombre_mots" class="selectOptions">{{difficulte.nom}}</option>
             </select>
+
+            <button onclick="testOptions()" id="activiteSelect">Commencer</button>
+
+            <span> {{messageError}} </span>
 					</div>
 
           <div id="divActivités">
@@ -73,8 +77,8 @@
             </div>
 
             <div id="boutonsMots">
-							<button v-if="size > 4" v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{trueButton: item.tvalue, falseButton: item.fvalue}" class="boutonMotsEtendu" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
-              <button v-else v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{trueButton: item.tvalue, falseButton: item.fvalue}" class="boutonMots" v-on:click="test(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
+							<button  v-for="item in listeMots"  v-bind:disabled="item.disabled" v-bind:class="{trueButton: item.tvalue, falseButton: item.fvalue, boutonMotsEtendu: etendu, boutonMots: !etendu}"
+                       v-on:click="testAnswer(item, listeMots)"><span class="zoneTexte">{{item.mot}}</span></button>
 						</div>
 
             <div id="nextButton">

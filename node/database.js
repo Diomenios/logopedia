@@ -88,6 +88,21 @@ database.get('/image_path', (req, res) => {
   });
 })
 
+.get('/classe_images', (req, res) => {
+  if (req.query.classe_id === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire l\'id d\'une classe !');
+  }
+  conn.query("SELECT image_nom, image_id, Images.type_id from Images INNER JOIN Types ON Images.type_id = Types.type_id WHERE classe_id = ?",
+                [req.query.classe_id], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.set('Content-Type', 'application/json');
+    res.send(rows);
+  });
+})
+
 .get('/mots', (req, res) => {
   if (req.query.type === undefined) {
     sendMessage("veuillez introduire le type des mots que vous désirez récupérer", res);
