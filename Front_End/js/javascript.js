@@ -77,7 +77,7 @@ function lancerActivités(){
 	divActivités.style.display ="block";
 }
 var boutonsActivité = document.getElementsByClassName("boutonMots");
-var feedBackActivites = "<h2>FeedBack de l'activité</h2><br>";
+var feedBackActivites = "<h2><u>FeedBack de l'activité</u></h2><br>";
 var indiceImages = 0;
 var indiceMots = 0;
 var compteurResultat = 0;
@@ -110,7 +110,7 @@ function chargementImageMot(){// adapter avec la base de donnés
 			document.getElementsByClassName("zoneTexte")[m].innerHTML = motBaseDonnee[indiceMots][m];
 		}
 	}else{
-		var boutonRetour = '<div id= divResultat ><span>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length}`+'</span>'
+		var boutonRetour = '<div id= divResultat ><br><h2>'+`Résultat: ${compteurResultat}/${imageBaseDonnee.length} </h2>`
 		+'<br><span>'+feedBackActivites+'</span>'
 		+'<br><a href="activite.html"><button>Home</button></a></div>'
 		document.getElementById("boite").innerHTML = boutonRetour;
@@ -135,7 +135,6 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 						boutonsActivité[p].disabled = true;
 						boutonsActivité[p].style.color = "black";
 					}
-					feedBackActivites += `Image: ${indiceImages} tu as trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML}' <br>`;
 				}
 
 				else{
@@ -153,8 +152,8 @@ function verifiacation() { // adapter au niv de la difficulté donc le nombre de
 						boutonsActivité[p].disabled = true;
 						boutonsActivité[p].style.color = "black";
 					}
-					feedBackActivites += `Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML} '
-					la réponse '${motBaseDonnee[indiceMots-1][1]}' <br>`;
+					feedBackActivites += `<h5> Image: ${indiceImages} tu n'as pas  trouvé la bonne orthographe: ton choix '${spanMots[j].innerHTML}'
+					la réponse '${motBaseDonnee[indiceMots-1][1]}'</h5> <br>`;
 					}
 			}
 		}
