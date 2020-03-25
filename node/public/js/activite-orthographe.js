@@ -3,6 +3,9 @@
 let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER;
 let MAX_IMAGES;
+let DIFFICULTE;
+let CLASSE;
+
 let image = new Image();
 let mots;
 let listeObjBoutons;
@@ -12,12 +15,43 @@ let indiceImages = 0;
 let score = 0;
 let difficulties=[];
 let classes=[];
+let feedbackList=[];
 
 let mvOptions;
 let mvButtons;
 let mvNextButton;
+let mvResultats;
 
 /***********************  VUE pour l'exercice  ********************************/
+
+function onload(){
+
+	getAllClasses();
+	getAllDifficultes();
+
+	mvOptions = new Vue({
+		el:"#divParametre",
+		data:{
+			classes: classes,
+			selectClasse:"",
+			difficulties: difficulties,
+			selectDifficulte:"",
+			messageError:"",
+			display:"none"
+		}
+	});
+
+	mvResultats = new Vue({
+		el:"#divResultats",
+		data:{
+			title:"",
+			score:"",
+			feedback:"",
+			display:"none"
+		}
+	});
+}
+
 
 function loadVue(){
 
@@ -28,7 +62,8 @@ function loadVue(){
 		data:{
 			listeMots:listeObjBoutons,
 			size: MOTS_NUMBER,
-			etendu: (MOTS_NUMBER>4)
+			etendu: (MOTS_NUMBER>4),
+			display:"flex"
 		},
 		methods:{
 			testAnswer: verification,
@@ -53,24 +88,6 @@ mvNextButton = new Vue({
 			active: function () {
 				this.display="block";
 			}
-		}
-	});
-}
-
-function onload(){
-
-	getAllClasses();
-	getAllDifficultes();
-
-	mvOptions = new Vue({
-		el:"#divParametre",
-		data:{
-			classes: classes,
-			selectClasse:"",
-			difficulties: difficulties,
-			selectDifficulte:"",
-			messageError:"",
-			display:"none"
 		}
 	});
 }
@@ -121,15 +138,24 @@ function validateShuffleMots(listMots){
 }
 
 function chargementImageMot(){// adapter avec la base de donnés
-		try {
+	try {
 		mvNextButton.display="none";
 		getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
 		getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
 	} catch (error) {
 		if(error == "TypeError: REFERENCE_IMAGES_SAVE[indiceImages] is undefined"){
-			let doc = document.getElementById("divActivités");
+
+			document.getElementById("divImage").style.display = 'none';
+
+			mvButtons.display="none";
+
+			mvResultats.display="block";
+			mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
+			mvResultats.score=formatScore(score, MAX_IMAGES);
+			mvResultats.feedback=formatFeedback();
+			/*let doc = document.getElementById("divActivités");
 			doc.innerHTML = "Votre score : " + score + "/" + REFERENCE_IMAGES_SAVE.length;
-			doc.style.margin = 'auto';
+			doc.style.margin = 'auto';*/
 		}
 		else{
 			console.log(error);
@@ -138,13 +164,17 @@ function chargementImageMot(){// adapter avec la base de donnés
 	mvButtons.reInit();
 }
 
-function verification(item, listeItems){
+function verification(item, listeItems, mot){
 	if(indiceImages < REFERENCE_IMAGES_SAVE.length){
+
+		let trueResultat;
+
 		if(item.value == "1"){
 			score++;
 			for (let i = 0; i < listeItems.length; i++) {
 				if (listeItems[i].value == 1) {
 					listeItems[i].tvalue=true;
+					trueResultat = listeItems[i].mot;
 				}
 				listeItems[i].disabled=true;
 			}
@@ -154,10 +184,12 @@ function verification(item, listeItems){
 			for (let i = 0; i < listeItems.length; i++) {
 				if (listeItems[i].value == 1) {
 					listeItems[i].tvalue=true;
+					trueResultat = listeItems[i].mot;
 				}
 				listeItems[i].disabled=true;
 			}
 		}
+		feedbackList.push({resultat: mot,trueResultat: trueResultat});
 		indiceImages ++;
 		mvNextButton.active();
 	}
@@ -203,9 +235,33 @@ function testOptions(){
 		lancerActivités();
 		loadingDatabase(mvOptions.selectClasse);
 		loadVue();
+		getClasseNom(mvOptions.selectClasse);
+		getDifficulteNom(mvOptions.selectDifficulte);
 	}
 }
 
+function formatTitle(classe, difficulte){
+	return classe + ", difficulté " + difficulte;
+}
+
+function formatScore(resultat, max){
+	return "Résultat : " + resultat + "/" + max;
+}
+
+function formatFeedback(){
+	let returnString="";
+
+	for (let i = 0; i < feedbackList.length; i++) {
+		if (feedbackList[i].resultat == feedbackList[i].trueResultat) {
+			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez correctement répondu \n";
+		}
+		else{
+			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
+		}
+	}
+
+	return returnString;
+}
 
 /***********************  fonctions de GET database  **************************/
 
@@ -254,6 +310,7 @@ function loadingDatabase(classeId) {
  	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
             REFERENCE_IMAGES_SAVE = JSON.parse(this.responseText);
+						MAX_IMAGES = REFERENCE_IMAGES_SAVE.length;
  						getMotsByType(REFERENCE_IMAGES_SAVE[0].type_id);
  						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].image_nom);
         }
@@ -310,4 +367,36 @@ function loadingDatabase(classeId) {
 	*/
  	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
   xhttp.send();
+ }
+
+ function getClasseNom(classeId){
+
+	 let xhttp = new XMLHttpRequest();
+
+	 xhttp.onreadystatechange = function() {
+	 			 if (this.readyState == 4 && this.status == 200) {
+	 				let returnValues = JSON.parse(this.responseText);
+
+					CLASSE = returnValues[0].classe_nom;
+				}
+	 };
+
+	 xhttp.open("GET", "https://localhost/api/select_classe?classe_id=" + classeId, true);
+	 xhttp.send();
+ }
+
+ function getDifficulteNom(nombreMots){
+
+	 let xhttp = new XMLHttpRequest();
+
+	 xhttp.onreadystatechange = function() {
+	 			 if (this.readyState == 4 && this.status == 200) {
+	 				let returnValues = JSON.parse(this.responseText);
+
+					DIFFICULTE = returnValues[0].nom;
+				}
+	 	};
+
+	 xhttp.open("GET", "https://localhost/api/select_difficulte?nombre_mots=" + nombreMots, true);
+	 xhttp.send();
  }
