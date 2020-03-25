@@ -103,6 +103,39 @@ database.get('/image_path', (req, res) => {
   });
 })
 
+.get('/select_difficulte', (req, res) => {
+  if (req.query.nombre_mots === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire l\'id d\'une classe !');
+  }
+  else {
+    conn.query("SELECT nom FROM Difficultes WHERE nombre_mots = ? ", [req.query.nombre_mots] , (err, rows) => {
+      if (err) {
+        throw err;
+      }
+      res.set('Content-Type', 'application/json');
+      res.send(rows);
+    });
+  }
+})
+
+.get('/select_classe', (req, res) => {
+  if (req.query.classe_id === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire l\'id d\'une classe !');
+  }
+  else {
+    conn.query("SELECT classe_nom FROM Classes WHERE classe_id = ? ", [req.query.classe_id] , (err, rows) => {
+      if (err) {
+        throw err;
+      }
+      res.set('Content-Type', 'application/json');
+      res.send(rows);
+    });
+  }
+})
+
+
 .get('/mots', (req, res) => {
   if (req.query.type === undefined) {
     sendMessage("veuillez introduire le type des mots que vous désirez récupérer", res);
