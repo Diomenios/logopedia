@@ -8,7 +8,8 @@ var uuidv5 = require('uuidv5');
 
 var app = express();
 var database = express.Router();
-const conn = mariadb.createConnection({host:process.env.HOST, user:process.env.USERNAME, password:process.env.PASSWORD, database:process.env.DATABASE});
+
+const conn = mariadb.createConnection({host:process.env.HOST, user:process.env.U_NAME, password:process.env.PASSWORD, database:process.env.DATABASE});
 
 const PATH = __dirname + '/public/';
 
