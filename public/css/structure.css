@@ -1,4 +1,14 @@
+@font-face {
+  font-family: 'Teko';
+  src: url('fonts/Teko-Medium.ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Medium.ttf');
+}
+
 header{
+  font-family: 'Teko';
     width: 100%;
     background-color: lightgrey;
     position: fixed;
@@ -7,6 +17,7 @@ header{
 }
 
 body{
+
     background-color: rgb(187, 210, 225);
 	padding-top: 56px;
 }
@@ -232,7 +243,7 @@ footer > p{
 }
 
 .main_Box{
-font-family: Roboto;
+font-family: 'Roboto';
   display: center;
   justify-content: center;
   align-items: center;
