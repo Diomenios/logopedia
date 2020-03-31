@@ -1,4 +1,4 @@
-node/.env
-node/node_modules/*
-node/package-lock.json
-node/public/images/*
+.env
+node_modules/*
+package-lock.json
+public/images/*
