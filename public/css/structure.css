@@ -7,7 +7,7 @@ header{
 }
 
 body{
-    background-color: whitesmoke;
+    background-color: rgb(187, 210, 225);
 	padding-top: 56px;
 }
 
@@ -232,6 +232,7 @@ footer > p{
 }
 
 .main_Box{
+font-family: Roboto;
   display: center;
   justify-content: center;
   align-items: center;

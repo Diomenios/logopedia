@@ -66,7 +66,7 @@
 						<option v-for="difficulte in difficulties" v-bind:value="difficulte.nombre_mots" class="selectOptions">{{difficulte.nom}}</option>
 					</select>
 
-					<button onclick="testOptions()" id="activiteSelect">Commencer</button>
+					<button onclick="testOptions()" id="activiteSelect" class="btn btn-primary btn-sm">Commencer</button>
 
 					<span> {{messageError}} </span>
 				</div>
@@ -82,8 +82,8 @@
 						v-on:click="testAnswer(item, listeMots, item.mot)"><span class="zoneTexte">{{item.mot}}</span></button>
 					</div>
 
-					<div id="nextButton">
-						<button class="showButton" v-bind:style="{display: display} " v-on:click="next()"> {{message}} </button>
+					<div id="nextButton" >
+						<button class="showButton btn-primary" v-bind:style="{display: display} " v-on:click="next()"> {{message}} </button>
 					</div>
 
 				<div id="divResultats" v-bind:style="{display:display}">
