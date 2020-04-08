@@ -1,5 +1,7 @@
 'use strict'
 
+/**********************  Variables d'environnements  **************************/
+
 let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER;
 let MAX_IMAGES;
@@ -25,6 +27,9 @@ let mvResultats;
 
 /***********************  VUE pour l'exercice  ********************************/
 
+/*
+*	Initialise les Vues necessaires apres que le body aie ete initialise
+*/
 function onload(){
 
 	getAllLongueurs();
@@ -59,7 +64,10 @@ function onload(){
 	});
 }
 
-
+/*
+*	Initialise les Vues en rapport avec l'affichage des mots et le passage a l'image
+* 	suivante.
+*/
 function loadVue(){
 
 	listeObjBoutons = loadVueObjects();
@@ -101,6 +109,9 @@ mvNextButton = new Vue({
 
 /*************************  VUE fonctions d'aide  *****************************/
 
+/*
+*	Initialise une liste d'objets voue a contenir les mots de l'activite
+*/
 function loadVueObjects(){
 	let objReturn=new Array();
 
@@ -113,6 +124,10 @@ function loadVueObjects(){
 
 /**************************  fonctions JS  ************************************/
 
+/*
+* Cache les parametres, et affiche la div contenant la premiere image ainsi que
+* 	les mots
+*/
 function lancerActivités(){
 	var divParametres = document.getElementById("divParametre");
 	var divActivités = document.getElementById("divActivités");
@@ -121,6 +136,9 @@ function lancerActivités(){
 	divActivités.style.display ="block";
 }
 
+/*
+* Melange de maniere totalement aleatoire la liste passee en parametre.
+*/
 function shuffle(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 	  let j = Math.floor(Math.random() * (i + 1));
@@ -128,6 +146,12 @@ function shuffle(array) {
 	}
 }
 
+/*
+* Permet d'etre sur que le mot correcte se trouve bien dans la liste de mots qui
+* 	sera prise pour l'image
+*	Considere que si la propriete "distracteur" du mot est a 1, le mot est la proposition
+*		correcte.
+*/
 function validateShuffleMots(listMots){
 	let itsTrue =  false;
 	for (let i = 0; i < MOTS_NUMBER; i++) {
@@ -144,32 +168,51 @@ function validateShuffleMots(listMots){
 	}
 }
 
-function chargementImageMot(){// adapter avec la base de donnés
+/*
+* Charge l'image et les mots suivants
+*	Cache le bouton de la Vue mvNextButton
+* Verifie s'il reste des images disponibles
+* S'il ne reste plus d'images disponibles ou que la longeur max du test est atteinte,
+*		affiche les scores, ainsi que le feedback de l'activite
+*/
+function chargementImageMot(){
 	try {
+
 		mvNextButton.display="none";
 		if (indiceImages >= MAX_IMAGES) {
 
 			afficherLesResultats();
-
 		}
 		else {
-
+			// chargement des nouveaux mots et de la nouvelle image.
 			getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
 			getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
 			mvButtons.reInit();
 		}
 	} catch (error) {
+
 		if(error == "TypeError: REFERENCE_IMAGES_SAVE[indiceImages] is undefined"){
 
 			afficherLesResultats();
-
 		}
 		else{
+
 			console.log(error);
 		}
 	}
 }
 
+/*
+*	Verifie que le bouton clique est le bouton contenant le mot juste
+* Si la valeur est fausse, affiche en vert le bouton correcte, et rougis le bouton clique
+* Si la valeur est vraie, affiche le bouton clique en vert
+* Incremente la variable indiceImages
+*	Affiche le bouton contenu dans la Vue mvNextButton
+*
+* @param {Object} item	objet contenant les valeurs en rapport avec le mot choisi
+* @param {Object[]} listeItems	la liste contenant tous les objets des mots
+* @param {String} mot	 Le mot sur lequel l'utilisateur a cliqué
+*/
 function verification(item, listeItems, mot){
 	if(indiceImages < REFERENCE_IMAGES_SAVE.length){
 
@@ -201,6 +244,12 @@ function verification(item, listeItems, mot){
 	}
 }
 
+/*
+* Genere le code HTML necessaire a l'affichage de l'image
+* Insere le code genere dans la div dont l'id a ete passe en parametre
+*
+* @param {String} divId  id de la div dans laquelle l'image doit etre inseree
+*/
 function generateImageHtml(divId){
 
 	let image = '<img id= imagesActivite src= "">';
@@ -211,6 +260,12 @@ function generateImageHtml(divId){
 	documentId.style.visibility = 'hidden';
 }
 
+/*
+* Ajoute les nouveaux mots aux boutons contenu dans la Vue mvButtons
+*
+* @param {Object} nouveauxMots les mots a inserer dans a la variabe globale listeObjBoutons
+																	liee a la Vue mvButtons
+*/
 function fillButtons(nouveauxMots){
 
  for (let i = 0; i < MOTS_NUMBER; i++) {
@@ -219,6 +274,12 @@ function fillButtons(nouveauxMots){
  }
 }
 
+/*
+* Verifie que les 3 options ont bien ete selectionnee
+*	Si une/plusieurs options n'ont pas ete selectionnee, affiche un message precisant
+*		quels options ont ete laissees vides
+* Lance la fonction verificationDisponibiliteImage si tout est correct
+*/
 function testOptions(){
 	if (mvOptions.selectLongueur === "" || mvOptions.selectClasse === "" || mvOptions.selectDifficulte === "") {
 
@@ -239,14 +300,47 @@ function testOptions(){
 	}
 }
 
+/*
+* Efface les div contenant l'image et les boutons de l'activite
+*	Utilise les fonctions formatTitle, formatScore, et formatFeedback pour creer
+*		le contenu du feedback de l'activite
+*	Affiche le feedback de l'activite
+*/
+function afficherLesResultats(){
+	document.getElementById("divImage").style.display = 'none';
+
+	mvButtons.display="none";
+
+	mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
+	mvResultats.score=formatScore(score, MAX_IMAGES);
+	mvResultats.feedback=formatFeedback();
+	mvResultats.display="block";
+}
+
+/*
+* Genere le titre du feedback de l'activite
+*
+* @param {String} classe  la catégorie de mots utilise pour l'activite
+*	@param {String} difficulte	la difficulte choisie pour l'activite
+*/
 function formatTitle(classe, difficulte){
 	return classe + ", difficulté " + difficulte;
 }
 
+/*
+* Genere le score de l'activite
+*
+* @param {Int} resultat	 le nombre de mots correctement trouve
+* @param {Int} max  le nombre d'images faites proposee l'activite
+*/
 function formatScore(resultat, max){
 	return "Résultat : " + resultat + "/" + max;
 }
 
+/*
+* Genere le feedback concernant chacune des images proposee lors de l'activite
+*	Utilise pour cela la variable globale feedbackList
+*/
 function formatFeedback(){
 	let returnString="";
 
@@ -262,19 +356,15 @@ function formatFeedback(){
 	return returnString;
 }
 
-function afficherLesResultats(){
-	document.getElementById("divImage").style.display = 'none';
-
-	mvButtons.display="none";
-
-	mvResultats.display="block";
-	mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
-	mvResultats.score=formatScore(score, MAX_IMAGES);
-	mvResultats.feedback=formatFeedback();
-}
-
 /***********************  fonctions de GET database  **************************/
 
+/*
+* Verifie cote serveur le nombre d'images disponible pour la categorie d'images
+*		passee en parametre
+* Si le nombre d'image est different de 0, demarre l'activite
+*
+* @param {Int} classe Id de la categorie d'images a verifier
+*/
 function verificationDisponibiliteImage(classe){
 	let xhttp = new XMLHttpRequest();
 
@@ -302,6 +392,10 @@ function verificationDisponibiliteImage(classe){
   xhttp.send();
 }
 
+/*
+* Demande au serveur la liste de toutes les longueurs contenue dans la database
+* Insere les longueurs dans la liste "longueurs" liee a la Vue mvOptions
+*/
 function getAllLongueurs(){
 
 	let xhttp = new XMLHttpRequest();
@@ -321,6 +415,10 @@ function getAllLongueurs(){
   xhttp.send();
 }
 
+/*
+* Demande au serveur la liste de toutes les classes(categorie) contenue dans la database
+* Insere les classes dans la liste "classes" liee a la Vue mvOptions
+*/
 function getAllClasses(){
 
 	let xhttp = new XMLHttpRequest();
@@ -340,6 +438,10 @@ function getAllClasses(){
   xhttp.send();
 }
 
+/*
+* Demande au serveur la liste de toutes les difficultes contenue dans la database
+* Insere les difficultes dans la liste "difficultes" liee a la Vue mvOptions
+*/
 function getAllDifficultes(){
 
 	let xhttp = new XMLHttpRequest();
@@ -358,6 +460,15 @@ function getAllDifficultes(){
   xhttp.send();
 }
 
+/*
+* Demande au serveur la liste des noms toutes les images associees a la classe ayant
+*		l'id passe en parametre
+* Utilise la fonction getMotsByType pour aller chercher la liste des mots associe
+*		a la premiere image
+* Utilise la fonction getImageWithGuid pour loader la premiere image de la liste
+*
+* @param {Int} classeId  l'id de la categorie d'images devant etre chargee pour l'activite
+*/
 function loadingDatabase(classeId) {
 
  	let xhttp = new XMLHttpRequest();
@@ -376,9 +487,16 @@ function loadingDatabase(classeId) {
 
  	xhttp.open("GET", "https://localhost/api/classe_images?classe_id="+classeId, true);
   xhttp.send();
- }
+}
 
- function getMotsByType(type) {
+/*
+* Demande au serveur la liste de mots associee au type passe en parametre
+*	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots
+* Ajoute les mots aux bouttons de l'activite avec la fonction fillButtons
+*
+* @param {Int} type  id du type associes aux mots qu'on veut avoir
+*/
+function getMotsByType(type) {
  	let xhttp = new XMLHttpRequest();
 
  	xhttp.onreadystatechange = function() {
@@ -393,7 +511,16 @@ function loadingDatabase(classeId) {
    xhttp.send();
  }
 
- function getImageWithGuid(guid, nextId, next){
+/*
+*	Download a partir du serveur l'image ayant le nom passe en parametre
+*	Download aussi l'image suivante, pour permettre un changement d'image plus fluide
+*
+* @param {String} guid  le nom sous lequel l'image est stockee sur le site
+* @param {Int} nextId  l'indice de la prochaine image a loader
+* @param {Boolean} next True s'il reste une image apres, False si l'image a loader
+*													est la derniere
+*/
+function getImageWithGuid(guid, nextId, next){
  	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
@@ -425,9 +552,14 @@ function loadingDatabase(classeId) {
 	*/
  	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
   xhttp.send();
- }
+}
 
- function getClasseNom(classeId){
+/*
+* Demande au serveur le nom d'une categorie, a partir de son id
+*
+* @param {Int} classeId  l'id de la classe dont on veut avoir le nom
+*/
+function getClasseNom(classeId){
 
 	 let xhttp = new XMLHttpRequest();
 
@@ -441,9 +573,15 @@ function loadingDatabase(classeId) {
 
 	 xhttp.open("GET", "https://localhost/api/select_classe?classe_id=" + classeId, true);
 	 xhttp.send();
- }
+}
 
- function getDifficulteNom(nombreMots){
+/*
+* Demande au serveur le nom d'une difficulte, a partir du nombre de mots differents
+*		de celle-ci
+*
+* @param {Int} nombreMots  le nombre de mots differents affiche par images
+*/
+function getDifficulteNom(nombreMots){
 
 	 let xhttp = new XMLHttpRequest();
 
@@ -457,8 +595,13 @@ function loadingDatabase(classeId) {
 
 	 xhttp.open("GET", "https://localhost/api/select_difficulte?nombre_mots=" + nombreMots, true);
 	 xhttp.send();
- }
+}
 
+/*
+* Demande le nombre d'images disponible pour une classe(categorie) choisie
+*
+* @param {Int} classeId  l'id de la classe dont on veut savoir le nombre d'images
+*/
 function imagesDisponible(classe){
 	if (classe == "") {
 		return;
