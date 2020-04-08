@@ -89,6 +89,17 @@ database.get('/image_path', (req, res) => {
   });
 })
 
+.get('/longueurs', (req, res) => {
+  conn.query("SELECT * FROM Longueurs", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.set('Content-Type', 'application/json');
+    res.send(rows);
+  });
+})
+
+
 .get('/classe_images', (req, res) => {
   if (req.query.classe_id === undefined) {
     res.set('Content-Type', 'text/plain');
@@ -143,6 +154,21 @@ database.get('/image_path', (req, res) => {
   }
   else {
     conn.query("SELECT mot, distracteur FROM Mots WHERE type_id = ?", [req.query.type], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+      res.set('Content-Type', 'application/json');
+      res.send(rows);
+    });
+  }
+})
+
+.get('/somme_images', (req, res) => {
+  if (req.query.classe === undefined) {
+    sendMessage("veuillez introduire la classe des images à sommer", res);
+  }
+  else {
+    conn.query("SELECT COUNT(*) AS result FROM Images INNER JOIN Types ON Images.type_id = Types.type_id WHERE classe_id = ?", [req.query.classe], (err, rows) => {
       if (err) {
         throw err;
       }

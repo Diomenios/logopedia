@@ -15,6 +15,7 @@ let indiceImages = 0;
 let score = 0;
 let difficulties=[];
 let classes=[];
+let longueurs=[];
 let feedbackList=[];
 
 let mvOptions;
@@ -26,18 +27,24 @@ let mvResultats;
 
 function onload(){
 
+	getAllLongueurs();
 	getAllClasses();
 	getAllDifficultes();
 
 	mvOptions = new Vue({
 		el:"#divParametre",
 		data:{
+			longueurs: longueurs,
+			selectLongueur:"",
 			classes: classes,
 			selectClasse:"",
 			difficulties: difficulties,
 			selectDifficulte:"",
 			messageError:"",
 			display:"none"
+		},
+		methods:{
+			checkImages: imagesDisponible
 		}
 	});
 
@@ -140,28 +147,27 @@ function validateShuffleMots(listMots){
 function chargementImageMot(){// adapter avec la base de donnés
 	try {
 		mvNextButton.display="none";
-		getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
-		getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
+		if (indiceImages >= MAX_IMAGES) {
+
+			afficherLesResultats();
+
+		}
+		else {
+
+			getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
+			getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
+			mvButtons.reInit();
+		}
 	} catch (error) {
 		if(error == "TypeError: REFERENCE_IMAGES_SAVE[indiceImages] is undefined"){
 
-			document.getElementById("divImage").style.display = 'none';
+			afficherLesResultats();
 
-			mvButtons.display="none";
-
-			mvResultats.display="block";
-			mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
-			mvResultats.score=formatScore(score, MAX_IMAGES);
-			mvResultats.feedback=formatFeedback();
-			/*let doc = document.getElementById("divActivités");
-			doc.innerHTML = "Votre score : " + score + "/" + REFERENCE_IMAGES_SAVE.length;
-			doc.style.margin = 'auto';*/
 		}
 		else{
 			console.log(error);
 		}
 	}
-	mvButtons.reInit();
 }
 
 function verification(item, listeItems, mot){
@@ -214,29 +220,22 @@ function fillButtons(nouveauxMots){
 }
 
 function testOptions(){
-	if (mvOptions.selectClasse === "" || mvOptions.selectDifficulte === "") {
-		let count = 0;
+	if (mvOptions.selectLongueur === "" || mvOptions.selectClasse === "" || mvOptions.selectDifficulte === "") {
+
+		mvOptions.messageError= "";
+
+		if (mvOptions.selectLongueur === "") {
+				mvOptions.messageError += "Veuillez sélectionner la longueur que vous désirez pour l'exercice \n";
+		}
 		if (mvOptions.selectClasse === "") {
-				mvOptions.messageError = "Veuillez sélectionner une catégorie d'images pour le test";
-				count++;
+				mvOptions.messageError += "Veuillez sélectionner la catégorie d'images sur laquelle sera l'exercice \n";
 		}
 		if (mvOptions.selectDifficulte === "") {
-			if (count == 0) {
-				mvOptions.messageError = "Veuillez sélectionner la difficulté du test";
-			}
-			else {
-				mvOptions.messageError += "\n Veuillez sélectionner la difficulté du test";
-			}
-			count++;
+			mvOptions.messageError += "Veuillez sélectionner la difficulté de l'exercice";
 		}
 	}
 	else {
-		MOTS_NUMBER = mvOptions.selectDifficulte;
-		lancerActivités();
-		loadingDatabase(mvOptions.selectClasse);
-		loadVue();
-		getClasseNom(mvOptions.selectClasse);
-		getDifficulteNom(mvOptions.selectDifficulte);
+		verificationDisponibiliteImage(mvOptions.selectClasse);
 	}
 }
 
@@ -263,7 +262,64 @@ function formatFeedback(){
 	return returnString;
 }
 
+function afficherLesResultats(){
+	document.getElementById("divImage").style.display = 'none';
+
+	mvButtons.display="none";
+
+	mvResultats.display="block";
+	mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
+	mvResultats.score=formatScore(score, MAX_IMAGES);
+	mvResultats.feedback=formatFeedback();
+}
+
 /***********************  fonctions de GET database  **************************/
+
+function verificationDisponibiliteImage(classe){
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+        	let returnValues = JSON.parse(this.responseText);
+
+					if (returnValues[0].result == 0) {
+						mvOptions.messageError = "Il n'y a pas d'images disponible dans cette catégorie, veuillez en choisir une autre."
+					}
+					else{
+						MOTS_NUMBER = mvOptions.selectDifficulte;
+						MAX_IMAGES = mvOptions.selectLongueur;
+
+						lancerActivités();
+						loadingDatabase(mvOptions.selectClasse);
+						loadVue();
+						getClasseNom(mvOptions.selectClasse);
+						getDifficulteNom(mvOptions.selectDifficulte);
+					}
+        }
+  };
+
+ 	xhttp.open("GET", "https://localhost/api/somme_images?classe=" + classe, true);
+  xhttp.send();
+}
+
+function getAllLongueurs(){
+
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+        	let returnValues = JSON.parse(this.responseText);
+
+					for(let i = 0; i<returnValues.length ; i++){
+						longueurs.push(returnValues[i]);
+					}
+					mvOptions.display = "flex";
+        }
+  };
+
+ 	xhttp.open("GET", "https://localhost/api/longueurs", true);
+  xhttp.send();
+}
 
 function getAllClasses(){
 
@@ -310,7 +366,9 @@ function loadingDatabase(classeId) {
  	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
             REFERENCE_IMAGES_SAVE = JSON.parse(this.responseText);
-						MAX_IMAGES = REFERENCE_IMAGES_SAVE.length;
+						if (REFERENCE_IMAGES_SAVE.length < MAX_IMAGES) {
+							MAX_IMAGES = REFERENCE_IMAGES_SAVE.length;
+						}
  						getMotsByType(REFERENCE_IMAGES_SAVE[0].type_id);
  						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].image_nom);
         }
@@ -400,3 +458,23 @@ function loadingDatabase(classeId) {
 	 xhttp.open("GET", "https://localhost/api/select_difficulte?nombre_mots=" + nombreMots, true);
 	 xhttp.send();
  }
+
+function imagesDisponible(classe){
+	if (classe == "") {
+		return;
+	}
+	else{
+		let xhttp = new XMLHttpRequest();
+
+	 	xhttp.onreadystatechange = function() {
+	    	if (this.readyState == 4 && this.status == 200) {
+	       	let returnValues = JSON.parse(this.responseText);
+
+					mvOptions.messageError = "Il y a " + returnValues[0].result +" images de disponible dans cette catégorie !";
+	      }
+	  };
+
+	  xhttp.open("GET", "https://localhost/api/somme_images?classe=" + classe, true);
+	  xhttp.send();
+	}
+}
