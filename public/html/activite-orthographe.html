@@ -79,7 +79,8 @@
 
 				<div id="divActivités">
 
-					<div id="divImage">
+					<div id="divImage" v-bind:style={visibility:visibilityJS}>
+            <img id= imagesActivite v-bind:src= "source">
 					</div>
 
 		      <div id="boutonsMots" v-bind:style="{display:display} ">

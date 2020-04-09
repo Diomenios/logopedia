@@ -12,7 +12,7 @@ let image = new Image();
 let mots;
 let listeObjBoutons;
 let nextImage = new Image();
-let nextMots;
+let nextMots=[];
 let indiceImages = 0;
 let score = 0;
 let difficulties=[];
@@ -24,6 +24,7 @@ let mvOptions;
 let mvButtons;
 let mvNextButton;
 let mvResultats;
+let mvImage;
 
 /***********************  VUE pour l'exercice  ********************************/
 
@@ -62,6 +63,20 @@ function onload(){
 			display:"none"
 		}
 	});
+
+
+		mvImage = new Vue({
+			el:"#divImage",
+			data:{
+				source: image,
+				visibilityJS: "hidden"
+			},
+			methods:{
+				changeImage: function(nouvelleSource){
+					this.source = nouvelleSource;
+				}
+			}
+		});
 }
 
 /*
@@ -185,8 +200,14 @@ function chargementImageMot(){
 		}
 		else {
 			// chargement des nouveaux mots et de la nouvelle image.
-			getMotsByType(REFERENCE_IMAGES_SAVE[indiceImages].type_id);
-			getImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages	].image_nom);
+			image.src = nextImage.src;
+			mots = nextMots;
+			fillButtons(mots);
+
+			if (indiceImages+1 < MAX_IMAGES) {
+				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].image_nom);
+				getNextMotsByType(REFERENCE_IMAGES_SAVE[indiceImages+1].type_id);
+			}
 			mvButtons.reInit();
 		}
 	} catch (error) {
@@ -470,9 +491,8 @@ function getAllDifficultes(){
 * @param {Int} classeId  l'id de la categorie d'images devant etre chargee pour l'activite
 */
 function loadingDatabase(classeId) {
-
  	let xhttp = new XMLHttpRequest();
-	generateImageHtml("divImage");
+	//generateImageHtml("divImage");
 
  	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
@@ -480,12 +500,37 @@ function loadingDatabase(classeId) {
 						if (REFERENCE_IMAGES_SAVE.length < MAX_IMAGES) {
 							MAX_IMAGES = REFERENCE_IMAGES_SAVE.length;
 						}
- 						getMotsByType(REFERENCE_IMAGES_SAVE[0].type_id);
  						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].image_nom);
+						getMotsByType(REFERENCE_IMAGES_SAVE[0].type_id);
+						getNextImageWithGuid(REFERENCE_IMAGES_SAVE[1].image_nom);
+						getNextMotsByType(REFERENCE_IMAGES_SAVE[1].type_id);
         }
   };
 
  	xhttp.open("GET", "https://localhost/api/classe_images?classe_id="+classeId, true);
+  xhttp.send();
+}
+
+/*
+*	Download a partir du serveur l'image ayant le nom passe en parametre
+*	Initialise l'image de la Vue "mvImage"
+*
+* @param {String} guid  le nom sous lequel l'image est stockee sur le site
+*/
+function getImageWithGuid(guid){
+
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+			 if (this.readyState == 4 && this.status == 200) {
+					image.src = this.responseText;
+					image.onload = function(){
+						mvImage.changeImage(image.src);
+						mvImage.visibilityJS='visible';
+					}
+				}
+	};
+ 	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
   xhttp.send();
 }
 
@@ -511,47 +556,45 @@ function getMotsByType(type) {
    xhttp.send();
  }
 
-/*
-*	Download a partir du serveur l'image ayant le nom passe en parametre
-*	Download aussi l'image suivante, pour permettre un changement d'image plus fluide
-*
-* @param {String} guid  le nom sous lequel l'image est stockee sur le site
-* @param {Int} nextId  l'indice de la prochaine image a loader
-* @param {Boolean} next True s'il reste une image apres, False si l'image a loader
-*													est la derniere
-*/
-function getImageWithGuid(guid, nextId, next){
- 	let xhttp = new XMLHttpRequest();
+ /*
+ *	Download a partir du serveur l'image ayant le nom passe en parametre
+ *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
+ *
+ * @param {String} guid  le nom sous lequel l'image est stockee sur le site
+ */
+function getNextImageWithGuid(guid){
+
+	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
 			 if (this.readyState == 4 && this.status == 200) {
-					image.src = this.responseText;
-					image.onload = function(){
-						document.getElementById('imagesActivite').src = image.src;
-						document.getElementById("divImage").style.visibility = 'visible';
-					}
+					nextImage.src = this.responseText;
 				}
 	};
-	/*if (next) {
-		xhttp.onreadystatechange = function() {
-					 if (this.readyState == 4 && this.status == 200) {
-						image.src = this.responseText;
-						getImageWithGuid(REFERENCE_IMAGES_SAVE[nextId].image_nom, NULL, false);
-						console.log("chemin de l'image : " + this.responseText);
-					}
-		};
-	}
-	else {
-		xhttp.onreadystatechange = function() {
-					 if (this.readyState == 4 && this.status == 200) {
-						nextImage.src = this.responseText;
-						console.log("chemin de l'image : " + this.responseText);
-					}
-		};
-	}
-	*/
- 	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
+
+	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
   xhttp.send();
+}
+
+/*
+* Demande au serveur la liste de mots associee au type passe en parametre
+* Stocke la liste dans la variable "nextMots" pour fluidifier le changement d'image
+*	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots
+*
+* @param {Int} type  id du type associes aux mots qu'on veut avoir
+*/
+function getNextMotsByType(type){
+	let xhttp = new XMLHttpRequest();
+
+ 	xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+             nextMots = JSON.parse(this.responseText);
+						 shuffle(nextMots);
+						 validateShuffleMots(nextMots);
+        }
+     };
+ 	xhttp.open("GET", "https://localhost/api/mots?type="+type, true);
+   xhttp.send();
 }
 
 /*
