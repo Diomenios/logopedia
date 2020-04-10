@@ -178,42 +178,6 @@ database.get('/image_path', (req, res) => {
   }
 })
 
-.get('/input', (req, res) =>{
-  if (req.query.url === undefined || req.query.type === undefined) {
-    res.set('Content-Type', 'text/plain');
-    res.send('Veuillez introduire une requête sous la forme : /input?type=param1 & url=url_image');
-  }
-  else{
-    var requestSettings = {
-          url: req.query.url,
-          method: 'GET',
-          encoding: null
-    };
-
-    request(requestSettings, function(error, response, body) {
-        let extension = mime.extension(response.headers['content-type']);
-        let name = uuidv5('url', req.query.url);
-
-        if ( extension == 'jpeg') {
-          extension = 'jpg';
-        }
-
-        name += '.' + extension;
-
-        insertImage(name, req.query.type, req.query.nom, extension);
-
-        fs.writeFile(__dirname+'/public/images/'+name, body, function(err){
-          if (err) {
-            throw err;
-          }
-          console.log("image save");
-          res.set('Content-Type', 'text/plain');
-          res.send('image sauvegardée sous le nom de : ' + name);
-        });
-    });
-  }
-});
-
 database.get("/outils/synchro", (req, res) =>{
   fs.readdir(__dirname+'/public/images', function (err, files) {
     if (err){
@@ -241,9 +205,32 @@ database.get("/outils/synchro", (req, res) =>{
   });
 });
 
+database.get('/input', (req, res) =>{
+  if (req.query.url === undefined || req.query.type === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Veuillez introduire une requête sous la forme : /input?type=param1 & url=url_image');
+  }
+  else{
+    var requestSettings = {
+          url: req.query.url,
+          method: 'GET',
+          encoding: null
+    };
+
+    request(requestSettings, function(error, response, body) {
+
+        let extension = mime.extension(response.headers['content-type']);
+        if ( extension == 'jpeg') {
+          extension = 'jpg';
+        }
+
+        checkValidType(req.query.url, extension, req.query.type);
+    });
+  }
+});
 /******************************  Zone des fonctions  **************************/
 
-function insertImage(name, type, nom_origine, extension){
+function insertImageIntoDatabase(name, type, nom_origine, extension){
   if (nom_origine === undefined) {
     conn.query("INSERT INTO Images(image_nom, image_extension, type_id) value (?, ?, ?)",
                 [name, extension, type], (err, res) => {
@@ -318,8 +305,12 @@ function formatImage(pictureName){
 
     let originalName = "";
     for (let i = 0; i < splitName.length-2; i++) {
-
-      originalName += splitName[i];
+      if (i==0) {
+        originalName += splitName[i];
+      }
+      else {
+        originalName += "." + splitName[i];
+      }
     }
 
     console.log("check de l'image : " + originalName + " / " + splitName[splitName.length-1] + " / " + splitName[splitName.length-2]);
@@ -328,6 +319,12 @@ function formatImage(pictureName){
   else{
       console.log("format non conforme, l'opération a été abandonnée pour la photo : " + pictureName);
   }
+}
+
+function checkValidTypeUrl(){
+  let newPictureName = uuidv5('url', pictureName) + "." + pictureType + "." + pictureExtension;
+  insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureExtension);
+  writeImage(newPictureName, res);
 }
 
 function checkValidType(pictureName, pictureExtension, pictureType){
@@ -341,15 +338,32 @@ function checkValidType(pictureName, pictureExtension, pictureType){
     else{
       console.log("new name : " + uuidv5('X500', pictureName+pictureType+pictureExtension) + " / ");
       let newPictureName = uuidv5('X500', pictureName+pictureType+pictureExtension) + "." + pictureType + "." + pictureExtension;
-      console.log(newPictureName);
-
-      insertImage(newPictureName, rows[0].type_id, pictureName, pictureExtension);
+      insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureName, pictureExtension);
+      renameImage(newPictureName, pictureName + "." + pictureType + "." + pictureExtension);
     }
   });
 }
 
-function writeImage(){
-  
+function renameImage(newName, oldName){
+  fs.rename(__dirname+"/public/images/"+oldName, __dirname+"/public/images/"+newName, function(err){
+    if (err) {
+      throw err;
+    }
+    console.log("image renommée en " + newName);
+  });
+}
+
+function writeImage(pictureName, body,res){
+  fs.writeFile(__dirname+'/public/images/'+pictureName, body, function(err){
+    if (err) {
+      throw err;
+    }
+    console.log("image save");
+    if (res != undefined) {
+      res.set('Content-Type', 'text/plain');
+      res.send('image sauvegardée sous le nom de : ' +pictureName);
+    }
+  });
 }
 
 module.exports = database;
