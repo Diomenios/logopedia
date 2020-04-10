@@ -214,6 +214,33 @@ database.get('/image_path', (req, res) => {
   }
 });
 
+database.get("/outils/synchro", (req, res) =>{
+  fs.readdir(__dirname+'/public/images', function (err, files) {
+    if (err){
+      throw err;
+    }
+
+    for (let index in files) {
+      conn.query("SELECT COUNt(*) as count from Images WHERE image_nom = ?", [files[index]], (err, rows) =>{
+        if (err) {
+          throw err;
+        }
+        console.log("rows : " + rows[0].count);
+        if (rows[0].count == 0) {
+          console.log("image : " + files[index] + " non connue");
+          formatImage(files[index]);
+        }
+        else{
+          console.log("image : " + files[index] + " connue");
+        }
+      });
+    }
+
+    res.set('Content-Type', 'text/plain');
+    res.send(files);
+  });
+});
+
 /******************************  Zone des fonctions  **************************/
 
 function insertImage(name, type, nom_origine, extension){
@@ -282,6 +309,47 @@ function readAndSendImage(guid, extension, res){
 function sendMessage(message, res){
   res.set('Content-Type', 'text/plain');
   res.send(message);
+}
+
+function formatImage(pictureName){
+  let splitName = pictureName.split(".");
+
+  if (splitName[splitName.length-1] == 'jpg' || splitName[splitName.length-1] == 'png' || splitName[splitName.length-1] == 'jpeg') {
+
+    let originalName = "";
+    for (let i = 0; i < splitName.length-2; i++) {
+
+      originalName += splitName[i];
+    }
+
+    console.log("check de l'image : " + originalName + " / " + splitName[splitName.length-1] + " / " + splitName[splitName.length-2]);
+    checkValidType(originalName, splitName[splitName.length-1], splitName[splitName.length-2]);
+  }
+  else{
+      console.log("format non conforme, l'opération a été abandonnée pour la photo : " + pictureName);
+  }
+}
+
+function checkValidType(pictureName, pictureExtension, pictureType){
+  conn.query("SELECT type_id from Types WHERE type_nom = ?", [pictureType], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    if (rows.length === 0) {
+      console.log("L'image " + pictureName+pictureType+pictureExtension + " est dans une catégorie non définie dans la Database")
+    }
+    else{
+      console.log("new name : " + uuidv5('X500', pictureName+pictureType+pictureExtension) + " / ");
+      let newPictureName = uuidv5('X500', pictureName+pictureType+pictureExtension) + "." + pictureType + "." + pictureExtension;
+      console.log(newPictureName);
+
+      insertImage(newPictureName, rows[0].type_id, pictureName, pictureExtension);
+    }
+  });
+}
+
+function writeImage(){
+  
 }
 
 module.exports = database;

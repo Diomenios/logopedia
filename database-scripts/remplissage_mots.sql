@@ -75,3 +75,10 @@ VALUES
 ('margerite', 0, 11),
 ('margueryte', 0, 11),
 ('marguerit', 0, 11);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('rose', 1, 12),
+('rause', 0, 12),
+('reause', 0, 12),
+('rosse', 0, 12),
+('rausse', 0, 12);
