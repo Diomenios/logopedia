@@ -11,4 +11,7 @@ VALUES
   ('pissenlit', 2),
   ('tournessol', 2),
   ('marguerite', 2),
-  ('rose', 2);
+  ('rose', 2),
+  ('tulipe', 2),
+  ('coquelicot', 2),
+  ('jacinthe', 2);

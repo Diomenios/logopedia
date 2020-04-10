@@ -82,3 +82,24 @@ VALUES
 ('reause', 0, 12),
 ('rosse', 0, 12),
 ('rausse', 0, 12);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('tulipe', 1, 13),
+('tullipe', 0, 13),
+('teulipe', 0, 13),
+('teulype', 0, 13),
+('tulype', 0, 13);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('coquelicot', 1, 14),
+('cauquelicot', 0, 14),
+('coquelicaut', 0, 14),
+('coclikot', 0, 14),
+('cauclikot', 0, 14);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('jacinthe', 1, 14),
+('jaceainthe', 0, 14),
+('jaceinthe', 0, 14),
+('jacynthe', 0, 14),
+('geacinthe', 0, 14);

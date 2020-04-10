@@ -224,13 +224,13 @@ database.get('/input', (req, res) =>{
           extension = 'jpg';
         }
 
-        checkValidType(req.query.url, extension, req.query.type);
+        checkValidTypeUrl(req.query.url, req.query.nom, extension, req.query.type, res, body);
     });
   }
 });
 /******************************  Zone des fonctions  **************************/
 
-function insertImageIntoDatabase(name, type, nom_origine, extension){
+function insertImageIntoDatabase(name, type, extension, nom_origine){
   if (nom_origine === undefined) {
     conn.query("INSERT INTO Images(image_nom, image_extension, type_id) value (?, ?, ?)",
                 [name, extension, type], (err, res) => {
@@ -321,10 +321,21 @@ function formatImage(pictureName){
   }
 }
 
-function checkValidTypeUrl(){
-  let newPictureName = uuidv5('url', pictureName) + "." + pictureType + "." + pictureExtension;
-  insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureExtension);
-  writeImage(newPictureName, res);
+function checkValidTypeUrl(pictureUrl, pictureName, pictureExtension, pictureType, res, body){
+  conn.query("SELECT type_id from Types WHERE type_nom = ?", [pictureType], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    if (rows.length === 0) {
+      console.log("L'image " + pictureName+pictureType+pictureExtension + " est dans une catégorie non définie dans la Database")
+    }
+    else{
+      console.log("new name : " + uuidv5('url', pictureName+pictureType+pictureExtension) + " / ");
+      let newPictureName = uuidv5('url', pictureUrl) + "." + pictureType + "." + pictureExtension;
+      insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureExtension, pictureName);
+      writeImage(newPictureName, body, res, sendMessage);
+    }
+  });
 }
 
 function checkValidType(pictureName, pictureExtension, pictureType){
@@ -353,15 +364,14 @@ function renameImage(newName, oldName){
   });
 }
 
-function writeImage(pictureName, body,res){
+function writeImage(pictureName, body, res, callback){
   fs.writeFile(__dirname+'/public/images/'+pictureName, body, function(err){
     if (err) {
       throw err;
     }
     console.log("image save");
-    if (res != undefined) {
-      res.set('Content-Type', 'text/plain');
-      res.send('image sauvegardée sous le nom de : ' +pictureName);
+    if (callback != undefined && res != undefined) {
+      callback('image sauvegardée sous le nom de : ' +pictureName, res);
     }
   });
 }
