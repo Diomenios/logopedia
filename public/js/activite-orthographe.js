@@ -216,12 +216,7 @@ function chargementImageMot(){
 			afficherLesResultats();
 		}
 		else{
-<<<<<<< HEAD
-				console.log(error);
-=======
-
 			console.log(error);
->>>>>>> a3ad60bae781f08fb06086c0d9c2d1b1c062e76c
 		}
 	}
 }
@@ -409,11 +404,11 @@ function verificationDisponibiliteImage(classe){
 						getClasseNom(mvOptions.selectClasse);
 						getDifficulteNom(mvOptions.selectDifficulte);
 					}
-        	}
-  	};
+        }
+  };
 
-  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
-  	xhttp.send();
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
+  xhttp.send();
 }
 
 /*
@@ -432,11 +427,11 @@ function getAllLongueurs(){
 						longueurs.push(returnValues[i]);
 					}
 					mvOptions.display = "flex";
-        	}
-  	};
+        }
+	};
 
-  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/longueurs", true);
-  	xhttp.send();
+	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/longueurs", true);
+  xhttp.send();
 }
 
 /*
@@ -456,9 +451,9 @@ function getAllClasses(){
 					}
 					mvOptions.display = "flex";
        		 }
-	  };
+	};
 
-  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes", true);
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes", true);
  	xhttp.send();
 }
 
@@ -534,7 +529,7 @@ function getImageWithGuid(guid){
 				}
 	};
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
-  	xhttp.send();
+  xhttp.send();
 }
 
 /*
@@ -554,10 +549,10 @@ function getMotsByType(type) {
 						 validateShuffleMots(mots);
 						 fillButtons(mots);
         }
-     };
+  };
 
-  	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
-  	 xhttp.send();
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
+  xhttp.send();
  }
 
  /*
@@ -580,7 +575,7 @@ function getImageWithGuid(guid){
 				}
 	};
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
-  	xhttp.send();
+  xhttp.send();
 }
 
 /*
@@ -599,9 +594,9 @@ function getNextMotsByType(type){
 						 shuffle(nextMots);
 						 validateShuffleMots(nextMots);
         }
-     };
+  };
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
-   	xhttp.send();
+  xhttp.send();
 }
 
 /*
@@ -667,7 +662,7 @@ function imagesDisponible(classe){
 	      }
 	  };
 
-	  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
-	  xhttp.send();
+	 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
+	 	xhttp.send();
 	}
 }
