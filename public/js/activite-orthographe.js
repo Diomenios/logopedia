@@ -1,7 +1,6 @@
 'use strict'
 
 /**********************  Variables d'environnements  **************************/
-
 let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER;
 let MAX_IMAGES;
@@ -409,7 +408,7 @@ function verificationDisponibiliteImage(classe){
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/somme_images?classe=" + classe, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
   xhttp.send();
 }
 
@@ -432,7 +431,7 @@ function getAllLongueurs(){
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/longueurs", true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/longueurs", true);
   xhttp.send();
 }
 
@@ -455,7 +454,7 @@ function getAllClasses(){
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/classes", true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes", true);
   xhttp.send();
 }
 
@@ -477,7 +476,7 @@ function getAllDifficultes(){
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/difficultes", true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/difficultes", true);
   xhttp.send();
 }
 
@@ -507,7 +506,7 @@ function loadingDatabase(classeId) {
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/classe_images?classe_id="+classeId, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classe_images?classe_id="+classeId, true);
   xhttp.send();
 }
 
@@ -530,7 +529,7 @@ function getImageWithGuid(guid){
 					}
 				}
 	};
- 	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
   xhttp.send();
 }
 
@@ -552,7 +551,7 @@ function getMotsByType(type) {
 						 fillButtons(mots);
         }
      };
- 	xhttp.open("GET", "https://localhost/api/mots?type="+type, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
    xhttp.send();
  }
 
@@ -572,7 +571,7 @@ function getNextImageWithGuid(guid){
 				}
 	};
 
-	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
+	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
   xhttp.send();
 }
 
@@ -593,7 +592,7 @@ function getNextMotsByType(type){
 						 validateShuffleMots(nextMots);
         }
      };
- 	xhttp.open("GET", "https://localhost/api/mots?type="+type, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
    xhttp.send();
 }
 
@@ -614,7 +613,7 @@ function getClasseNom(classeId){
 				}
 	 };
 
-	 xhttp.open("GET", "https://localhost/api/select_classe?classe_id=" + classeId, true);
+	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/select_classe?classe_id=" + classeId, true);
 	 xhttp.send();
 }
 
@@ -636,7 +635,7 @@ function getDifficulteNom(nombreMots){
 				}
 	 	};
 
-	 xhttp.open("GET", "https://localhost/api/select_difficulte?nombre_mots=" + nombreMots, true);
+	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/select_difficulte?nombre_mots=" + nombreMots, true);
 	 xhttp.send();
 }
 
@@ -660,7 +659,7 @@ function imagesDisponible(classe){
 	      }
 	  };
 
-	  xhttp.open("GET", "https://localhost/api/somme_images?classe=" + classe, true);
+	  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
 	  xhttp.send();
 	}
 }
