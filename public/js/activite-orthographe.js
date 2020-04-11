@@ -158,7 +158,7 @@ function chargementImageMot(){// adapter avec la base de donnés
 			doc.style.margin = 'auto';*/
 		}
 		else{
-			console.log(error);
+				console.log(error);
 		}
 	}
 	mvButtons.reInit();
@@ -280,7 +280,7 @@ function getAllClasses(){
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/classes", true);
+ 	xhttp.open("GET", "https://51.178.41.115/api/classes", true);
   xhttp.send();
 }
 
@@ -298,7 +298,7 @@ function getAllDifficultes(){
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/difficultes", true);
+ 	xhttp.open("GET", "https://51.178.41.115/api/difficultes", true);
   xhttp.send();
 }
 
@@ -316,7 +316,7 @@ function loadingDatabase(classeId) {
         }
   };
 
- 	xhttp.open("GET", "https://localhost/api/classe_images?classe_id="+classeId, true);
+ 	xhttp.open("GET", "https://51.178.41.115/api/classe_images?classe_id="+classeId, true);
   xhttp.send();
  }
 
@@ -331,7 +331,7 @@ function loadingDatabase(classeId) {
 						 fillButtons(mots);
         }
      };
- 	xhttp.open("GET", "https://localhost/api/mots?type="+type, true);
+ 	xhttp.open("GET", "https://51.178.41.115/api/mots?type="+type, true);
    xhttp.send();
  }
 
@@ -365,7 +365,7 @@ function loadingDatabase(classeId) {
 		};
 	}
 	*/
- 	xhttp.open("GET", "https://localhost/api/image_path?guid="+guid, true);
+ 	xhttp.open("GET", "https://51.178.41.115/api/image_path?guid="+guid, true);
   xhttp.send();
  }
 
@@ -381,7 +381,7 @@ function loadingDatabase(classeId) {
 				}
 	 };
 
-	 xhttp.open("GET", "https://localhost/api/select_classe?classe_id=" + classeId, true);
+	 xhttp.open("GET", "https://51.178.41.115/api/select_classe?classe_id=" + classeId, true);
 	 xhttp.send();
  }
 
@@ -397,6 +397,6 @@ function loadingDatabase(classeId) {
 				}
 	 	};
 
-	 xhttp.open("GET", "https://localhost/api/select_difficulte?nombre_mots=" + nombreMots, true);
+	 xhttp.open("GET", "https://51.178.41.115/api/select_difficulte?nombre_mots=" + nombreMots, true);
 	 xhttp.send();
  }
