@@ -44,3 +44,9 @@ CREATE TABLE Difficultes(
   nombre_mots INT NOT NULL UNIQUE,
   PRIMARY KEY(nom)
 );
+
+CREATE TABLE Longueurs(
+  nom varchar(30) NOT NULL,
+  nombre_images INT NOT NULL UNIQUE,
+  PRIMARY KEY(nom)
+);
