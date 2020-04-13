@@ -13,10 +13,11 @@ function init(){
     },
     methods:{
       afficherDescription : function (bouton){
-        bouton.visibility = "visible";
+        bouton.display = "block";
+
       },
       cacherDescription : function (bouton){
-        bouton.visibility = "hidden";
+        bouton.display = "none";
       }
     }
   });
@@ -38,7 +39,7 @@ function getActivites() {
         let returnArray = JSON.parse(this.responseText);
 
         for (let i = 0; i < returnArray.length; i++) {
-          BUTTONS.push({visibility: 'hidden', object: returnArray[i]});
+          BUTTONS.push({display: 'none', object: returnArray[i]});
         }
         console.log(BUTTONS);
       }

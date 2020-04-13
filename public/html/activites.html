@@ -58,9 +58,10 @@
 
         <div id="activities-buttons" v-bind:style="{visibility : hidden}" class="cached">
 
-          <span class="spanDescription" v-for="button in buttons" v-bind:style="{visibility : button.visibility}">{{button.object.description}}</span>
-          <a v-for="button in buttons" v-bind:href="button.object.activite_url"><button class="btn, bouton_activités" v-on:mouseenter="afficherDescription(button)" v-on:mouseout="cacherDescription(button)">{{button.object.activite_nom}}</button></a>
-
+          <div v-for="button in buttons">
+            <a v-bind:href="button.object.activite_url" ><button class="btn, bouton_activités" v-on:mouseenter="afficherDescription(button)" v-on:mouseout="cacherDescription(button)">{{button.object.activite_nom}}</button></a>
+            <span class="spanDescription"  v-bind:style="{display : button.display}">{{button.object.description}}</span>
+        </div>
         </div>
 
       </section>
