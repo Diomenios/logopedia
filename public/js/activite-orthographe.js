@@ -579,6 +579,26 @@ function getImageWithGuid(guid){
 }
 
 /*
+ *	Download a partir du serveur l'image ayant le nom passe en parametre
+ *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
+ *
+ * @param {String} guid  le nom sous lequel l'image est stockee sur le site
+ */
+function getNextImageWithGuid(guid){
+
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+			 if (this.readyState == 4 && this.status == 200) {
+					nextImage.src = this.responseText;
+				}
+	};
+
+	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
+  xhttp.send();
+}
+
+/*
 * Demande au serveur la liste de mots associee au type passe en parametre
 * Stocke la liste dans la variable "nextMots" pour fluidifier le changement d'image
 *	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots

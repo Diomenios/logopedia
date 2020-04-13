@@ -476,7 +476,7 @@ function checkValidType(pictureName, pictureExtension, pictureType){
     }
     else{
       let newPictureName = uuidv5('X500', pictureName+pictureType+pictureExtension) + "." + pictureType + "." + pictureExtension;
-      insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureName, pictureExtension);
+      insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureExtension, pictureName);
       renameImage(newPictureName, pictureName + "." + pictureType + "." + pictureExtension);
     }
   });
