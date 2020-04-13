@@ -237,6 +237,17 @@ database.get('/somme_images', (req, res) => {
   }
 });
 
+//TODO : description
+database.get('/activites_list', (req, res) => {
+  conn.query("SELECT * FROM DescriptionActivites", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.set('Content-Type', 'application/json');
+    res.send(rows);
+  });
+});
+
 /*
 * Fait le tri dans les images se trouvant dans le dossier "public/images"
 * Laisse intouche les images dont le nom se trouve a la fois dans la base de donnee
