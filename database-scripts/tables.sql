@@ -50,3 +50,10 @@ CREATE TABLE Longueurs(
   nombre_images INT NOT NULL UNIQUE,
   PRIMARY KEY(nom)
 );
+
+CREATE TABLE DescriptionActivites(
+  activite_id INT AUTO_INCREMENT NOT NULL,
+  activite_nom varchar(30) NOT NULL UNIQUE,
+  description varchar(400) NOT NULL,
+  PRIMARY KEY(activite_id)
+);
