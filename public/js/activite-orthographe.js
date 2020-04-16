@@ -263,6 +263,10 @@ function formatFeedback(){
 	return returnString;
 }
 
+function AfficherZoneSauvegarde(){
+	let zoneSauvegarde = document.getElementById('zoneSauvegarde');
+    zoneSauvegarde.style.display = "block";}
+
 /***********************  fonctions de GET database  **************************/
 
 function getAllClasses(){
