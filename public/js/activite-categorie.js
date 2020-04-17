@@ -5,7 +5,7 @@ let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER;
 let MAX_IMAGES;
 let DIFFICULTE;
-let CLASSE;
+let CLASSES;
 
 let image = new Image();
 let mots;
@@ -199,8 +199,8 @@ function chargementImageMot(){
 			fillButtons(mots);
 
 			if (indiceImages+1 < MAX_IMAGES) {
-				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].image_nom);
-				getNextMotsByType(REFERENCE_IMAGES_SAVE[indiceImages+1].type_id);
+				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].nom);
+				nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[indiceImages+1].categorie-1].classe_nom);
 			}
 			mvButtons.reInit();
 		}
@@ -284,7 +284,7 @@ function fillButtons(nouveauxMots){
 
  for (let i = 0; i < MOTS_NUMBER; i++) {
 	 listeObjBoutons[i].mot = nouveauxMots[i].mot;
-	 listeObjBoutons[i].value = nouveauxMots[i].distracteur;
+	 listeObjBoutons[i].value = nouveauxMots[i].value;
  }
 }
 
@@ -307,7 +307,7 @@ function testOptions(){
 		}
 	}
 	else {
-		verificationDisponibiliteImage(mvOptions.selectClasse);
+		verificationDisponibiliteImage(mvOptions.selectLongueur);
 	}
 }
 
@@ -367,6 +367,28 @@ function formatFeedback(){
 	return returnString;
 }
 
+function composeMots(nombreDeMots, categorie){
+
+	let nouveauxMots = [{mot: categorie, value: 1}];
+
+	for(let i = 0 ; i < nombreDeMots-1 ; i++){
+		let random = Math.round(Math.random()*(CLASSES.length-1));
+		while (isInArray(nouveauxMots, CLASSES[random].classe_nom)) {
+			random = Math.round(Math.random()*(CLASSES.length-1));
+		}
+		nouveauxMots.push({mot: CLASSES[random].classe_nom, value:0});
+	}
+	return nouveauxMots;
+}
+
+function isInArray(array, element){
+	for (let i = 0 ; i < array.length ; i++){
+		if (array[i].mot == element) {
+			return true;
+		}
+	}
+	return false;
+}
 /***********************  fonctions de GET database  **************************/
 
 /*
@@ -376,30 +398,34 @@ function formatFeedback(){
 *
 * @param {Int} classe Id de la categorie d'images a verifier
 */
-function verificationDisponibiliteImage(classe){
+function verificationDisponibiliteImage(nombreImages){
 	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
         	let returnValues = JSON.parse(this.responseText);
 
-					if (returnValues[0].result == 0) {
-						mvOptions.messageError = "Il n'y a pas d'images disponible dans cette catégorie, veuillez en choisir une autre."
+					console.log(returnValues);
+					if (returnValues.length == 0) {
+						mvOptions.messageError = "Il n'y a pas d'images disponible"
 					}
 					else{
 						MOTS_NUMBER = mvOptions.selectDifficulte;
 						MAX_IMAGES = mvOptions.selectLongueur;
+						DIFFICULTE = mvOptions.selectDifficulte;
+						REFERENCE_IMAGES_SAVE = returnValues;
 
 						lancerActivités();
-						loadingDatabase(mvOptions.selectClasse);
+						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].nom);
+						getNextImageWithGuid(REFERENCE_IMAGES_SAVE[1].nom);
+						getAllOrdoredClasses();
 						loadVue();
-						getClasseNom(mvOptions.selectClasse);
 						getDifficulteNom(mvOptions.selectDifficulte);
 					}
         }
   };
 
-  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/activites/categorie_random_images?nombre=" + nombreImages , true);
   xhttp.send();
 }
 
@@ -449,6 +475,25 @@ function getAllClasses(){
  	xhttp.send();
 }
 
+function getAllOrdoredClasses(){
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+        	let returnValues = JSON.parse(this.responseText);
+
+					CLASSES = returnValues;
+
+					mots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[0].categorie-1].classe_nom);
+					fillButtons(mots);
+					nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[1].categorie-1].classe_nom);
+				}
+	};
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes_order_id", true);
+ 	xhttp.send();
+}
+
 /*
 * Demande au serveur la liste de toutes les difficultes contenue dans la database
 * Insere les difficultes dans la liste "difficultes" liee a la Vue mvOptions
@@ -468,36 +513,6 @@ function getAllDifficultes(){
   	};
 
   	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/difficultes", true);
-  	xhttp.send();
-}
-
-/*
-* Demande au serveur la liste des noms toutes les images associees a la classe ayant
-*		l'id passe en parametre
-* Utilise la fonction getMotsByType pour aller chercher la liste des mots associe
-*		a la premiere image
-* Utilise la fonction getImageWithGuid pour loader la premiere image de la liste
-*
-* @param {Int} classeId  l'id de la categorie d'images devant etre chargee pour l'activite
-*/
-function loadingDatabase(classeId) {
- 	let xhttp = new XMLHttpRequest();
-	//generateImageHtml("divImage");
-
- 	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-            REFERENCE_IMAGES_SAVE = JSON.parse(this.responseText);
-						if (REFERENCE_IMAGES_SAVE.length < MAX_IMAGES) {
-							MAX_IMAGES = REFERENCE_IMAGES_SAVE.length;
-						}
- 						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].image_nom);
-						getMotsByType(REFERENCE_IMAGES_SAVE[0].type_id);
-						getNextImageWithGuid(REFERENCE_IMAGES_SAVE[1].image_nom);
-						getNextMotsByType(REFERENCE_IMAGES_SAVE[1].type_id);
-        	}
-  	};
-
-  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classe_images?classe_id="+classeId, true);
   	xhttp.send();
 }
 
@@ -547,29 +562,6 @@ function getMotsByType(type) {
   xhttp.send();
  }
 
- /*
- *	Download a partir du serveur l'image ayant le nom passe en parametre
- *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
- *
- * @param {String} guid  le nom sous lequel l'image est stockee sur le site
- */
-function getImageWithGuid(guid){
-
-	let xhttp = new XMLHttpRequest();
-
-	xhttp.onreadystatechange = function() {
-			 if (this.readyState == 4 && this.status == 200) {
-					image.src = this.responseText;
-					image.onload = function(){
-						mvImage.changeImage(image.src);
-						mvImage.visibilityJS='visible';
-					}
-				}
-	};
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
-  xhttp.send();
-}
-
 /*
  *	Download a partir du serveur l'image ayant le nom passe en parametre
  *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
@@ -609,27 +601,6 @@ function getNextMotsByType(type){
   };
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
   xhttp.send();
-}
-
-/*
-* Demande au serveur le nom d'une categorie, a partir de son id
-*
-* @param {Int} classeId  l'id de la classe dont on veut avoir le nom
-*/
-function getClasseNom(classeId){
-
-	 let xhttp = new XMLHttpRequest();
-
-	 xhttp.onreadystatechange = function() {
-	 			 if (this.readyState == 4 && this.status == 200) {
-	 				let returnValues = JSON.parse(this.responseText);
-
-					CLASSE = returnValues[0].classe_nom;
-				}
-	 };
-
-	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/select_classe?classe_id=" + classeId, true);
-	 xhttp.send();
 }
 
 /*
