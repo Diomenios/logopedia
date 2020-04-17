@@ -555,29 +555,6 @@ function getMotsByType(type) {
   xhttp.send();
  }
 
- /*
- *	Download a partir du serveur l'image ayant le nom passe en parametre
- *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
- *
- * @param {String} guid  le nom sous lequel l'image est stockee sur le site
- */
-function getImageWithGuid(guid){
-
-	let xhttp = new XMLHttpRequest();
-
-	xhttp.onreadystatechange = function() {
-			 if (this.readyState == 4 && this.status == 200) {
-					image.src = this.responseText;
-					image.onload = function(){
-						mvImage.changeImage(image.src);
-						mvImage.visibilityJS='visible';
-					}
-				}
-	};
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
-  xhttp.send();
-}
-
 /*
  *	Download a partir du serveur l'image ayant le nom passe en parametre
  *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image

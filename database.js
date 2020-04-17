@@ -266,7 +266,7 @@ database.get('/activites/categorie_random_images', (req, res) => {
     sendError("vous n'avez pas préciser le nombre d'images désirée => /api/activite/categorie_random_images", res)
   }
   else {
-    conn.query("SELECT image_nom AS nom,  classe_id AS categorie FROM Images INNER JOIN Types ON Images.type_id = Types.type_id", [req.query.classe], (err, rows) => {
+    conn.query("SELECT image_nom AS nom,  classe_id AS categorie, type_nom AS type FROM Images INNER JOIN Types ON Images.type_id = Types.type_id", [req.query.classe], (err, rows) => {
       if (err) {
         throw err;
       }

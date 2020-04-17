@@ -125,7 +125,7 @@ function loadVueObjects(){
 	let objReturn=new Array();
 
 	for(let i = 0 ; i < MOTS_NUMBER ; i++){
-		objReturn.push({mot:"", value:"", tvalue:false, fvalue:false, disabled:false});
+		objReturn.push({mot:"", value:"", type:"", tvalue:false, fvalue:false, disabled:false});
 	}
 	return objReturn;
 }
@@ -200,7 +200,7 @@ function chargementImageMot(){
 
 			if (indiceImages+1 < MAX_IMAGES) {
 				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].nom);
-				nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[indiceImages+1].categorie-1].classe_nom);
+				nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[indiceImages+1].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[indiceImages+1].type);
 			}
 			mvButtons.reInit();
 		}
@@ -252,7 +252,7 @@ function verification(item, listeItems, mot){
 				listeItems[i].disabled=true;
 			}
 		}
-		feedbackList.push({resultat: mot,trueResultat: trueResultat});
+		feedbackList.push({resultat: mot,trueResultat: trueResultat, type: item.type});
 		indiceImages ++;
 		mvNextButton.active();
 	}
@@ -285,6 +285,7 @@ function fillButtons(nouveauxMots){
  for (let i = 0; i < MOTS_NUMBER; i++) {
 	 listeObjBoutons[i].mot = nouveauxMots[i].mot;
 	 listeObjBoutons[i].value = nouveauxMots[i].value;
+	 listeObjBoutons[i].type = nouveauxMots[i].type;
  }
 }
 
@@ -322,7 +323,7 @@ function afficherLesResultats(){
 
 	mvButtons.display="none";
 
-	mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
+	mvResultats.title=formatTitle(DIFFICULTE);
 	mvResultats.score=formatScore(score, MAX_IMAGES);
 	mvResultats.feedback=formatFeedback();
 	mvResultats.display="block";
@@ -334,8 +335,8 @@ function afficherLesResultats(){
 * @param {String} classe  la catégorie de mots utilise pour l'activite
 *	@param {String} difficulte	la difficulte choisie pour l'activite
 */
-function formatTitle(classe, difficulte){
-	return classe + ", difficulté " + difficulte;
+function formatTitle(difficulte){
+	return "Difficulté " + difficulte;
 }
 
 /*
@@ -357,26 +358,26 @@ function formatFeedback(){
 
 	for (let i = 0; i < feedbackList.length; i++) {
 		if (feedbackList[i].resultat == feedbackList[i].trueResultat) {
-			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez correctement répondu \n";
+			returnString += "A la photo \"" + feedbackList[i].type + "\" vous avez correctement répondu \n";
 		}
 		else{
-			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
+			returnString += "A la photo \"" + feedbackList[i].type + "\" vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
 		}
 	}
 
 	return returnString;
 }
 
-function composeMots(nombreDeMots, categorie){
+function composeMots(nombreDeMots, categorie, type){
 
-	let nouveauxMots = [{mot: categorie, value: 1}];
+	let nouveauxMots = [{mot: categorie, value: 1, type: type}];
 
 	for(let i = 0 ; i < nombreDeMots-1 ; i++){
 		let random = Math.round(Math.random()*(CLASSES.length-1));
 		while (isInArray(nouveauxMots, CLASSES[random].classe_nom)) {
 			random = Math.round(Math.random()*(CLASSES.length-1));
 		}
-		nouveauxMots.push({mot: CLASSES[random].classe_nom, value:0});
+		nouveauxMots.push({mot: CLASSES[random].classe_nom, value:0, type: type});
 	}
 	return nouveauxMots;
 }
@@ -405,7 +406,6 @@ function verificationDisponibiliteImage(nombreImages){
          if (this.readyState == 4 && this.status == 200) {
         	let returnValues = JSON.parse(this.responseText);
 
-					console.log(returnValues);
 					if (returnValues.length == 0) {
 						mvOptions.messageError = "Il n'y a pas d'images disponible"
 					}
@@ -484,9 +484,9 @@ function getAllOrdoredClasses(){
 
 					CLASSES = returnValues;
 
-					mots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[0].categorie-1].classe_nom);
+					mots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[0].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[0].type);
 					fillButtons(mots);
-					nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[1].categorie-1].classe_nom);
+					nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[1].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[1].type);
 				}
 	};
 
