@@ -5,6 +5,7 @@
             <title>Logopédie</title>
             <meta charset="utf-8">
       <script src="/static/js/vue.js"></script>
+      <script src="/static/js/global.js"></script>
 			<script src="/static/js/activites.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
@@ -51,14 +52,16 @@
 				</div>
 			</nav>
 		</header>
-    <body onload="init()">
+    <body onload="getActivites(), init()">
 
       <section class="main_Box">
 
         <div id="activities-buttons" v-bind:style="{visibility : hidden}" class="cached">
 
-          <a v-for="button in buttons" v-bind:href="button.url"><button v-bind:id ="button.id"  class="btn">{{button.name}}</button></a>
-
+          <div v-for="button in buttons">
+            <a v-bind:href="button.object.activite_url" ><button class="btn, bouton_activités" v-on:mouseenter="afficherDescription(button)" v-on:mouseout="cacherDescription(button)">{{button.object.activite_nom}}</button></a>
+            <span class="spanDescription"  v-bind:style="{display : button.display}">{{button.object.description}}</span>
+        </div>
         </div>
 
       </section>

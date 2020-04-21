@@ -5,7 +5,7 @@ let REFERENCE_IMAGES_SAVE;
 let MOTS_NUMBER;
 let MAX_IMAGES;
 let DIFFICULTE;
-let CLASSE;
+let CLASSES;
 
 let image = new Image();
 let mots;
@@ -15,7 +15,6 @@ let nextMots=[];
 let indiceImages = 0;
 let score = 0;
 let difficulties=[];
-let classes=[];
 let longueurs=[];
 let feedbackList=[];
 
@@ -33,7 +32,6 @@ let mvImage;
 function onload(){
 
 	getAllLongueurs();
-	getAllClasses();
 	getAllDifficultes();
 
 	mvOptions = new Vue({
@@ -41,16 +39,11 @@ function onload(){
 		data:{
 			longueurs: longueurs,
 			selectLongueur:"",
-			classes: classes,
-			selectClasse:"",
 			difficulties: difficulties,
 			selectDifficulte:"",
 			messageError:"",
 			display:"none"
 		},
-		methods:{
-			checkImages: imagesDisponible
-		}
 	});
 
 	mvResultats = new Vue({
@@ -130,7 +123,7 @@ function loadVueObjects(){
 	let objReturn=new Array();
 
 	for(let i = 0 ; i < MOTS_NUMBER ; i++){
-		objReturn.push({mot:"", value:"", tvalue:false, fvalue:false, disabled:false});
+		objReturn.push({mot:"", value:"", type:"", tvalue:false, fvalue:false, disabled:false});
 	}
 	return objReturn;
 }
@@ -204,8 +197,9 @@ function chargementImageMot(){
 			fillButtons(mots);
 
 			if (indiceImages+1 < MAX_IMAGES) {
-				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].image_nom);
-				getNextMotsByType(REFERENCE_IMAGES_SAVE[indiceImages+1].type_id);
+				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].nom);
+				nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[indiceImages+1].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[indiceImages+1].type);
+				shuffle(nextMots);
 			}
 			mvButtons.reInit();
 		}
@@ -257,7 +251,7 @@ function verification(item, listeItems, mot){
 				listeItems[i].disabled=true;
 			}
 		}
-		feedbackList.push({resultat: mot,trueResultat: trueResultat});
+		feedbackList.push({resultat: mot,trueResultat: trueResultat, type: item.type});
 		indiceImages ++;
 		mvNextButton.active();
 	}
@@ -289,33 +283,31 @@ function fillButtons(nouveauxMots){
 
  for (let i = 0; i < MOTS_NUMBER; i++) {
 	 listeObjBoutons[i].mot = nouveauxMots[i].mot;
-	 listeObjBoutons[i].value = nouveauxMots[i].distracteur;
+	 listeObjBoutons[i].value = nouveauxMots[i].value;
+	 listeObjBoutons[i].type = nouveauxMots[i].type;
  }
 }
 
 /*
-* Verifie que les 3 options ont bien ete selectionnee
-*	Si une/plusieurs options n'ont pas ete selectionnee, affiche un message precisant
+* Verifie que les 2 options ont bien ete selectionnee
+*	Si l'une des deux options n'ont pas ete selectionnee, affiche un message precisant
 *		quels options ont ete laissees vides
 * Lance la fonction verificationDisponibiliteImage si tout est correct
 */
 function testOptions(){
-	if (mvOptions.selectLongueur === "" || mvOptions.selectClasse === "" || mvOptions.selectDifficulte === "") {
+	if (mvOptions.selectLongueur === "" || mvOptions.selectDifficulte === "") {
 
 		mvOptions.messageError= "";
 
 		if (mvOptions.selectLongueur === "") {
 				mvOptions.messageError += "Veuillez sélectionner la longueur que vous désirez pour l'exercice \n";
 		}
-		if (mvOptions.selectClasse === "") {
-				mvOptions.messageError += "Veuillez sélectionner la catégorie d'images sur laquelle sera l'exercice \n";
-		}
 		if (mvOptions.selectDifficulte === "") {
 			mvOptions.messageError += "Veuillez sélectionner la difficulté de l'exercice";
 		}
 	}
 	else {
-		verificationDisponibiliteImage(mvOptions.selectClasse);
+		verificationDisponibiliteImage(mvOptions.selectLongueur);
 	}
 }
 
@@ -330,7 +322,7 @@ function afficherLesResultats(){
 
 	mvButtons.display="none";
 
-	mvResultats.title=formatTitle(CLASSE, DIFFICULTE);
+	mvResultats.title=formatTitle(DIFFICULTE);
 	mvResultats.score=formatScore(score, MAX_IMAGES);
 	mvResultats.feedback=formatFeedback();
 	mvResultats.display="block";
@@ -342,8 +334,8 @@ function afficherLesResultats(){
 * @param {String} classe  la catégorie de mots utilise pour l'activite
 *	@param {String} difficulte	la difficulte choisie pour l'activite
 */
-function formatTitle(classe, difficulte){
-	return classe + ", difficulté " + difficulte;
+function formatTitle(difficulte){
+	return "Difficulté " + difficulte;
 }
 
 /*
@@ -365,16 +357,57 @@ function formatFeedback(){
 
 	for (let i = 0; i < feedbackList.length; i++) {
 		if (feedbackList[i].resultat == feedbackList[i].trueResultat) {
-			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez correctement répondu \n";
+			returnString += "A la photo \"" + feedbackList[i].type + "\" vous avez correctement répondu \n";
 		}
 		else{
-			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
+			returnString += "A la photo \"" + feedbackList[i].type + "\" vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
 		}
 	}
 
 	return returnString;
 }
 
+/*
+* Genere une liste de mots aléatoires, contenant comme premier mot la valeur correcte.
+*		Les autres sont tous des distracteurs
+*
+* @param {Int} nombreDeMots  Le nombre de mots que l'on desire avoir dans la liste
+* @param {String} categorie	 La vraie categorie de l'image
+* @param {String}	type			 Le type de l'image (chat, chien, ...)
+*
+* @return {Object} nouveauxMots  La liste des mots
+*/
+function composeMots(nombreDeMots, categorie, type){
+
+	let nouveauxMots = [{mot: categorie, value: 1, type: type}];
+
+	for(let i = 0 ; i < nombreDeMots-1 ; i++){
+		let random = Math.round(Math.random()*(CLASSES.length-1));
+		while (isInArray(nouveauxMots, CLASSES[random].classe_nom)) {
+			random = Math.round(Math.random()*(CLASSES.length-1));
+		}
+		nouveauxMots.push({mot: CLASSES[random].classe_nom, value:0, type: type});
+	}
+	return nouveauxMots;
+}
+
+/*
+* Verifie si une cle "mot" associe a une valeur precise se trouve bien dans une liste
+*
+* @param {Object} array  La liste que l'on desire verifiee
+* @param {String} elem	 le nom de l'element pour lequel on desire faire la verification
+*
+* @return {Boolean} 		 retourne true si l'element a ete trouve, et false si l'element
+*													 n'est pas dans la liste
+*/
+function isInArray(array, element){
+	for (let i = 0 ; i < array.length ; i++){
+		if (array[i].mot == element) {
+			return true;
+		}
+	}
+	return false;
+}
 /***********************  fonctions de GET database  **************************/
 
 /*
@@ -384,30 +417,33 @@ function formatFeedback(){
 *
 * @param {Int} classe Id de la categorie d'images a verifier
 */
-function verificationDisponibiliteImage(classe){
+function verificationDisponibiliteImage(nombreImages){
 	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
         	let returnValues = JSON.parse(this.responseText);
 
-					if (returnValues[0].result == 0) {
-						mvOptions.messageError = "Il n'y a pas d'images disponible dans cette catégorie, veuillez en choisir une autre."
+					if (returnValues.length == 0) {
+						mvOptions.messageError = "Il n'y a pas d'images disponible"
 					}
 					else{
 						MOTS_NUMBER = mvOptions.selectDifficulte;
 						MAX_IMAGES = mvOptions.selectLongueur;
+						DIFFICULTE = mvOptions.selectDifficulte;
+						REFERENCE_IMAGES_SAVE = returnValues;
 
 						lancerActivités();
-						loadingDatabase(mvOptions.selectClasse);
+						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].nom);
+						getNextImageWithGuid(REFERENCE_IMAGES_SAVE[1].nom);
+						getAllOrdoredClasses();
 						loadVue();
-						getClasseNom(mvOptions.selectClasse);
 						getDifficulteNom(mvOptions.selectDifficulte);
 					}
         }
   };
 
-  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/activites/categorie_random_images?nombre=" + nombreImages , true);
   xhttp.send();
 }
 
@@ -434,26 +470,24 @@ function getAllLongueurs(){
   xhttp.send();
 }
 
-/*
-* Demande au serveur la liste de toutes les classes(categorie) contenue dans la database
-* Insere les classes dans la liste "classes" liee a la Vue mvOptions
-*/
-function getAllClasses(){
-
+function getAllOrdoredClasses(){
 	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
         	let returnValues = JSON.parse(this.responseText);
 
-					for(let i = 0; i<returnValues.length ; i++){
-						classes.push(returnValues[i]);
-					}
-					mvOptions.display = "flex";
-       		 }
+					CLASSES = returnValues;
+
+					mots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[0].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[0].type);
+					shuffle(mots);
+					fillButtons(mots);
+					nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[1].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[1].type);
+					shuffle(nextMots);
+				}
 	};
 
-  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes", true);
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes_order_id", true);
  	xhttp.send();
 }
 
@@ -476,36 +510,6 @@ function getAllDifficultes(){
   	};
 
   	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/difficultes", true);
-  	xhttp.send();
-}
-
-/*
-* Demande au serveur la liste des noms toutes les images associees a la classe ayant
-*		l'id passe en parametre
-* Utilise la fonction getMotsByType pour aller chercher la liste des mots associe
-*		a la premiere image
-* Utilise la fonction getImageWithGuid pour loader la premiere image de la liste
-*
-* @param {Int} classeId  l'id de la categorie d'images devant etre chargee pour l'activite
-*/
-function loadingDatabase(classeId) {
- 	let xhttp = new XMLHttpRequest();
-	//generateImageHtml("divImage");
-
- 	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-            REFERENCE_IMAGES_SAVE = JSON.parse(this.responseText);
-						if (REFERENCE_IMAGES_SAVE.length < MAX_IMAGES) {
-							MAX_IMAGES = REFERENCE_IMAGES_SAVE.length;
-						}
- 						getImageWithGuid(REFERENCE_IMAGES_SAVE[0].image_nom);
-						getMotsByType(REFERENCE_IMAGES_SAVE[0].type_id);
-						getNextImageWithGuid(REFERENCE_IMAGES_SAVE[1].image_nom);
-						getNextMotsByType(REFERENCE_IMAGES_SAVE[1].type_id);
-        	}
-  	};
-
-  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classe_images?classe_id="+classeId, true);
   	xhttp.send();
 }
 
@@ -533,29 +537,6 @@ function getImageWithGuid(guid){
 }
 
 /*
-* Demande au serveur la liste de mots associee au type passe en parametre
-*	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots
-* Ajoute les mots aux bouttons de l'activite avec la fonction fillButtons
-*
-* @param {Int} type  id du type associes aux mots qu'on veut avoir
-*/
-function getMotsByType(type) {
- 	let xhttp = new XMLHttpRequest();
-
- 	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-             mots = JSON.parse(this.responseText);
-						 shuffle(mots);
-						 validateShuffleMots(mots);
-						 fillButtons(mots);
-        }
-  };
-
-  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
-  xhttp.send();
- }
-
-/*
  *	Download a partir du serveur l'image ayant le nom passe en parametre
  *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
  *
@@ -573,48 +554,6 @@ function getNextImageWithGuid(guid){
 
 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
   xhttp.send();
-}
-
-/*
-* Demande au serveur la liste de mots associee au type passe en parametre
-* Stocke la liste dans la variable "nextMots" pour fluidifier le changement d'image
-*	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots
-*
-* @param {Int} type  id du type associes aux mots qu'on veut avoir
-*/
-function getNextMotsByType(type){
-	let xhttp = new XMLHttpRequest();
-
- 	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-             nextMots = JSON.parse(this.responseText);
-						 shuffle(nextMots);
-						 validateShuffleMots(nextMots);
-        }
-  };
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
-  xhttp.send();
-}
-
-/*
-* Demande au serveur le nom d'une categorie, a partir de son id
-*
-* @param {Int} classeId  l'id de la classe dont on veut avoir le nom
-*/
-function getClasseNom(classeId){
-
-	 let xhttp = new XMLHttpRequest();
-
-	 xhttp.onreadystatechange = function() {
-	 			 if (this.readyState == 4 && this.status == 200) {
-	 				let returnValues = JSON.parse(this.responseText);
-
-					CLASSE = returnValues[0].classe_nom;
-				}
-	 };
-
-	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/select_classe?classe_id=" + classeId, true);
-	 xhttp.send();
 }
 
 /*
@@ -637,29 +576,4 @@ function getDifficulteNom(nombreMots){
 
 	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/select_difficulte?nombre_mots=" + nombreMots, true);
 	 xhttp.send();
-}
-
-/*
-* Demande le nombre d'images disponible pour une classe(categorie) choisie
-*
-* @param {Int} classeId  l'id de la classe dont on veut savoir le nombre d'images
-*/
-function imagesDisponible(classe){
-	if (classe == "") {
-		return;
-	}
-	else{
-		let xhttp = new XMLHttpRequest();
-
-	 	xhttp.onreadystatechange = function() {
-	    	if (this.readyState == 4 && this.status == 200) {
-	       	let returnValues = JSON.parse(this.responseText);
-
-					mvOptions.messageError = "Il y a " + returnValues[0].result +" images de disponible dans cette catégorie !";
-	      }
-	  };
-
-	 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
-	 	xhttp.send();
-	}
 }

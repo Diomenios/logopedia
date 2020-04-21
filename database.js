@@ -108,6 +108,19 @@ database.get('/classes', (req, res) => {
 });
 
 /*
+* Recupere dans la base de donnee la liste de toutes les classes d'images existantes
+* Ordonne les classes par numero d'id
+*/
+database.get('/classes_order_id', (req, res) => {
+  conn.query("SELECT * FROM Classes order by classe_id", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    sendJsons(rows, res);
+  });
+});
+
+/*
 * Recupere dans la base de donnee la liste de toutes les difficultes d'exercice existantes
 */
 database.get('/difficultes', (req, res) => {
@@ -233,6 +246,63 @@ database.get('/somme_images', (req, res) => {
       }
       res.set('Content-Type', 'application/json');
       res.send(rows);
+    });
+  }
+});
+
+/*
+* Recupere les descriptions des diverses activites
+*/
+database.get('/activites_list', (req, res) => {
+  conn.query("SELECT * FROM DescriptionActivites", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    res.set('Content-Type', 'application/json');
+    res.send(rows);
+  });
+});
+
+/*
+* Recupere un nombre defini d'images de classe (categorie) random
+*
+* @param {Int} nombre  Le nombre d'image que l'on desire recuperer
+*/
+database.get('/activites/categorie_random_images', (req, res) => {
+  if (req.query.nombre === undefined) {
+    sendError("vous n'avez pas préciser le nombre d'images désirée => /api/activite/categorie_random_images", res)
+  }
+  else {
+    conn.query("SELECT image_nom AS nom,  classe_id AS categorie, type_nom AS type FROM Images INNER JOIN Types ON Images.type_id = Types.type_id", [req.query.classe], (err, rows) => {
+      if (err) {
+        throw err;
+      }
+
+      let number = parseInt(req.query.nombre);
+      let imagesRandom = [];
+
+      if (rows.length < number) {
+        number = rows.length;
+      }
+      if (rows.length < 2*number) {
+        shuffle(rows);
+        for(let i = 0 ; i < number ; i++){
+          imagesRandom.push(rows[i]);
+        }
+      }
+      else{
+        for(let i = 0 ; i < number ; i++){
+          let rand = Math.round(Math.random()*(number-1));
+
+          while (rows[rand] == "") {
+            rand = Math.round(Math.random()*(number-1));
+          }
+          imagesRandom.push(rows[rand]);
+          rows[rand] = "";
+        }
+      }
+
+      sendJsons(imagesRandom, res);
     });
   }
 });
@@ -395,6 +465,16 @@ function sendMessage(message, res){
   res.send(message);
 }
 
+function sendError(message, res){
+  res.set('Content-Type', 'application/json');
+  res.send({code:666, contenu: message});
+}
+
+function sendJsons(object, res){
+  res.set('Content-Type', 'application/json');
+  res.send(object);
+}
+
 /*
 * Transforme une image ayant le format <nom_de_l'image>.<type_de_l'image>.<extension_de_l'image>
 *   en un nouveau nom qui pourra etre inserer dans la base de donnees
@@ -476,7 +556,7 @@ function checkValidType(pictureName, pictureExtension, pictureType){
     }
     else{
       let newPictureName = uuidv5('X500', pictureName+pictureType+pictureExtension) + "." + pictureType + "." + pictureExtension;
-      insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureName, pictureExtension);
+      insertImageIntoDatabase(newPictureName, rows[0].type_id, pictureExtension, pictureName);
       renameImage(newPictureName, pictureName + "." + pictureType + "." + pictureExtension);
     }
   });
@@ -515,6 +595,14 @@ function writeImage(pictureName, body, res, callback){
       callback('image sauvegardée sous le nom de : ' +pictureName, res);
     }
   });
+}
+
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 }
 
 module.exports = database;
