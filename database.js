@@ -250,7 +250,9 @@ database.get('/somme_images', (req, res) => {
   }
 });
 
-//TODO : description
+/*
+* Recupere les descriptions des diverses activites
+*/
 database.get('/activites_list', (req, res) => {
   conn.query("SELECT * FROM DescriptionActivites", (err, rows) => {
     if (err) {
@@ -261,6 +263,11 @@ database.get('/activites_list', (req, res) => {
   });
 });
 
+/*
+* Recupere un nombre defini d'images de classe (categorie) random
+*
+* @param {Int} nombre  Le nombre d'image que l'on desire recuperer
+*/
 database.get('/activites/categorie_random_images', (req, res) => {
   if (req.query.nombre === undefined) {
     sendError("vous n'avez pas préciser le nombre d'images désirée => /api/activite/categorie_random_images", res)

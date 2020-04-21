@@ -15,7 +15,6 @@ let nextMots=[];
 let indiceImages = 0;
 let score = 0;
 let difficulties=[];
-let classes=[];
 let longueurs=[];
 let feedbackList=[];
 
@@ -33,7 +32,6 @@ let mvImage;
 function onload(){
 
 	getAllLongueurs();
-	getAllClasses();
 	getAllDifficultes();
 
 	mvOptions = new Vue({
@@ -201,6 +199,7 @@ function chargementImageMot(){
 			if (indiceImages+1 < MAX_IMAGES) {
 				getNextImageWithGuid(REFERENCE_IMAGES_SAVE[indiceImages+1].nom);
 				nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[indiceImages+1].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[indiceImages+1].type);
+				shuffle(nextMots);
 			}
 			mvButtons.reInit();
 		}
@@ -368,6 +367,16 @@ function formatFeedback(){
 	return returnString;
 }
 
+/*
+* Genere une liste de mots aléatoires, contenant comme premier mot la valeur correcte.
+*		Les autres sont tous des distracteurs
+*
+* @param {Int} nombreDeMots  Le nombre de mots que l'on desire avoir dans la liste
+* @param {String} categorie	 La vraie categorie de l'image
+* @param {String}	type			 Le type de l'image (chat, chien, ...)
+*
+* @return {Object} nouveauxMots  La liste des mots
+*/
 function composeMots(nombreDeMots, categorie, type){
 
 	let nouveauxMots = [{mot: categorie, value: 1, type: type}];
@@ -382,6 +391,15 @@ function composeMots(nombreDeMots, categorie, type){
 	return nouveauxMots;
 }
 
+/*
+* Verifie si une cle "mot" associe a une valeur precise se trouve bien dans une liste
+*
+* @param {Object} array  La liste que l'on desire verifiee
+* @param {String} elem	 le nom de l'element pour lequel on desire faire la verification
+*
+* @return {Boolean} 		 retourne true si l'element a ete trouve, et false si l'element
+*													 n'est pas dans la liste
+*/
 function isInArray(array, element){
 	for (let i = 0 ; i < array.length ; i++){
 		if (array[i].mot == element) {
@@ -452,29 +470,6 @@ function getAllLongueurs(){
   xhttp.send();
 }
 
-/*
-* Demande au serveur la liste de toutes les classes(categorie) contenue dans la database
-* Insere les classes dans la liste "classes" liee a la Vue mvOptions
-*/
-function getAllClasses(){
-
-	let xhttp = new XMLHttpRequest();
-
-	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-        	let returnValues = JSON.parse(this.responseText);
-
-					for(let i = 0; i<returnValues.length ; i++){
-						classes.push(returnValues[i]);
-					}
-					mvOptions.display = "flex";
-       		 }
-	};
-
-  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/classes", true);
- 	xhttp.send();
-}
-
 function getAllOrdoredClasses(){
 	let xhttp = new XMLHttpRequest();
 
@@ -485,8 +480,10 @@ function getAllOrdoredClasses(){
 					CLASSES = returnValues;
 
 					mots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[0].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[0].type);
+					shuffle(mots);
 					fillButtons(mots);
 					nextMots = composeMots(MOTS_NUMBER, CLASSES[REFERENCE_IMAGES_SAVE[1].categorie-1].classe_nom, REFERENCE_IMAGES_SAVE[1].type);
+					shuffle(nextMots);
 				}
 	};
 
@@ -540,29 +537,6 @@ function getImageWithGuid(guid){
 }
 
 /*
-* Demande au serveur la liste de mots associee au type passe en parametre
-*	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots
-* Ajoute les mots aux bouttons de l'activite avec la fonction fillButtons
-*
-* @param {Int} type  id du type associes aux mots qu'on veut avoir
-*/
-function getMotsByType(type) {
- 	let xhttp = new XMLHttpRequest();
-
- 	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-             mots = JSON.parse(this.responseText);
-						 shuffle(mots);
-						 validateShuffleMots(mots);
-						 fillButtons(mots);
-        }
-  };
-
-  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
-  xhttp.send();
- }
-
-/*
  *	Download a partir du serveur l'image ayant le nom passe en parametre
  *	Stocke l'image dans la variable "nextImage" pour fluidifier le changement d'image
  *
@@ -579,27 +553,6 @@ function getNextImageWithGuid(guid){
 	};
 
 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/image_path?guid="+guid, true);
-  xhttp.send();
-}
-
-/*
-* Demande au serveur la liste de mots associee au type passe en parametre
-* Stocke la liste dans la variable "nextMots" pour fluidifier le changement d'image
-*	Melange la liste reçue avec les fonctions shuffle et validateShuffleMots
-*
-* @param {Int} type  id du type associes aux mots qu'on veut avoir
-*/
-function getNextMotsByType(type){
-	let xhttp = new XMLHttpRequest();
-
- 	xhttp.onreadystatechange = function() {
-         if (this.readyState == 4 && this.status == 200) {
-             nextMots = JSON.parse(this.responseText);
-						 shuffle(nextMots);
-						 validateShuffleMots(nextMots);
-        }
-  };
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/mots?type="+type, true);
   xhttp.send();
 }
 
