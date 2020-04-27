@@ -5,6 +5,9 @@ var request = require('request');
 var mariadb = require('mariadb/callback');
 var mime = require('mime-types');
 var uuidv5 = require('uuidv5');
+var crypto = require('crypto');
+
+/*******************  Set-up des variables des modules  ***********************/
 
 var app = express();
 var database = express.Router();
@@ -13,9 +16,36 @@ const conn = mariadb.createConnection({host:process.env.HOST, user:process.env.U
 
 const PATH = __dirname + '/public/';
 
+/**
+ * generates random string of characters i.e salt
+ * @function
+ * @param {number} length - Length of the random string.
+ */
+var genRandomString = function(length){
+    return crypto.randomBytes(Math.ceil(length/2))
+            .toString('hex') /** convert to hexadecimal format */
+            .slice(0,length);   /** return required number of characters */
+};
+
+/**
+ * hash password with sha512.
+ * @function
+ * @param {string} password - List of required fields.
+ * @param {string} salt - Data to be validated.
+ */
+var sha512 = function(password, salt){
+    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+    hash.update(password);
+    var value = hash.digest('hex');
+    return {
+        salt:salt,
+        passwordHash:value
+    };
+};
+
 /***************************  Zone de routing  ********************************/
 
-/*
+/**
 * Recupere une image a partir de son nom d'origine
 * Utilise la fonction getImageWithOriginalName pour recuperer l'image
 *
@@ -30,7 +60,7 @@ database.get('/image_nom', function(req, res) {
   }
 });
 
-/*
+/**
 * Recupere une image a partir de son nom dans le dossier "images"
 * Utilise la fonction readAndSendImage pour renvoyer l'image
 *
@@ -48,7 +78,7 @@ database.get('/image', (req, res) => {
   }
 })
 
-/*
+/**
 * Recupere le chemin menant a une image
 *
 * @param {String} guid  Le nom, dans le dossier "images", de la photo qu'on
@@ -65,7 +95,7 @@ database.get('/image_path', (req, res) => {
   }
 });
 
-/*
+/**
 * Recupere dans la base de donnee toutes les images liees a une classe particuliere,
 *   a partir du nom de celle-ci
 *
@@ -94,7 +124,7 @@ database.get('/images', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere dans la base de donnee la liste de toutes les classes d'images existantes
 */
 database.get('/classes', (req, res) => {
@@ -107,7 +137,7 @@ database.get('/classes', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere dans la base de donnee la liste de toutes les classes d'images existantes
 * Ordonne les classes par numero d'id
 */
@@ -120,7 +150,7 @@ database.get('/classes_order_id', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere dans la base de donnee la liste de toutes les difficultes d'exercice existantes
 */
 database.get('/difficultes', (req, res) => {
@@ -133,7 +163,7 @@ database.get('/difficultes', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere dans la base de donnee la liste de toutes les longueurs d'exercice existantes
 */
 database.get('/longueurs', (req, res) => {
@@ -146,7 +176,7 @@ database.get('/longueurs', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere dans la base de donnee toutes les images liees a une classe particuliere,
 *   a partir de l'id de celle-ci
 *
@@ -167,7 +197,7 @@ database.get('/classe_images', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere dans la base de donnee le nom d'une difficulte particuliere a l'aide du nombre de mots qu'elle implique
 *
 * @param {Int} nombre_mots  Le nombre de mots qu'implique la difficulte
@@ -188,7 +218,7 @@ database.get('/select_difficulte', (req, res) => {
   }
 });
 
-/*
+/**
 * Recupere dans la base de donnee le nom d'une classe particuliere a l'aide de l'id de celle-ci
 *
 * @param {Int} classe_id  L'id de la classe dont on veut le nom
@@ -209,7 +239,7 @@ database.get('/select_classe', (req, res) => {
   }
 });
 
-/*
+/**
 * Recupere dans la base de donnee la liste des mots associes a un type particuliere
 *
 * @param {Int} type  L'id du type pour lequel on veut recuperer les mots
@@ -229,7 +259,7 @@ database.get('/mots', (req, res) => {
   }
 });
 
-/*
+/**
 * Effectue la somme des images listees dans la database, liees a une classe particuliere
 * Renvoie le resultat de la somme
 *
@@ -250,7 +280,7 @@ database.get('/somme_images', (req, res) => {
   }
 });
 
-/*
+/**
 * Recupere les descriptions des diverses activites
 */
 database.get('/activites_list', (req, res) => {
@@ -263,7 +293,7 @@ database.get('/activites_list', (req, res) => {
   });
 });
 
-/*
+/**
 * Recupere un nombre defini d'images de classe (categorie) random
 *
 * @param {Int} nombre  Le nombre d'image que l'on desire recuperer
@@ -307,7 +337,7 @@ database.get('/activites/categorie_random_images', (req, res) => {
   }
 });
 
-/*
+/**
 * Fait le tri dans les images se trouvant dans le dossier "public/images"
 * Laisse intouche les images dont le nom se trouve a la fois dans la base de donnee
 *   et dans le dossier d'Images
@@ -336,7 +366,7 @@ database.get("/outils/synchro", (req, res) =>{
   });
 });
 
-/*
+/**
 * Insere une image, a l'aide de son url, dans le dossier "public/images", ainsi que
 *   dans la base de donnees
 *
@@ -370,9 +400,78 @@ database.get('/input', (req, res) =>{
   }
 });
 
+database.get('/first_root_user', (req, res) =>{
+  if (req.query.validate === undefined || req.query.user === undefined || req.query.password === undefined) {
+    sendMessage("Erreur, veuillez introduire l\'url sous la forme : /first_root_user?validate=<pass_key>&user=<username>&password=<mot_de_passe>", res);
+  }
+  else{
+    if (req.query.validate != process.env.KEY_USER_PASSWORD) {
+      sendMessage("Erreur, vous n\'avez pas l\'autorisation de faire cette requête !", res);
+    }
+    else{
+      conn.query("SELECT COUNt(*) as count from Users WHERE root = 1", (err, rows) =>{
+        if (err) {
+          throw err;
+        }
+        if (rows[0].count != 0) {
+          sendMessage("Un Utilisateur root a déjà été enregistré", res);
+        }
+        else{
+          var salt = genRandomString(24); /** Gives us salt of length 24 */
+          var passwordData = sha512(req.query.password, salt);
+          console.log('UserPassword = '+req.query.password);
+          console.log('Passwordhash = '+passwordData.passwordHash);
+          console.log('nSalt = '+passwordData.salt);
+          console.log('user = '+req.query.user);
+
+          conn.query("INSERT INTO Users (user_name, password, salt, root) VALUES (?, ?, ?, 1)", [req.query.user, passwordData.passwordHash, passwordData.salt], (err, rows) =>{
+            if (err) {
+              throw err;
+            }
+            sendJsons(rows, res);
+          });
+        }
+      });
+    }
+  }
+});
+
+database.get("/outils/validate_root_user", (req, res) =>{
+  if (req.query.password === undefined || req.query.user === undefined) {
+    res.set('Content-Type', 'text/plain');
+    res.send('Erreur, veuillez introduire l\'url sous la forme : /outils/show_password?sha=<sha_password>&user=<username>');
+  }
+  else{
+    conn.query("SELECT salt, password, root FROM Users WHERE user_name=?", [req.query.user], (err, rows) =>{
+      if (err) {
+        throw err;
+      }
+      if (rows[0] === undefined) {
+        sendJsons({boolean: 0, message: "Votre utilisateur n'existe pas, veuillez recommencer"}, res);
+      }
+      else{
+        let passwordData = sha512(req.query.password, rows[0].salt);
+        console.log(passwordData.passwordHash);
+        console.log(rows[0].password);
+        console.log(rows[0].salt);
+        if (passwordData.passwordHash == rows[0].password && rows[0].root == 1) {
+          sendJsons({boolean: 1}, res);
+        }
+        else {
+          if (passwordData.password != rows[0].password) {
+            sendJsons({boolean: 0, message: "Votre mot de passe ou votre utilisateur est incorrect"}, res);
+          }
+          else{
+            sendJsons({boolean: 0, message: "Vous n'avez pas les permissions d'accéder à cette interface"}, res);
+          }
+        }
+      }
+    });
+  }
+});
 /******************************  Zone des fonctions  **************************/
 
-/*
+/**
 * Insere une image dans la base de donnees
 *
 * @param {String} name         Le nom (GUID) de l'image dans le dossier "public/images"
@@ -401,7 +500,7 @@ function insertImageIntoDatabase(name, type, extension, nom_origine){
   }
 }
 
-/*
+/**
 * Renvoie une image a partir de son nom d'origine
 *
 * @param {String} nom  Le nom d'origine de l'image
@@ -435,7 +534,7 @@ function getImageWithOriginalName(nom, res) {
   });
 }
 
-/*
+/**
 * Renvoie une image a partir de son nom (GUID) dans le dossier "public/images"
 *
 * @param {String} guid       Le nom d'origine de l'image dans le dossier "public/images"
@@ -454,7 +553,7 @@ function readAndSendImage(guid, extension, res){
   });
 }
 
-/*
+/**
 * Renvoie un message en texte plein
 *
 * @param {String} message  Le message que l'on souhaite envoyer
@@ -475,7 +574,7 @@ function sendJsons(object, res){
   res.send(object);
 }
 
-/*
+/**
 * Transforme une image ayant le format <nom_de_l'image>.<type_de_l'image>.<extension_de_l'image>
 *   en un nouveau nom qui pourra etre inserer dans la base de donnees
 * Verifie que l'extension de l'image est correcte
@@ -505,7 +604,7 @@ function formatImage(pictureName){
   }
 }
 
-/*
+/**
 * Verifie si le type de l'image existe bien dans la base de donnee
 * Affiche un message dans la console si le type de l'image n'existe pas
 * Utilise la fonction insertImageIntoDatabase pour inserer l'image dans la base de donnees
@@ -535,7 +634,7 @@ function checkValidTypeUrl(pictureUrl, pictureName, pictureExtension, pictureTyp
   });
 }
 
-/*
+/**
 * Verifie si le type de l'image existe bien dans la base de donnee
 * Affiche un message dans la console si le type de l'image n'existe pas
 * Utilise la fonction insertImageIntoDatabase pour inserer l'image dans la base de donnees
@@ -562,7 +661,7 @@ function checkValidType(pictureName, pictureExtension, pictureType){
   });
 }
 
-/*
+/**
 * Renomme une image se trouvant dans le dossier "public/images"
 *
 * @param {String} newName  Le nouveau nom de l'image a renommer
@@ -576,7 +675,7 @@ function renameImage(newName, oldName){
   });
 }
 
-/*
+/**
 * Sauvegarde une nouvelle image dans le dossier "public/images"
 *
 * @param {String}   pictureName  Le nom de l'image a sauvegardee
