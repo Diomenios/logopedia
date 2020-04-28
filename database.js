@@ -337,6 +337,56 @@ database.get('/activites/categorie_random_images', (req, res) => {
   }
 });
 
+database.get('/first_root_user', (req, res) =>{
+  if (req.query.validate === undefined || req.query.user === undefined || req.query.password === undefined) {
+    sendMessage("Erreur, veuillez introduire l\'url sous la forme : /first_root_user?validate=<pass_key>&user=<username>&password=<mot_de_passe>", res);
+  }
+  else{
+    if (req.query.validate != process.env.KEY_USER_PASSWORD) {
+      sendMessage("Erreur, vous n\'avez pas l\'autorisation de faire cette requête !", res);
+    }
+    else{
+      conn.query("SELECT COUNt(*) as count from Users WHERE root = 1", (err, rows) =>{
+        if (err) {
+          throw err;
+        }
+        if (rows[0].count != 0) {
+          sendMessage("Un Utilisateur root a déjà été enregistré", res);
+        }
+        else{
+          var salt = genRandomString(24); /** Gives us salt of length 24 */
+          var passwordData = sha512(req.query.password, salt);
+          conn.query("INSERT INTO Users (user_name, password, salt, root) VALUES (?, ?, ?, 1)", [req.query.user, passwordData.passwordHash, passwordData.salt], (err, rows) =>{
+            if (err) {
+              throw err;
+            }
+            sendJsons(rows, res);
+          });
+        }
+      });
+    }
+  }
+});
+
+//TODO preciser le format d'envois
+database.get('/admin/tables_name', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/tables_name?user=<username>&password=<user_password>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "SHOW tables",[], res);
+  }
+});
+
+database.get('/admin/table_x', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.table === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_Classes?user=<username>&password=<user_password>&table=<table_name>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "SELECT * FROM "+req.query.table,[], res);
+  }
+});
+
 /**
 * Fait le tri dans les images se trouvant dans le dossier "public/images"
 * Laisse intouche les images dont le nom se trouve a la fois dans la base de donnee
@@ -364,6 +414,36 @@ database.get("/outils/synchro", (req, res) =>{
     res.set('Content-Type', 'text/plain');
     res.send(files);
   });
+});
+
+database.get("/outils/validate_root_user", (req, res) =>{
+  if (req.query.password === undefined || req.query.user === undefined) {
+    sendJsons({boolean:0, message: "Erreur, veuillez introduire l\'url sous la forme : /outils/show_password?sha=<sha_password>&user=<username>"}, res);
+  }
+  else{
+    conn.query("SELECT salt, password, root FROM Users WHERE user_name=?", [req.query.user], (err, rows) =>{
+      if (err) {
+        throw err;
+      }
+      if (rows[0] === undefined) {
+        sendJsons({boolean: 0, message: "Votre utilisateur n'existe pas, veuillez recommencer"}, res);
+      }
+      else{
+        let passwordData = sha512(req.query.password, rows[0].salt);
+        if (passwordData.passwordHash == rows[0].password && rows[0].root == 1) {
+          sendJsons({boolean: 1}, res);
+        }
+        else {
+          if (passwordData.password != rows[0].password) {
+            sendJsons({boolean: 0, message: "Votre mot de passe ou votre utilisateur est incorrect"}, res);
+          }
+          else{
+            sendJsons({boolean: 0, message: "Vous n'avez pas les permissions d'accéder à cette interface"}, res);
+          }
+        }
+      }
+    });
+  }
 });
 
 /**
@@ -400,74 +480,8 @@ database.get('/input', (req, res) =>{
   }
 });
 
-database.get('/first_root_user', (req, res) =>{
-  if (req.query.validate === undefined || req.query.user === undefined || req.query.password === undefined) {
-    sendMessage("Erreur, veuillez introduire l\'url sous la forme : /first_root_user?validate=<pass_key>&user=<username>&password=<mot_de_passe>", res);
-  }
-  else{
-    if (req.query.validate != process.env.KEY_USER_PASSWORD) {
-      sendMessage("Erreur, vous n\'avez pas l\'autorisation de faire cette requête !", res);
-    }
-    else{
-      conn.query("SELECT COUNt(*) as count from Users WHERE root = 1", (err, rows) =>{
-        if (err) {
-          throw err;
-        }
-        if (rows[0].count != 0) {
-          sendMessage("Un Utilisateur root a déjà été enregistré", res);
-        }
-        else{
-          var salt = genRandomString(24); /** Gives us salt of length 24 */
-          var passwordData = sha512(req.query.password, salt);
-          console.log('UserPassword = '+req.query.password);
-          console.log('Passwordhash = '+passwordData.passwordHash);
-          console.log('nSalt = '+passwordData.salt);
-          console.log('user = '+req.query.user);
-
-          conn.query("INSERT INTO Users (user_name, password, salt, root) VALUES (?, ?, ?, 1)", [req.query.user, passwordData.passwordHash, passwordData.salt], (err, rows) =>{
-            if (err) {
-              throw err;
-            }
-            sendJsons(rows, res);
-          });
-        }
-      });
-    }
-  }
-});
-
-database.get("/outils/validate_root_user", (req, res) =>{
-  if (req.query.password === undefined || req.query.user === undefined) {
-    res.set('Content-Type', 'text/plain');
-    res.send('Erreur, veuillez introduire l\'url sous la forme : /outils/show_password?sha=<sha_password>&user=<username>');
-  }
-  else{
-    conn.query("SELECT salt, password, root FROM Users WHERE user_name=?", [req.query.user], (err, rows) =>{
-      if (err) {
-        throw err;
-      }
-      if (rows[0] === undefined) {
-        sendJsons({boolean: 0, message: "Votre utilisateur n'existe pas, veuillez recommencer"}, res);
-      }
-      else{
-        let passwordData = sha512(req.query.password, rows[0].salt);
-        console.log(passwordData.passwordHash);
-        console.log(rows[0].password);
-        console.log(rows[0].salt);
-        if (passwordData.passwordHash == rows[0].password && rows[0].root == 1) {
-          sendJsons({boolean: 1}, res);
-        }
-        else {
-          if (passwordData.password != rows[0].password) {
-            sendJsons({boolean: 0, message: "Votre mot de passe ou votre utilisateur est incorrect"}, res);
-          }
-          else{
-            sendJsons({boolean: 0, message: "Vous n'avez pas les permissions d'accéder à cette interface"}, res);
-          }
-        }
-      }
-    });
-  }
+database.get('/req_number', (req, res) => {
+  sendMessage("nombre de paramètres = " + Object.keys(req.query).length, res);
 });
 /******************************  Zone des fonctions  **************************/
 
@@ -702,6 +716,31 @@ function shuffle(a) {
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+}
+
+function secureDatabaseQuery(user, password, query, queryDatas, res){
+  conn.query("SELECT salt, password, root FROM Users WHERE user_name=?", [user], (err, rows) =>{
+    if (err) {
+      throw err;
+    }
+    if (rows[0] === undefined) {
+      sendJsons({boolean: 0, message: "Votre utilisateur n'existe pas, veuillez recommencer"}, res);
+    }
+    else{
+      let passwordData = sha512(password, rows[0].salt);
+      if (passwordData.passwordHash == rows[0].password && rows[0].root == 1) {
+        conn.query(query, queryDatas, (err, rows) =>{
+          if (err) {
+            throw err;
+          }
+          sendJsons({boolean: 1, requestBody: rows}, res);
+        });
+      }
+      else {
+        sendJsons({boolean: 0, message: "Permission denied"}, res);
+      }
+    }
+  });
 }
 
 module.exports = database;

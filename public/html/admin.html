@@ -6,6 +6,7 @@
       <title>Logopédie</title>
       <meta charset="utf-8">
       <script src="/static/js/vue.js"></script>
+      <script src="/static/js/global.js"></script>
 			<script src="/static/js/admin.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
@@ -13,8 +14,8 @@
 
 			<!-- Bootstrap CSS -->
 			<link href="/static/css/bootstrap.css" rel="stylesheet">
-            <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
-			<link rel="stylesheet" type = "text/css" href="/static/css/accueil.css" />
+      <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
+			<link rel="stylesheet" type = "text/css" href="/static/css/admin.css" />
   </head>
 	<header>
 			<!-- Navigation -->
@@ -28,13 +29,35 @@
 	</header>
   <body onload="onload();">
 
-    <section id="loginPassword">
-      <input type="text" v-model:"login">
-      <input type="password" v-model:"password">
-      <button onclick="checkLoginPassword">
+    <section id="loginPassword" v-bind:style="{display:display}">
+      <form class="" action="index.html" method="post">
+        <input type="text" v-model="login" placeholder="login"><br>
+        <input type="password" v-model="password">
+      </form>
+
+      <button v-on:click="checkLoginPassword()"> Valider </button>
       <span>{{errorMessage}}</span>
+
     </section>
 
+    <section id="administration">
+
+      <div id="tablesList" v-bind:style="{display:display}">
+        <button class="tablesButtons" v-for="table in tables" ><span>{{table}}</span></button>
+      </div>
+
+      <div id="tablesBody">
+        <table>
+          <tr>
+            <th v-for="column in columns"> {{column.name}}</th>
+          </tr>
+          <tr v-for="row in rows">
+            <td v-for="elem in row.elems"> {{elem.data}} </td>
+          </tr>
+        </table>
+      </div>
+
+    </section>
   </body>
 
   <footer>
