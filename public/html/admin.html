@@ -27,14 +27,34 @@
 			</nav>
 	</header>
   <body onload="onload();">
+<section class="main_Box" >
 
-    <section id="loginPassword">
-      <input type="text" v-model:"login">
-      <input type="password" v-model:"password">
-      <button onclick="checkLoginPassword">
-      <span>{{errorMessage}}</span>
-    </section>
-
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card card-signin my-5">
+        <div class="card-body">
+  			     <h5 class="card-title text-center">Administrateur Login</h5>
+             <form class="form-signin">
+                <div class="form-label-group">
+  					           <input type="email" id="inputEmail" class="form-control" placeholder="Identifiant" required autofocus>
+  					                <label for="inputEmail">Identifiant</label>
+                </div>
+                <div class="form-label-group">
+  					           <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
+  					                <label for="inputPassword">Mot de passe</label>
+                </div>
+                <div class="custom-control custom-checkbox mb-3">
+  					           <input type="checkbox" class="custom-control-input" id="customCheck1">
+  					                <label class="custom-control-label" for="customCheck1">Retenir le Mot de Passe</label>
+                </div>
+  					         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+  					<hr class="my-4">
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
   </body>
 
   <footer>
