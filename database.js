@@ -393,7 +393,76 @@ database.get('/admin/table_columns_x', (req, res) => {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_column_x?user=<username>&password=<user_password>&table=<table_name>", res);
   }
   else {
-    secureDatabaseQuery(req.query.user, req.query.password, "Select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
+    secureDatabaseQuery(req.query.user, req.query.password, "select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
+  }
+});
+
+database.get('/admin/add_Classes', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.classe_nom === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Classes?user=<username>&password=<user_password>&classe_nom=<class_name>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "INSERT INTO Classes (classe_nom) VALUES (?)",[req.query.classe_nom], res);
+  }
+});
+
+database.get('/admin/add_DescriptionActivites', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.activite_url === undefined || req.query.activite_nom === undefined || req.query.description === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_DescriptionActivites?user=<username>&password=<user_password>&activite_url=<activity_url>" +
+                    "&activite_nom=<activity_name&description=<activity_description>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "INSERT INTO DescriptionActivites (activite_url, activite_nom, description) VALUES (?, ?, ?)",
+                            [req.query.activite_url, req.query.activite_nom, req.query.description], res);
+  }
+});
+
+database.get('/admin/add_Difficultes', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.nom === undefined || req.query.nombre_mots === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Difficultes?user=<username>&password=<user_password>&nom=<difficulty_name>&nombre_mots=<number_of_words>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "INSERT INTO Difficultes (nom, nombre_mots) VALUES (?, ?)",[req.query.nom, req.query.nombre_mots], res);
+  }
+});
+
+database.get('/admin/add_Longueurs', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.nom === undefined || req.query.nombre_images === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Longueurs?user=<username>&password=<user_password>&nom=<length_name>&nombre_images=<number_of_pictures>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "INSERT INTO Longueurs (nom, nombre_images) VALUES (?, ?)",[req.query.nom, req.query.nombre_images], res);
+  }
+});
+
+database.get('/admin/add_Mots', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.mot === undefined || req.query.distracteur === undefined || req.query.type_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Mots?user=<username>&password=<user_password>&mot=<word>&distracteur=<1(false)_or_0(true)>&type_id=<type_id>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "INSERT INTO Mots (mot, distracteur, type_id) VALUES (?, ?, ?)",[req.query.mot, req.query.distracteur, req.query.type_id], res);
+  }
+});
+
+database.get('/admin/add_Types', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.type_nom === undefined || req.query.classe_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Types?user=<username>&password=<user_password>&type_nom=<type_name>&classe_id=<classe_id>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "INSERT INTO Types (type_nom, classe_id) VALUES (?, ?)",[req.query.type_nom, req.query.classe_id], res);
+  }
+});
+
+database.get('/admin/add_Users', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_name === undefined || req.query.password === undefined || req.query.root === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Users?admin_user=<username>&admin_password=<user_password>&user_name=<new_user_name>&password=<new_user_password>" +
+                      "&root=<1(root)_or_0(casual)>", res);
+  }
+  else {
+    var password_salt = genRandomString(24); /** Gives us salt of length 24 */
+    var passwordData = sha512(req.query.password, password_salt);
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Users (user_name, password, salt, root) VALUES (?, ?, ?, ?)"
+                              ,[req.query.user_name, passwordData.passwordHash, password_salt, req.query.root], res);
   }
 });
 
@@ -444,7 +513,7 @@ database.get("/outils/validate_root_user", (req, res) =>{
           sendJsons({boolean: 1}, res);
         }
         else {
-          if (passwordData.password != rows[0].password) {
+          if (passwordData.passwordHash != rows[0].password) {
             sendJsons({boolean: 0, message: "Votre mot de passe ou votre utilisateur est incorrect"}, res);
           }
           else{
