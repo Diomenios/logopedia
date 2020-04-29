@@ -78,7 +78,7 @@ function validateConnection(user, password){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/outils/validate_root_user?password="+ password + "&user="+user, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/outils/validate_root_user?admin_password="+ password + "&admin_user="+user, true);
   xhttp.send();
 }
 
@@ -99,7 +99,7 @@ function getTablesNames(){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/tables_name?password="+ PASSWORD + "&user="+USERNAME, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/tables_name?admin_user=" + USERNAME + "&admin_password=" + PASSWORD, true);
   xhttp.send();
 }
 
@@ -124,7 +124,7 @@ function getTableColumnsTitle(tableName){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_columns_x?password="+ PASSWORD + "&user="+ USERNAME + "&table=" +tableName, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_columns_x?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + "&table=" +tableName, true);
   xhttp.send();
 }
 
@@ -153,6 +153,6 @@ function getTableBody(tableName){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_x?password="+ PASSWORD + "&user="+USERNAME + "&table=" +tableName, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_x?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + "&table=" +tableName, true);
   xhttp.send();
 }
