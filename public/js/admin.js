@@ -52,7 +52,7 @@ function startAmdinistrationGUI() {
     el:"#tableBody",
     data: {
       columns:[],
-      rows:[["c'est", "toi"], ["je", "t'aime"]],
+      rows:[],
       display: "flex"
     }
   });
