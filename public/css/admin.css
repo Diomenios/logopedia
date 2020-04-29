@@ -1,6 +1,5 @@
 /*CSS Page Administration*/
 table{
-  background-color: white;
   border: 1px solid black;
   max-width: 50%;
 }
@@ -19,14 +18,14 @@ th{
 
 #administration{
   height: 90vh;
-  background-color: blue;
+  /*background-color: blue;*/
   display: block;
 }
 
 #tablesList{
   min-height: 20%;
   min-width: 100%;
-  background-color: red;
+  /*background-color: red;*/
   display: none;
   align-items: center;
   justify-content: space-around;
@@ -35,7 +34,7 @@ th{
 #tableBody{
   min-height: 80%;
   min-width: 100%;
-  background-color: green;
+  /*background-color: green;*/
   display: none;
   align-items: center;
   justify-content: space-around;
