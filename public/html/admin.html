@@ -43,17 +43,24 @@
     <section id="administration">
 
       <div id="tablesList" v-bind:style="{display:display}">
-        <button class="tablesButtons" v-for="table in tables" ><span>{{table}}</span></button>
+        <button class="tablesButtons" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
       </div>
 
-      <div id="tablesBody">
+      <div id="tableBody" v-bind:style="{display:display}">
         <table>
-          <tr>
-            <th v-for="column in columns"> {{column.name}}</th>
-          </tr>
-          <tr v-for="row in rows">
-            <td v-for="elem in row.elems"> {{elem.data}} </td>
-          </tr>
+
+          <thead>
+            <tr>
+              <th class="th" v-for="column in columns"> {{column}} </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr v-for="row in rows">
+              <td class="td" v-for="elem in row"> {{elem}} </td>
+            </tr>
+          </tbody>
+
         </table>
       </div>
 

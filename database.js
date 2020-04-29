@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 var express = require('express');
 var fs = require('fs');
 var request = require('request');
@@ -380,10 +381,19 @@ database.get('/admin/tables_name', (req, res) => {
 
 database.get('/admin/table_x', (req, res) => {
   if (req.query.user === undefined || req.query.password === undefined || req.query.table === undefined) {
-    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_Classes?user=<username>&password=<user_password>&table=<table_name>", res);
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_x?user=<username>&password=<user_password>&table=<table_name>", res);
   }
   else {
     secureDatabaseQuery(req.query.user, req.query.password, "SELECT * FROM "+req.query.table,[], res);
+  }
+});
+
+database.get('/admin/table_columns_x', (req, res) => {
+  if (req.query.user === undefined || req.query.password === undefined || req.query.table === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_column_x?user=<username>&password=<user_password>&table=<table_name>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.user, req.query.password, "Select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
   }
 });
 
