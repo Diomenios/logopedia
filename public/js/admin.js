@@ -23,7 +23,7 @@ function onload(){
       login:"louis",
       password:"diomenios",
       errorMessage:"",
-      display:"flex"
+      display:"block"
     },
     methods:{
       checkLoginPassword: function(){
