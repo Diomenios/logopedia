@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr-BE">
+
+  <head>
+
+      <title>Logopédie</title>
+      <meta charset="utf-8">
+      <script src="/static/js/vue.js"></script>
+      <script src="/static/js/global.js"></script>
+			<script src="/static/js/admin.js"></script>
+			<!-- Required meta tags -->
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+			<!-- Bootstrap CSS -->
+			<link href="/static/css/bootstrap.css" rel="stylesheet">
+      <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
+			<link rel="stylesheet" type = "text/css" href="/static/css/admin.css" />
+  </head>
+	<header>
+			<!-- Navigation -->
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+				<div class="container" id="windowTitle">
+					<a class="navbar-brand" href="/">Logopédie</a>
+          <!-- TODO : Emile il faut que ceci soit le titre au milieu de la NAV-BAR -->
+          <h2 class="navbar-brand"> {{title}} </h2>
+				</div>
+			</nav>
+	</header>
+  <body onload="onload();">
+    <section v-bind:style={display:display} class="main_Box" id="loginPassword">
+
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+      			     <h5 class="card-title text-center">Administrateur Login</h5>
+                 <form class="form-signin" onsubmit="return false;">
+                    <div class="form-label-group">
+
+                      <input v-model="login" type="text" id="inputEmail" class="form-control" placeholder="Identifiant" required autofocus>
+                      <label for="inputEmail">Identifiant</label>
+
+                    </div>
+                    <div class="form-label-group">
+
+                      <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
+                      <label for="inputPassword">Mot de passe</label>
+
+                    </div>
+  					        <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" v-on:click="checkLoginPassword()">Valider</button>
+  					        <hr class="my-4">
+
+                    <span>{{errorMessage}}</span>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+  <section id="administration">
+
+    <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce/ces  boutons ? -->
+    <div id="tablesList" v-bind:style="{display:display}">
+      <button class="tablesButtons" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
+    </div>
+
+    <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce tableau ? -->
+    <div id="tableBody" v-bind:style="{display:display}">
+      <table>
+
+        <thead>
+          <tr>
+            <th class="th" v-for="column in columns"> {{column}} </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="row in rows">
+            <td class="td" v-for="elem in row"> {{elem}} </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+  </section>
+  </body>
+
+  <footer>
+    <p>Copyright &copy;-2020 <br>Created by Louis, Martin and Emile</p>
+  </footer>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</html>

@@ -5,6 +5,7 @@
             <title>Logopédie</title>
             <meta charset="utf-8">
       <script src="/static/js/vue.js"></script>
+      <script src="/static/js/global.js"></script>
 			<script src="/static/js/activites.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
@@ -51,14 +52,16 @@
 				</div>
 			</nav>
 		</header>
-    <body onload="init()">
+    <body onload="getActivites(), init()">
 
       <section class="main_Box">
 
         <div id="activities-buttons" v-bind:style="{visibility : hidden}" class="cached">
 
-          <a v-for="button in buttons" v-bind:href="button.url"><button v-bind:id ="button.id">{{button.name}}</button></a>
-
+          <div v-for="button in buttons">
+            <a v-bind:href="button.object.activite_url" ><button class="btn, bouton_activités" v-on:mouseenter="afficherDescription(button)" v-on:mouseout="cacherDescription(button)">{{button.object.activite_nom}}</button></a>
+            <span class="spanDescription"  v-bind:style="{display : button.display}">{{button.object.description}}</span>
+        </div>
         </div>
 
       </section>
@@ -66,7 +69,7 @@
     </body>
 
         <footer>
-            <p>Copyright &copy;-2020 <br>Created by Martin and Emile</p>
+            <p>Copyright &copy;-2020 <br>Created by Louis, Martin and Emile</p>
         </footer>
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

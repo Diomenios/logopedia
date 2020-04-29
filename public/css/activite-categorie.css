@@ -1,8 +1,13 @@
+span{
+  white-space: pre-line;
+}
+
 .boutonMots{
   width: 45%;
   height: 45%;
   float: left;
   margin: 5px;
+  border-radius: 2rem;
   border: 1px solid black;
 }
 
@@ -11,6 +16,7 @@
   height: 45%;
   float: left;
   margin: 5px;
+  border-radius: 2rem;
   border: 1px solid black;
 }
 
@@ -20,6 +26,7 @@
   margin: auto;
   display: block;
   border: 2px solid black;
+  border-radius: 2rem;
 }
 
 .trueButton{
@@ -39,6 +46,10 @@
   min-width: 250px;
   min-height: 60px;
   border: 2px solid black;
+}
+
+.buttonMinSize{
+  min-width: 140px;
 }
 
 #imagesActivite{
@@ -61,17 +72,13 @@
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
-  background-color: rgb(0, 191, 255); 
   border-radius: 2rem;
 }
-.boutonMots{
-  margin: 2px;
-  border-radius: 2rem;
-}
+
 #boutonsMots{
   width: 400px;
   height: 100px;
-  margin-top: 5%;
+  margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -83,7 +90,7 @@
 
 #divParametre{
   width: 400px;
-  margin-top: 250px;
+  margin-top: 10%;
   margin-left: auto;
   margin-right: auto;
   z-index: 2;
@@ -93,6 +100,7 @@
 }
 
 #activiteSelect{
+  margin-top: 10px;
   min-width: 250px;
   min-height: 60px;
   border: 2px solid black;
@@ -116,13 +124,22 @@
 #divResultats{
   width: 50%;
   height: 100%;
-  background-color: rgb(248,248,255);
-  border: 2px solid black;
   margin-left: auto;
   margin-right: auto;
   /*display: block;*/
   text-align: center;
   flex-direction: column;
+  justify-content: center;
+  white-space: pre;
+}
+
+#ResultatsBoutons{
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  /*display: block;*/
+  text-align: center;
+  flex-direction: line;
   justify-content: center;
   white-space: pre;
 }

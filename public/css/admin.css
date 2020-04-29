@@ -1,0 +1,41 @@
+/*CSS Page Administration*/
+table{
+  border: 1px solid black;
+  max-width: 50%;
+}
+
+td{
+  border: 1px solid black;
+}
+
+th{
+  border: 2px solid black;
+}
+
+.tablesButtons{
+
+}
+
+#administration{
+  height: 90vh;
+  /*background-color: blue;*/
+  display: block;
+}
+
+#tablesList{
+  min-height: 20%;
+  min-width: 100%;
+  /*background-color: red;*/
+  display: none;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#tableBody{
+  min-height: 80%;
+  min-width: 100%;
+  /*background-color: green;*/
+  display: none;
+  align-items: center;
+  justify-content: space-around;
+}

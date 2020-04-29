@@ -63,11 +63,11 @@ VALUES
 ('pissanlit', 0, 9);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
-('tournessol', 1, 10),
+('tournesol', 1, 10),
 ('tournessolle', 0, 10),
 ('tournnessol', 0, 10),
 ('tournnessolle', 0, 10),
-('tournesol', 0, 10);
+('tournessol', 0, 10);
 INSERT INTO Mots(mot, distracteur, type_id)
 VALUES
 ('marguerite', 1, 11),
@@ -75,3 +75,31 @@ VALUES
 ('margerite', 0, 11),
 ('margueryte', 0, 11),
 ('marguerit', 0, 11);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('rose', 1, 12),
+('rause', 0, 12),
+('reause', 0, 12),
+('rosse', 0, 12),
+('rausse', 0, 12);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('tulipe', 1, 13),
+('tullipe', 0, 13),
+('teulipe', 0, 13),
+('teulype', 0, 13),
+('tulype', 0, 13);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('coquelicot', 1, 14),
+('cauquelicot', 0, 14),
+('coquelicaut', 0, 14),
+('coclikot', 0, 14),
+('cauclikot', 0, 14);
+INSERT INTO Mots(mot, distracteur, type_id)
+VALUES
+('jacinthe', 1, 15),
+('jaceainthe', 0, 15),
+('jaceinthe', 0, 15),
+('jacynthe', 0, 15),
+('geacinthe', 0, 15);

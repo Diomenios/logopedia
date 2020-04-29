@@ -1,6 +1,6 @@
 INSERT INTO Classes(classe_nom)
 VALUES
-  ('animals'),
+  ('animaux'),
   ('plantes'),
   ('oiseaux'),
   ('animaux marins'),
