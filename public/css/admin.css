@@ -13,21 +13,23 @@ th{
 }
 
 .tablesButtons{
-
 }
 
 #administration{
   height: 90vh;
   /*background-color: blue;*/
   display: block;
+
 }
 
 #tablesList{
-  min-height: 20%;
-  min-width: 100%;
+  min-height: 10%;
+  min-width: 900px;
+  max-width: 70%;
   /*background-color: red;*/
   display: none;
   align-items: center;
+  margin: auto;
   justify-content: space-around;
 }
 
@@ -38,4 +40,12 @@ th{
   display: none;
   align-items: center;
   justify-content: space-around;
+}
+.custom-center {
+    margin: 0 calc(50% - 66px) 0 0;
+}
+.btn-sunny {
+color: #fff;
+background-color: #f4ad49;
+border-bottom:2px solid #c38a3a;
 }
