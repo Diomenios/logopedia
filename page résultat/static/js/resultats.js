@@ -7,10 +7,11 @@ let tabPatient =  [
 ]
 
 let tabResultats =  [
-  {id_sauvegarde:1, numero_patient: 1, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:2, numero_patient: 1, resultat_image:2, nombre_image: 6, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:3, numero_patient: 1, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
-  {id_sauvegarde:4, numero_patient: 1, resultat_image:3, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
+  {id_sauvegarde:1, numero_patient: 1, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test1", date_activite: "12-08-2020", id_activites:1 },
+  {id_sauvegarde:1, numero_patient: 1, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test1", date_activite: "12-08-2020", id_activites:1 },
+  {id_sauvegarde:3, numero_patient: 1, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test3", date_activite: "12-08-2020", id_activites:2 },
+  {id_sauvegarde:1, numero_patient: 1, resultat_image:7, nombre_image: 8, feedback:"salut c'est un test1", date_activite: "14-08-2020", id_activites:1 },
+  {id_sauvegarde:3, numero_patient: 1, resultat_image:1, nombre_image: 4, feedback:"salut c'est un test3", date_activite: "14-08-2020", id_activites:2 },
 
   {id_sauvegarde:5, numero_patient: 2, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
   {id_sauvegarde:6, numero_patient: 2, resultat_image:2, nombre_image: 6, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
@@ -120,19 +121,24 @@ function afficherResulats(element){
 
   for( e of tabResultats){
     if( indexPatient == e.numero_patient){
-      tabDataX.push(e.date_activite);
+      //console.log(e)
+
       for( f of tabActivé){
+
         if(e.id_activites == f.id_activites){
            nomActivite = f.activite_nom;
         }
+      }
         if(e.id_activites == 1){
-          scoreActivité1 = e.resultat_image;
           tabDataLineaireAct1.push(Math.ceil((e.resultat_image/e.nombre_image)*10));
         }else{
-          scoreActivité2 = e.resultat_image;
           tabDataLineaireAct2.push(Math.ceil((e.resultat_image/e.nombre_image)*10));
         }
-      }
+
+        if(tabDataX.length < tabDataLineaireAct1.length || tabDataX.length < tabDataLineaireAct2.length){
+          tabDataX.push(e.date_activite);
+        }
+        
       resultattexte += `Résultat: ${e.resultat_image}/${e.nombre_image} <br> Feedback: ${e.feedback} <br> Date: ${e.date_activite} <br> Activité: ${nomActivite} 
       <br>-------------------<br>`;
     }
@@ -229,14 +235,6 @@ function afficherResulats(element){
     }
   });
 
-
-
-
-
-
-
-
-
   }//fin de la fonction résultats
   function afficherResulatTexte(){
     $('#divResulatsGraph1').hide();
@@ -255,32 +253,6 @@ function afficherResulats(element){
     $('#divResulatsGraph1').hide();
     $('#divResulatsGraph2').show();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*----------------------------------------------*/
 
 var listePatient = new Vue({
@@ -299,8 +271,11 @@ function AfficherPatients(){
 }
 
 
-/*---------------------------
-partie pour l'autocomplétion
+/*---------------------------*/
+/**
+*partie pour l'autocomplétion
+*@param inp : champ html où est envoyé le résultat
+*@param 'arr' : Array dans lequel se fait la recherche 
 */
 function autocomplete(inp, arr) {
   
