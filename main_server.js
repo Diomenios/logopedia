@@ -1,11 +1,20 @@
 var express = require('express');
 var database = require('./database');
 const mariadb = require('mariadb');
+var rateLimit = require('express-rate-limit');
 
 const http = require('http');
 
 var app = express();
+app.enable('trust proxy');
 
+var limiter = new rateLimit({
+  windowMs: 15*60*1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  delayMs: 0 // disable delaying - full speed until the max limit is reached
+});
+
+app.use(limiter);
 app.use('/api', database);
 
 app.get('/', function(req, res) {

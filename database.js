@@ -7,11 +7,20 @@ var mariadb = require('mariadb/callback');
 var mime = require('mime-types');
 var uuidv5 = require('uuidv5');
 var crypto = require('crypto');
+var rateLimit = require('express-rate-limit');
+
 
 /*******************  Set-up des variables des modules  ***********************/
 
 var app = express();
 var database = express.Router();
+var limiter = new rateLimit({
+  windowMs: 15*60*1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  delayMs: 0 // disable delaying - full speed until the max limit is reached
+});
+
+
 
 const conn = mariadb.createConnection({host:process.env.HOST, user:process.env.U_NAME, password:process.env.PASSWORD, database:process.env.DATABASE});
 
@@ -45,6 +54,8 @@ var sha512 = function(password, salt){
 };
 
 /***************************  Zone de routing  ********************************/
+app.enable('trust proxy');
+app.use(limiter);
 
 /**
 * Recupere une image a partir de son nom d'origine
@@ -529,7 +540,8 @@ database.get('/admin/update_Types', (req, res) => {
 });
 
 database.get('/admin/update_Users', (req, res) => {
-  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_name === undefined || req.query.password === undefined || req.query.root === undefined) {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_name === undefined || req.query.password === undefined || req.query.root === undefined ||
+          req.query.user_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Users?admin_user=<username>&admin_password=<user_password>&user_name=<new_user_name>&password=<new_user_password>" +
                       "&root=<1(root)_or_0(casual)>&user_id=<user_id>", res);
   }
@@ -550,6 +562,80 @@ database.get('/admin/update_Users', (req, res) => {
     });
   }
 });
+
+database.get('/admin/delete_Classes', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.classe_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Classes?admin_user=<username>&admin_password=<user_password>&classe_id=<elem_id>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Classes WHERE classe_id=?",[req.query.classe_id], res);
+  }
+});
+
+database.get('/admin/delete_DescriptionActivites', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.activite_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_DescriptionActivites?admin_user=<username>&admin_password=<user_password>&activite_id=<activity_id>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM DescriptionActivites WHERE activite_id=?", [req.query.activite_id], res);
+  }
+});
+
+database.get('/admin/delete_Difficultes', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Difficultes?admin_user=<username>&admin_password=<user_password>&nom=<difficulty_name>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Difficultes WHERE nom=?",[req.query.nom], res);
+  }
+});
+
+database.get('/admin/delete_Longueurs', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Longueurs?admin_user=<username>&admin_password=<user_password>&nom=<length_name>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Longueurs WHERE nom=?",[req.query.nom], res);
+  }
+});
+
+database.get('/admin/delete_Mots', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.mot_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Mots?admin_user=<username>&admin_password=<user_password>&mot_id=<mot_id>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Mots WHERE mot_id=?",[req.query.mot_id], res);
+  }
+});
+
+database.get('/admin/delete_Types', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.type_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Types?admin_user=<username>&admin_password=<user_password>&type_id=<type_id>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Types WHERE type_id=?",[req.query.type_id], res);
+  }
+});
+
+database.get('/admin/delete_Users', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_id === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Users?admin_user=<username>&admin_password=<user_password>&user_id=<user_id>", res);
+  }
+  else {
+    conn.query("SELECT user_id FROM Users WHERE user_name=?", [req.query.admin_user], (err, rows) =>{
+      if (err) {
+        throw err;
+      }
+      if (rows[0].user_id == req.query.user_id) {
+        sendJsons({boolean: 0, message: "Permission refusée : vous essayez de modifier l'utilisateur avec les droits d'admin que vous utilisez pour le moment !"}, res);
+      }
+      else{
+        secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Users WHERE user_id=?", [req.query.user_id], res);
+      }
+    });
+  }
+});
+
 
 /**
 * Fait le tri dans les images se trouvant dans le dossier "public/images"
