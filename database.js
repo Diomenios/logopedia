@@ -15,7 +15,7 @@ var rateLimit = require('express-rate-limit');
 var app = express();
 var database = express.Router();
 var limiter = new rateLimit({
-  windowMs: 15*60*1000, // 15 minutes
+  windowMs: 60*1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
   delayMs: 0 // disable delaying - full speed until the max limit is reached
 });
@@ -404,7 +404,7 @@ database.get('/admin/table_columns_x', (req, res) => {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_column_x?admin_user=<username>&admin_password=<user_password>&table=<table_name>", res);
   }
   else {
-    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "select COLUMN_NAME, IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
   }
 });
 

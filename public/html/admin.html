@@ -66,25 +66,59 @@
       <button class="tablesButtons" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
     </div>
 
-    <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce tableau ? -->
-    <div id="tableBody" v-bind:style="{display:display}">
-      <table>
+    <div id="tableDescription">
+      <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce tableau ? -->
+      <div id="tableBody" v-bind:style="{display:displayBody}">
+          <table>
 
-        <thead>
+            <thead>
+              <tr>
+                <th class="th" v-for="column in columns"> {{column.name}} </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="row in rows" v-on:click="updateDelete(row)">
+                <td class="td" v-for="elem in row"> {{elem}} </td>
+              </tr>
+            </tbody>
+
+          </table>
+      </div>
+
+      <div id="updateRow" v-bind:style="{display:displayRow}">
+        <table >
           <tr>
-            <th class="th" v-for="column in columns"> {{column}} </th>
+            <td v-for="elem in row">
+              <input type="text" v-model="elem.value" :placeholder="elem.value">
+            </td>
           </tr>
-        </thead>
+        </table>
+        <div id="deleteUpdateButton" class="buttonMargin">
+          <button type="button" v-on:click="deleteRow()">Supprimer cette ligne</button>
+          <button type="button" v-on:click="updateRow()">Appliquer la modification</button>
+        </div>
+      </div>
 
-        <tbody>
-          <tr v-for="row in rows">
-            <td class="td" v-for="elem in row"> {{elem}} </td>
-          </tr>
-        </tbody>
+      <div id="updateTable" v-bind:style="{display:displayUpdate}">
 
-      </table>
+        <form onsubmit="updateDatabaseTable(); return false;">
+
+          <div v-for="column in columns">
+
+            <label v-bind:for="column.name" >{{column.name}}</label>
+            <input v-if="column.requested === 'NO'" type="text" v-bind:name="column.name" v-model="column.value" required>
+            <input v-else type="text" v-bind:name="column.name" v-model="column.value">
+
+          </div>
+
+          <input type="submit" value="Insérer les valeurs">
+          <span>{{updateMessage}}</span>
+
+        </form>
+
+      </div>
     </div>
-
   </section>
   </body>
 
