@@ -87,10 +87,15 @@
       </div>
 
       <div id="updateRow" v-bind:style="{display:displayRow}">
-        <table >
+        <table v-for="row in tableRow">
+          <thead>
+            <tr>
+              <th class="th" v-for="column in columns"> {{column.name}} </th>
+            </tr>
+          </thead>
           <tr>
             <td v-for="elem in row">
-              <input type="text" v-model="elem.value" :placeholder="elem.value">
+              <textarea class="textarea" type="textarea" v-model="elem.value"> {{elem.value}}</textarea>
             </td>
           </tr>
         </table>

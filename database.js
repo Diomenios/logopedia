@@ -404,7 +404,7 @@ database.get('/admin/table_columns_x', (req, res) => {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_column_x?admin_user=<username>&admin_password=<user_password>&table=<table_name>", res);
   }
   else {
-    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "select COLUMN_NAME, IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "select COLUMN_NAME, IS_NULLABLE, EXTRA from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
   }
 });
 

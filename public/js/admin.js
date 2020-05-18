@@ -61,7 +61,7 @@ function startAmdinistrationGUI() {
     data: {
       columns:[],
       rows:[],
-      row:[],
+      tableRow:[],
       updateMessage:"",
       displayBody: "flex",
       displayRow: "none",
@@ -71,20 +71,37 @@ function startAmdinistrationGUI() {
       updateDelete:function(row){
         this.displayBody="none";
         this.displayRow="flex";
+
+        this.tableRow=[];
+
+        let count = 0;
+        let newRow=[];
         for(let elem in row){
-          this.row.push({value: row[elem], columnName: this.columns[elem].name});
+          if (count == 5) {
+            this.tableRow.push(newRow);
+            newRow=[];
+            count=0;
+          }
+          else {
+            newRow.push({value: row[elem], columnName: this.columns[elem].name});
+            count++;
+          }
         }
+        if (count != 0) {
+          this.tableRow.push(newRow);
+        }
+        console.log(this.tableRow);
       },
       updateRow:function () {
         this.displayBody="flex";
         this.displayRow="none";
-        updateRow(this.row);
+        updateRow(this.tableRow);
         this.row = [];
       },
       deleteRow:function (){
         this.displayBody="flex";
         this.displayRow="none";
-        deleteRow(this.row);
+        deleteRow(this.tableRow);
         this.row =[];
       }
     }
@@ -160,7 +177,8 @@ function getTableColumnsTitle(tableName){
 
               mvTableBody.columns=[];
               for (let elem in Object.keys(returnValues.requestBody)) {
-                mvTableBody.columns.push({name:returnValues.requestBody[elem].COLUMN_NAME, requested:returnValues.requestBody[elem].IS_NULLABLE, value:""});
+                mvTableBody.columns.push({name:returnValues.requestBody[elem].COLUMN_NAME, requested:returnValues.requestBody[elem].IS_NULLABLE,
+                                            value:"", auto: returnValues.requestBody[elem].EXTRA});
               }
             }
             else{
@@ -232,8 +250,10 @@ function updateRow(datas){
   };
 
   let request = ""
-  for(let elem of datas){
-    request += "&"+elem.columnName+"="+elem.value;
+  for(let row of datas){
+    for(let elem of row){
+      request += "&"+elem.columnName+"="+elem.value;
+    }
   }
 
   xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/update_"+ CURRENT_TABLE +"?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + request, true);
@@ -251,8 +271,10 @@ function deleteRow(datas){
   };
 
   let request = ""
-  for(let elem of datas){
-    request += "&"+elem.columnName+"="+elem.value;
+  for(let row of datas){
+    for(let elem of row){
+      request += "&"+elem.columnName+"="+elem.value;
+    }
   }
 
   xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/delete_"+ CURRENT_TABLE +"?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + request, true);
