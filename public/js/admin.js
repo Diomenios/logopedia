@@ -22,8 +22,8 @@ function onload(){
   mvLoginPassword = new Vue({
     el:"#loginPassword",
     data:{
-      login:"louis",
-      password:"diomenios",
+      login:"",
+      password:"",
       errorMessage:"",
       display:"block"
     },
