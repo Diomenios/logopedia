@@ -2,11 +2,13 @@
 
 let USERNAME;
 let PASSWORD;
+let CURRENT_TABLE;
 
 let mvWindowTitle;
 let mvLoginPassword;
 let mvTablesList;
 let mvTableBody;
+let mvUpdateRow;
 
 function onload(){
 
@@ -43,19 +45,80 @@ function startAmdinistrationGUI() {
     methods:{
       loadTable: function(tableName){
         getTableColumnsTitle(tableName);
-        getTableBody(tableName)
+        getTableBody(tableName);
+        mvTableBody.displayUpdate= "flex";
+        CURRENT_TABLE = tableName;
+        mvTableBody.updateMessage="";
+        mvTableBody.displayBody="flex";
+        mvTableBody.displayRow="none";
+        mvTableBody.row=[];
       }
     }
   });
 
   mvTableBody = new Vue({
-    el:"#tableBody",
+    el:"#tableDescription",
     data: {
       columns:[],
       rows:[],
-      display: "flex"
+      tableRow:[],
+      updateMessage:"",
+      displayBody: "flex",
+      displayRow: "none",
+      displayUpdate: "none"
+    },
+    methods:{
+      updateDelete:function(row){
+        this.displayBody="none";
+        this.displayRow="flex";
+
+        this.tableRow=[];
+
+        let count = 0;
+        let newRow=[];
+        for(let elem in row){
+          if (count == 5) {
+            this.tableRow.push(newRow);
+            newRow=[];
+            count=0;
+          }
+          else {
+            newRow.push({value: row[elem], columnName: this.columns[elem].name});
+            count++;
+          }
+        }
+        if (count != 0) {
+          this.tableRow.push(newRow);
+        }
+        console.log(this.tableRow);
+      },
+      updateRow:function () {
+        this.displayBody="flex";
+        this.displayRow="none";
+        updateRow(this.tableRow);
+        this.row = [];
+      },
+      deleteRow:function (){
+        this.displayBody="flex";
+        this.displayRow="none";
+        deleteRow(this.tableRow);
+        this.row =[];
+      }
     }
   });
+
+}
+
+function updateDatabaseTable(){
+
+  let inputToDatabase={};
+
+  for (let i = 0 ; i < mvTableBody.columns.length ; i++) {
+    //inputToDatabase.push({[mvTableBody.columns[i].name] : mvTableBody.columns[i].value});
+    inputToDatabase[mvTableBody.columns[i].name] = mvTableBody.columns[i].value;
+  }
+
+  updateTable(inputToDatabase);
 }
 
 function validateConnection(user, password){
@@ -78,7 +141,7 @@ function validateConnection(user, password){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/outils/validate_root_user?password="+ password + "&user="+user, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/outils/validate_root_user?admin_password="+ password + "&admin_user="+user, true);
   xhttp.send();
 }
 
@@ -99,7 +162,7 @@ function getTablesNames(){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/tables_name?password="+ PASSWORD + "&user="+USERNAME, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/tables_name?admin_user=" + USERNAME + "&admin_password=" + PASSWORD, true);
   xhttp.send();
 }
 
@@ -114,8 +177,8 @@ function getTableColumnsTitle(tableName){
 
               mvTableBody.columns=[];
               for (let elem in Object.keys(returnValues.requestBody)) {
-                mvTableBody.columns.push(returnValues.requestBody[elem].COLUMN_NAME);
-
+                mvTableBody.columns.push({name:returnValues.requestBody[elem].COLUMN_NAME, requested:returnValues.requestBody[elem].IS_NULLABLE,
+                                            value:"", auto: returnValues.requestBody[elem].EXTRA});
               }
             }
             else{
@@ -124,7 +187,7 @@ function getTableColumnsTitle(tableName){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_columns_x?password="+ PASSWORD + "&user="+ USERNAME + "&table=" +tableName, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_columns_x?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + "&table=" +tableName, true);
   xhttp.send();
 }
 
@@ -153,6 +216,67 @@ function getTableBody(tableName){
         }
   };
 
- 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_x?password="+ PASSWORD + "&user="+USERNAME + "&table=" +tableName, true);
+ 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_x?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + "&table=" +tableName, true);
+  xhttp.send();
+}
+
+function updateTable(datas){
+  let xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            let returnValues = JSON.parse(this.responseText);
+            mvTableBody.updateMessage=returnValues.requestBody;
+        }
+  };
+
+  let request = ""
+  for(let key of Object.keys(datas)){
+    request += "&"+key+"="+datas[key];
+  }
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/add_"+ CURRENT_TABLE +"?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + request, true);
+  xhttp.send();
+}
+
+function updateRow(datas){
+  let xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            let returnValues = JSON.parse(this.responseText);
+            console.log(returnValues);
+        }
+  };
+
+  let request = ""
+  for(let row of datas){
+    for(let elem of row){
+      request += "&"+elem.columnName+"="+elem.value;
+    }
+  }
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/update_"+ CURRENT_TABLE +"?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + request, true);
+  xhttp.send();
+}
+
+function deleteRow(datas){
+  let xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            let returnValues = JSON.parse(this.responseText);
+            console.log(returnValues);
+        }
+  };
+
+  let request = ""
+  for(let row of datas){
+    for(let elem of row){
+      request += "&"+elem.columnName+"="+elem.value;
+    }
+  }
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/delete_"+ CURRENT_TABLE +"?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + request, true);
   xhttp.send();
 }

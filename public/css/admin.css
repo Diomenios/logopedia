@@ -1,41 +1,94 @@
 /*CSS Page Administration*/
+section{
+  display: none;
+}
+
 table{
   border: 1px solid black;
-  max-width: 50%;
+  max-width: 90%;
 }
 
 td{
   border: 1px solid black;
+  word-break: break-all;
 }
 
 th{
   border: 2px solid black;
 }
 
-.tablesButtons{
+.buttonMargin{
+  margin: 2%;
+}
 
+.textarea{
+  width: 100%;
 }
 
 #administration{
   height: 90vh;
-  /*background-color: blue;*/
   display: block;
+  overflow-y: auto;
+}
+
+#deleteUpdateButton{
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#tableDescription{
+  min-height: 70%;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
 }
 
 #tablesList{
-  min-height: 20%;
-  min-width: 100%;
-  /*background-color: red;*/
+  min-height: 10%;
+  min-width: 900px;
+  max-width: 70%;
   display: none;
   align-items: center;
+  margin: auto;
   justify-content: space-around;
 }
 
 #tableBody{
-  min-height: 80%;
-  min-width: 100%;
-  /*background-color: green;*/
+  min-height: 70%;
+  min-width: 50%;
   display: none;
   align-items: center;
   justify-content: space-around;
+}
+
+#updateRow{
+  min-height: 70vh;
+  min-width: 45%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#updateTable{
+  min-height: 70%;
+  min-width: 50%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-center {
+    margin: 0 calc(50% - 66px) 0 0;
+}
+
+.btn-sunny {
+color: #fff;
+background-color: #f4ad49;
+border-bottom:2px solid #c38a3a;
 }

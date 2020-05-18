@@ -22,12 +22,12 @@
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 				<div class="container" id="windowTitle">
 					<a class="navbar-brand" href="/">Logopédie</a>
-          <!-- TODO : Emile il faut que ceci soit le titre au milieu de la NAV-BAR -->
-          <h2 class="navbar-brand"> {{title}} </h2>
+          <h2 class="navbar-brand custom-center"> {{title}} </h2>
 				</div>
 			</nav>
 	</header>
   <body onload="onload();">
+
     <section v-bind:style={display:display} class="main_Box" id="loginPassword">
 
       <div class="row">
@@ -60,31 +60,70 @@
       </section>
 
   <section id="administration">
-
     <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce/ces  boutons ? -->
-    <div id="tablesList" v-bind:style="{display:display}">
-      <button class="tablesButtons" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
-    </div>
+   <div id="tablesList" v-bind:style="{display:display}">
+     <button class="tablesButtons" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
+   </div>
 
-    <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce tableau ? -->
-    <div id="tableBody" v-bind:style="{display:display}">
-      <table>
+    <div id="tableDescription">
+      <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce tableau ? -->
+      <div id="tableBody" v-bind:style="{display:displayBody}">
+          <table>
 
-        <thead>
+            <thead>
+              <tr>
+                <th class="th" v-for="column in columns"> {{column.name}} </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="row in rows" v-on:click="updateDelete(row)">
+                <td class="td" v-for="elem in row"> {{elem}} </td>
+              </tr>
+            </tbody>
+
+          </table>
+      </div>
+
+      <div id="updateRow" v-bind:style="{display:displayRow}">
+        <table v-for="row in tableRow">
+          <thead>
+            <tr>
+              <th class="th" v-for="column in columns"> {{column.name}} </th>
+            </tr>
+          </thead>
           <tr>
-            <th class="th" v-for="column in columns"> {{column}} </th>
-          </tr>
-        </thead>
+            <td v-for="elem in row">
+              <textarea class="textarea" type="textarea" v-model="elem.value"> {{elem.value}}</textarea>
+            </td>
 
-        <tbody>
-          <tr v-for="row in rows">
-            <td class="td" v-for="elem in row"> {{elem}} </td>
           </tr>
-        </tbody>
+        </table>
+        <div id="deleteUpdateButton" class="buttonMargin">
+          <button type="button" v-on:click="deleteRow()">Supprimer cette ligne</button>
+          <button type="button" v-on:click="updateRow()">Appliquer la modification</button>
+        </div>
+      </div>
 
-      </table>
+      <div id="updateTable" v-bind:style="{display:displayUpdate}">
+
+        <form onsubmit="updateDatabaseTable(); return false;">
+
+          <div v-for="column in columns">
+
+            <label v-bind:for="column.name" >{{column.name}}</label>
+            <input v-if="column.requested === 'NO'" type="text" v-bind:name="column.name" v-model="column.value" required>
+            <input v-else type="text" v-bind:name="column.name" v-model="column.value">
+
+          </div>
+
+          <input type="submit" value="Insérer les valeurs">
+          <span>{{updateMessage}}</span>
+
+        </form>
+
+      </div>
     </div>
-
   </section>
   </body>
 
