@@ -1,52 +1,27 @@
-let tabPatient =  [
-  { numero_patient:1, prenom: 'Louis', nom: 'Arys' },
-  { numero_patient:2,  prenom: 'Martin', nom: 'Perdaens' },
-  { numero_patient:3,  prenom: 'Anh-Emile', nom: 'Pham' },
-  { numero_patient:4,  prenom: 'Patrick', nom: 'Dujardin' },
-  { numero_patient:5,  prenom: 'Po', nom: 'Pham' }
-]
+'use strict'
 
-let tabResultats =  [
-  {id_sauvegarde:1, numero_patient: 1, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test1", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:1, numero_patient: 1, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test1", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:3, numero_patient: 1, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test3", date_activite: "12-08-2020", id_activites:2 },
-  {id_sauvegarde:1, numero_patient: 1, resultat_image:7, nombre_image: 8, feedback:"salut c'est un test1", date_activite: "14-08-2020", id_activites:1 },
-  {id_sauvegarde:3, numero_patient: 1, resultat_image:1, nombre_image: 4, feedback:"salut c'est un test3", date_activite: "14-08-2020", id_activites:2 },
+let tabPatient =  [];
+let tabResultats = [];
+let tabActive = [];
 
-  {id_sauvegarde:5, numero_patient: 2, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:6, numero_patient: 2, resultat_image:2, nombre_image: 6, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:7, numero_patient: 2, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
-  {id_sauvegarde:8, numero_patient: 2, resultat_image:3, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
+getActivites();
+getResultats();
+getPatients();
 
-  {id_sauvegarde:9, numero_patient: 3, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:10, numero_patient: 3, resultat_image:2, nombre_image: 6, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:11, numero_patient: 3, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
-  {id_sauvegarde:12, numero_patient: 3, resultat_image:3, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
+let recherche;
 
-  {id_sauvegarde:13, numero_patient: 4, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:14, numero_patient: 4, resultat_image:2, nombre_image: 6, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:15, numero_patient: 4, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
-  {id_sauvegarde:16, numero_patient: 4, resultat_image:3, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
+function onload(){
 
-  {id_sauvegarde:17, numero_patient: 5, resultat_image:5, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:18, numero_patient: 5, resultat_image:2, nombre_image: 6, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:1 },
-  {id_sauvegarde:19, numero_patient: 5, resultat_image:3, nombre_image: 4, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 },
-  {id_sauvegarde:20, numero_patient: 5, resultat_image:3, nombre_image: 8, feedback:"salut c'est un test", date_activite: "12-08-2020", id_activites:2 }
-]
+  recherche = new Vue({
+    el: '#divRecherche',
+    data: {},
+    methods:{
+      rechercheListe : rechercheListes,
+      resetListe : resetPages
+    }
+  });
+}
 
-let tabActivé = [
-  {id_activites:1, activite_url:"?",activite_nom:"activité orthographe",description:"?"},
-  {id_activites:2, activite_url:"?",activite_nom:"activité catégorie",description:"?"}
-]
-
-var recherche = new Vue({
-  el: '#divRecherche',
-  data: {},
-  methods:{
-    rechercheListe : rechercheListes,
-    resetListe : resetPages
-  }
-})
 
 function rechercheListes(){
   let check = true
@@ -59,8 +34,8 @@ function rechercheListes(){
     check = false
   }
   if(check){
-    for(patient of tabPatient){
-      if((inputRecherche.value == patient.nom) || 
+    for(let patient of tabPatient){
+      if((inputRecherche.value == patient.nom) ||
       (inputRecherche.value == patient.prenom) ||
       (inputRecherche.value == `${patient.prenom} ${patient.nom}`)){
         nouvelleListePatient += `<li onclick="afficherResulats(this);"> ${patient.prenom} ${patient.nom}</li>`;
@@ -71,7 +46,7 @@ function rechercheListes(){
 }
 function resetPages(){
   let nouvelleListe = "";
-  for(patient of tabPatient){
+  for(let patient of tabPatient){
       nouvelleListe += `<li onclick="afficherResulats(this);"> ${ patient.prenom } ${ patient.nom }</li>`
   }
   document.getElementById('listePatient').innerHTML = nouvelleListe;
@@ -94,7 +69,7 @@ function afficherResulats(element){
   let indexPatient = 0;
   let resultattexte = "";
 
-  
+
   let divResulatsTexte = document.getElementById('divResulatsTexte');
   let divResulats = document.getElementById('divResulats');
   let divResultatGraph1 = document.getElementById('divResulatsGraph1');
@@ -105,11 +80,11 @@ function afficherResulats(element){
 
   divResulats.style.display = "block";
 
-  patient = element.textContent;
-  patientModif = patient.replace(/\s/g,"")
+  let patient = element.textContent;
+  let patientModif = patient.replace(/\s/g,"")
 
   //recupérer l'id du patient
-  for( e of tabPatient){
+  for(let e of tabPatient){
     if( patientModif == `${e.prenom}${e.nom}`){
       indexPatient = e.numero_patient;
     }
@@ -119,14 +94,13 @@ function afficherResulats(element){
   let tabDataLineaireAct1 = [];
   let tabDataLineaireAct2 = [];
 
-  for( e of tabResultats){
+  for(let e of tabResultats){
     if( indexPatient == e.numero_patient){
-      //console.log(e)
 
-      for( f of tabActivé){
-
-        if(e.id_activites == f.id_activites){
-           nomActivite = f.activite_nom;
+      let nomActivite
+      for(let f of tabActive){
+        if(e.id_activites == f.activite_id){
+          nomActivite = f.activite_nom;
         }
       }
         if(e.id_activites == 1){
@@ -138,8 +112,8 @@ function afficherResulats(element){
         if(tabDataX.length < tabDataLineaireAct1.length || tabDataX.length < tabDataLineaireAct2.length){
           tabDataX.push(e.date_activite);
         }
-        
-      resultattexte += `Résultat: ${e.resultat_image}/${e.nombre_image} <br> Feedback: ${e.feedback} <br> Date: ${e.date_activite} <br> Activité: ${nomActivite} 
+
+      resultattexte += `Résultat: ${e.resultat_image}/${e.nombre_image} <br> Feedback: ${e.feedback} <br> Date: ${e.date_activite} <br> Activité: ${nomActivite}
       <br>-------------------<br>`;
     }
   }
@@ -166,7 +140,7 @@ function afficherResulats(element){
   <canvas id="myChart2"></canvas><br>
 
   <input id="bRetour" type="button" value="Retour Liste Patients" onclick="AfficherPatients()">`;
-  
+
   $('#divResulatsGraph1').hide();
   $('#divResulatsGraph2').hide();
   $('#divResulatsTexte').show();
@@ -207,12 +181,12 @@ function afficherResulats(element){
     type: 'line',
     data: {
       labels: tabDataX,
-      datasets: [{ 
+      datasets: [{
           data: tabDataLineaireAct1,
           label: "activité orthographe",
           borderColor: "#3e95cd",
           fill: false
-        }, { 
+        }, {
           data: tabDataLineaireAct2,
           label: "activité catégorie",
           borderColor: "#8e5ea2",
@@ -275,10 +249,10 @@ function AfficherPatients(){
 /**
 *partie pour l'autocomplétion
 *@param inp : champ html où est envoyé le résultat
-*@param 'arr' : Array dans lequel se fait la recherche 
+*@param 'arr' : Array dans lequel se fait la recherche
 */
 function autocomplete(inp, arr) {
-  
+
   var currentFocus;
   inp.addEventListener("input", function(e) {
 
@@ -291,7 +265,7 @@ function autocomplete(inp, arr) {
       a.setAttribute("class", "autocomplete-items");
       this.parentNode.appendChild(a);
       if(inp.value.length >= 3){
-      for (i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
 
         if (arr[i].nom.substr(0, val.length).toUpperCase() == val.toUpperCase()) { //condition si on fait une recherche par le nom
           b = document.createElement("DIV");
@@ -317,7 +291,7 @@ function autocomplete(inp, arr) {
           a.appendChild(b);
         }
 
-        else if ((arr[i].prenom+ ' '+arr[i].nom).substr(0, val.length).toUpperCase() == val.toUpperCase()) { 
+        else if ((arr[i].prenom+ ' '+arr[i].nom).substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           //condition si on fait une recherche par le prenom et le nom
           b = document.createElement("DIV");
           b.innerHTML =  arr[i].nom +' '+"<strong>" + arr[i].prenom.substr(0, val.length) + "</strong>";
@@ -330,7 +304,7 @@ function autocomplete(inp, arr) {
           a.appendChild(b);
         }
 
-        else if ((arr[i].nom+ ' '+arr[i].prenom).substr(0, val.length).toUpperCase() == val.toUpperCase()) { 
+        else if ((arr[i].nom+ ' '+arr[i].prenom).substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           //condition si on fait une recherche par le prenom et le nom
           b = document.createElement("DIV");
           b.innerHTML =  arr[i].nom +' '+"<strong>" + arr[i].prenom.substr(0, val.length) + "</strong>";
@@ -395,3 +369,55 @@ function autocomplete(inp, arr) {
 
 autocomplete(document.getElementById("recherche"), tabPatient);
 
+/**************************  Fonctions GET database  **************************/
+
+function getActivites() {
+  let xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let returnArray = JSON.parse(this.responseText);
+
+        for (let i = 0; i < returnArray.length; i++) {
+          tabActive.push(returnArray[i]);
+        }
+      }
+  };
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/activites_list", true);
+  xhttp.send();
+}
+
+function getResultats() {
+  let xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let returnArray = JSON.parse(this.responseText);
+
+        for (let i = 0; i < returnArray.length; i++) {
+          tabResultats.push(returnArray[i]);
+        }
+      }
+  };
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/resultats", true);
+  xhttp.send();
+}
+
+function getPatients() {
+  let xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        let returnArray = JSON.parse(this.responseText);
+
+        for (let i = 0; i < returnArray.length; i++) {
+          tabPatient.push(returnArray[i]);
+        }
+      }
+  };
+
+  xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/patients", true);
+  xhttp.send();
+}

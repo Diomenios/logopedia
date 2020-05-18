@@ -305,6 +305,25 @@ database.get('/activites_list', (req, res) => {
   });
 });
 
+database.get('/resultats', (req, res) => {
+  conn.query("SELECT * FROM Resultats", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    sendJsons(rows, res);
+  });
+});
+
+database.get('/patients', (req, res) => {
+  conn.query("SELECT * FROM Patients", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    sendJsons(rows, res);
+  });
+});
+
+
 /**
 * Recupere un nombre defini d'images de classe (categorie) random
 *

@@ -616,7 +616,7 @@ function addOrConfirmUser(nom, prenom, email, age){
 						console.log(feedbackList);
 					 	for (let elem of feedbackList) {
 							console.log("send");
-							addResultat(returnValues.numero_patient, (elem.resultat == elem.trueResultat), MAX_IMAGES, elem.feedback, new Date(), ACTIVITY_ID);
+							addResultat(returnValues.numero_patient, score, MAX_IMAGES, elem.feedback, new Date(), ACTIVITY_ID);
 					 	}
  				 	}
 			 }
@@ -638,13 +638,6 @@ function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateA
 				 }
 			 }
 	 };
-
-	 if (resultatImage) {
-	 	resultatImage=1;
-	 }
-	 else {
-	 	resultatImage=0;
-	 }
 
 	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/add_Resultats?numero_patient="+ numeroPatient +"&resultat_image="+ resultatImage +"&nombre_image="+ nombreImages
 								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites, true);
