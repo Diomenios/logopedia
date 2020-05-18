@@ -369,6 +369,54 @@ database.get('/first_root_user', (req, res) =>{
   }
 });
 
+database.get('/addOrConfirmUser', (req, res) => {
+  if (req.query.nom === undefined || req.query.prenom === undefined || req.query.email === undefined || req.query.age === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/addOrConfirmUser?nom=<patient_name>&prenom=<patient_prenom>&email=<patient_email>&age=<patient_age>", res);
+  }
+  else {
+    conn.query("SELECT numero_patient from Patients WHERE nom=? AND prenom=? AND email=? AND age=?", [req.query.nom, req.query.prenom, req.query.email, req.query.age],(err, rows) =>{
+      if (err) {
+        throw err;
+      }
+      if (rows[0] === undefined) {
+        conn.query("INSERT INTO Patients (nom, prenom, email, age) VALUES (?, ?, ?, ?)", [req.query.nom, req.query.prenom, req.query.email, req.query.age], (err, rows) =>{
+          if (err) {
+            throw err;
+          }
+          conn.query("SELECT numero_patient from Patients WHERE nom=? AND prenom=? AND email=? AND age=?", [req.query.nom, req.query.prenom, req.query.email, req.query.age],(err, rows) =>{
+            if (err) {
+              throw err;
+            }
+            sendJsons({status:1, numero_patient:rows[0].numero_patient}, res);
+          });
+        });
+      }
+      else {
+        sendJsons({status:1, numero_patient:rows[0].numero_patient}, res);
+      }
+    });
+  }
+});
+
+database.get('/add_Resultats', (req, res) => {
+  if (req.query.numero_patient === undefined || req.query.resultat_image === undefined || req.query.nombre_image === undefined|| req.query.feedback === undefined ||
+        req.query.date_activite === undefined || req.query.id_activites === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/add_Resultats?numero_patient=<patient_number>&resultat_image=<resultat>&nombre_image=<number_of_sequence>&"+
+                  "feedback=<image_feedback>&date_activite=<date>&id_activites=<activity_id>", res);
+                  console.log("error");
+  }
+  else {
+    conn.query("INSERT INTO Resultats (numero_patient, resultat_image, nombre_image, feedback, date_activite, id_activites) VALUES (?, ?, ?, ?, ?, ?)",
+                  [req.query.numero_patient, req.query.resultat_image, req.query.nombre_image, req.query.feedback, req.query.date_activite, req.query.id_activites], (err, rows) =>{
+      if (err) {
+        throw err;
+      }
+      sendJsons({status:1, message:"la requête a bien été ajoutée"}, res);
+    });
+  }
+});
+
+
 //TODO preciser le format d'envois
 database.get('/admin/tables_name', (req, res) => {
   if (req.query.user === undefined || req.query.password === undefined) {
@@ -394,6 +442,16 @@ database.get('/admin/table_columns_x', (req, res) => {
   }
   else {
     secureDatabaseQuery(req.query.user, req.query.password, "Select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=?",[req.query.table], res);
+  }
+});
+
+database.get('/admin/add_Patients', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.prenom === undefined || req.query.email === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Patients?admin_user=<username>&admin_password=<user_password>&nom=<patient_name>&prenom=<patient_prenom>" +
+                  "&email=<patient_email>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Patients (nom, prenom, email) VALUES (?, ?, ?)",[req.query.nom, req.query.prenom, req.query.email], res);
   }
 });
 

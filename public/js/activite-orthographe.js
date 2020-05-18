@@ -6,6 +6,7 @@ let MOTS_NUMBER;
 let MAX_IMAGES;
 let DIFFICULTE;
 let CLASSE;
+let ACTIVITY_ID = 1;
 
 let image = new Image();
 let mots;
@@ -24,6 +25,7 @@ let mvButtons;
 let mvNextButton;
 let mvResultats;
 let mvImage;
+let mvSauvegarde;
 
 /***********************  VUE pour l'exercice  ********************************/
 
@@ -63,8 +65,7 @@ function onload(){
 		}
 	});
 
-
-		mvImage = new Vue({
+	mvImage = new Vue({
 			el:"#divImage",
 			data:{
 				source: image,
@@ -75,7 +76,24 @@ function onload(){
 					this.source = nouvelleSource;
 				}
 			}
-		});
+	});
+
+	mvSauvegarde = new Vue({
+			el:"#zoneSauvegarde",
+			data:{
+				nom: "",
+				prenom: "",
+				age:undefined,
+				email: "",
+				display: "none",
+				message:""
+			},
+			methods:{
+				sauvegarde: function(){
+					addOrConfirmUser(this.nom, this.prenom, this.email, this.age);
+				}
+			}
+	});
 }
 
 /*
@@ -364,20 +382,24 @@ function formatFeedback(){
 	let returnString="";
 
 	for (let i = 0; i < feedbackList.length; i++) {
+		let stringToAdd;
 		if (feedbackList[i].resultat == feedbackList[i].trueResultat) {
-			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez correctement répondu \n";
+			stringToAdd = "A la photo du " + feedbackList[i].trueResultat + " vous avez correctement répondu \n";
+			returnString += stringToAdd;
 		}
 		else{
-			returnString += "A la photo du " + feedbackList[i].trueResultat + " vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
+			stringToAdd = "A la photo du " + feedbackList[i].trueResultat + " vous avez répondu : " +feedbackList[i].resultat + "(erreur) \n";
+			returnString += stringToAdd;
 		}
+
+		feedbackList[i]={trueResultat:feedbackList[i].trueResultat, resultat: feedbackList[i].resultat, feedback:stringToAdd};
 	}
 
 	return returnString;
 }
 
 function AfficherZoneSauvegarde(){
-	let zoneSauvegarde = document.getElementById('zoneSauvegarde');
-    zoneSauvegarde.style.display = "block";
+	mvSauvegarde.display="block";
 }
 /***********************  fonctions de GET database  **************************/
 
@@ -666,4 +688,50 @@ function imagesDisponible(classe){
 	 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/somme_images?classe=" + classe, true);
 	 	xhttp.send();
 	}
+}
+
+function addOrConfirmUser(nom, prenom, email, age){
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				let returnValues = JSON.parse(this.responseText);
+
+ 				 	if (returnValues.status == 1) {
+						console.log(feedbackList);
+					 	for (let elem of feedbackList) {
+							console.log("send");
+							addResultat(returnValues.numero_patient, (elem.resultat == elem.trueResultat), MAX_IMAGES, elem.feedback, new Date(), ACTIVITY_ID);
+					 	}
+ 				 	}
+			 }
+	 };
+
+	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/addOrConfirmUser?nom="+ nom +"&prenom="+ prenom +"&email="+ email +"&age="+ age, true);
+	xhttp.send();
+}
+
+function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateActivite, idActivites){
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				 let returnValues = JSON.parse(this.responseText);
+
+				 if (returnValues.status == 1) {
+					 	console.log("ajout réussi");
+				 }
+			 }
+	 };
+
+	 if (resultatImage) {
+	 	resultatImage=1;
+	 }
+	 else {
+	 	resultatImage=0;
+	 }
+
+	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/add_Resultats?numero_patient="+ numeroPatient +"&resultat_image="+ resultatImage +"&nombre_image="+ nombreImages
+								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites, true);
+	 xhttp.send();
 }

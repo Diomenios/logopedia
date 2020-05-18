@@ -115,26 +115,27 @@
 
             <button id='boutonSauvegarde' onclick="AfficherZoneSauvegarde()">Sauvegarde</button>
 
-            <div id="zoneSauvegarde">
-              <label for="name">Nom Patient:</label>
-              <input type="text" id="name" name="name" required minlength="4" maxlength="255" size="10">
-              <label for="name">Prénom Patient:</label>
-              <input type="text" id="name" name="name" required minlength="4" maxlength="255" size="10"><br>
-
-              <label for="name">Age Patient:</label>
-              <input type="number" id="name" name="name" required minlength="4" maxlength="255" size="10">
-
-              <label for="name">Email Patient:</label>
-              <input type="email" id="name" name="name" required minlength="4" maxlength="255" size="10"><br><br>
-
-              <button class="submit" type="submit">Confirmer</button>
-            </div>
-
           </div>
-  				</div>
 
+          <div id="zoneSauvegarde" v-bind:style="{display:display}">
+            <label for="name">Nom Patient:</label>
+            <input v-model="nom" type="text" name="name" required minlength="4" maxlength="255" size="10">
+            <label for="name">Prénom Patient:</label>
+            <input v-model="prenom" type="text" name="name" required minlength="4" maxlength="255" size="10"><br>
+
+            <label for="name">Age Patient:</label>
+            <input v-model="age" type="number" name="name" required minlength="4" maxlength="255" size="10">
+
+            <label for="name">Email Patient:</label>
+            <input v-model="email" type="email" name="name" required minlength="4" maxlength="255" size="10"><br><br>
+
+            <button class="submit" type="submit" v-on:click="sauvegarde()">Confirmer</button>
+          </div>
+          
 				</div>
+
 			</div>
+		</div>
 
 		</section>
     </body>
