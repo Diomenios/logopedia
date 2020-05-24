@@ -44,6 +44,7 @@ function rechercheListes(){
     document.getElementById('listePatient').innerHTML = nouvelleListePatient;
 }
 }
+
 function resetPages(){
   let nouvelleListe = "";
   for(let patient of tabPatient){
@@ -66,7 +67,10 @@ var listePatient = new Vue({
   }
 })
 
-
+/**
+ * Display result of the activity in the HTML 
+ * @param {object} : result of the activity
+ */
 function afficherResulats(element){
   let indexPatient = 0;
   let resultattexte = "";
