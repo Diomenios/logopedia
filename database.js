@@ -566,7 +566,10 @@ database.get('/admin/add_Users', (req, res) => {
                               ,[req.query.user_name, passwordData.passwordHash, password_salt, req.query.root], res);
   }
 });
-
+/**
+ * 
+ * mise a jour d'une classe via l'API admin
+ */
 database.get('/admin/update_Classes', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.classe_nom === undefined || req.query.classe_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Classes?admin_user=<username>&admin_password=<user_password>&classe_nom=<class_name>" +
@@ -577,6 +580,10 @@ database.get('/admin/update_Classes', (req, res) => {
   }
 });
 
+/**
+ * 
+ * mise a jour d'une description d'activite via l'API admin
+ */
 database.get('/admin/update_DescriptionActivites', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.activite_url === undefined || req.query.activite_nom === undefined ||
           req.query.description === undefined || req.query.activite_id === undefined) {
@@ -589,6 +596,10 @@ database.get('/admin/update_DescriptionActivites', (req, res) => {
   }
 });
 
+/**
+ * 
+ * mise a jour de la difficulte via l'API admin
+ */
 database.get('/admin/update_Difficultes', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.nombre_mots === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Difficultes?admin_user=<username>&admin_password=<user_password>&nom=<difficulty_name>&nombre_mots=<number_of_words>", res);
@@ -597,7 +608,10 @@ database.get('/admin/update_Difficultes', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "UPDATE Difficultes SET nombre_mots=? WHERE nom=?",[req.query.nombre_mots, req.query.nom], res);
   }
 });
-
+/**
+ * 
+ * mise a jour de la longueur des activites via l'API admin
+ */
 database.get('/admin/update_Longueurs', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.nombre_images === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Longueurs?admin_user=<username>&admin_password=<user_password>&nom=<length_name>&nombre_images=<number_of_pictures>", res);
@@ -606,7 +620,10 @@ database.get('/admin/update_Longueurs', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "UPDATE Longueurs SET nombre_images=? WHERE nom=?",[req.query.nombre_images, req.query.nom], res);
   }
 });
-
+/**
+ * 
+ * mise a jour d'un mot via l'API admin
+ */
 database.get('/admin/update_Mots', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.mot === undefined || req.query.distracteur === undefined || req.query.type_id === undefined ||
           req.query.mot_id === undefined) {
@@ -619,6 +636,10 @@ database.get('/admin/update_Mots', (req, res) => {
   }
 });
 
+/**
+ * 
+ * ajout d'un patient via l'API admin
+ */
 database.get('/admin/add_Patients', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.prenom === undefined || req.query.email === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Patients?admin_user=<username>&admin_password=<user_password>&nom=<patient_name>&prenom=<patient_prenom>" +
@@ -629,6 +650,10 @@ database.get('/admin/add_Patients', (req, res) => {
   }
 });
 
+/**
+ * 
+ * mise a jour d'un type via l'API admin
+ */
 database.get('/admin/update_Types', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.type_nom === undefined || req.query.classe_id === undefined || req.query.type_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Types?admin_user=<username>&admin_password=<user_password>&type_nom=<type_name>&classe_id=<classe_id>" +
@@ -639,6 +664,10 @@ database.get('/admin/update_Types', (req, res) => {
   }
 });
 
+/**
+ * 
+ * mise a jour des donnees d'un utilisateur via l'API admin
+ */
 database.get('/admin/update_Users', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_name === undefined || req.query.password === undefined || req.query.root === undefined ||
           req.query.user_id === undefined) {
@@ -663,6 +692,10 @@ database.get('/admin/update_Users', (req, res) => {
   }
 });
 
+/**
+ * 
+ * suppresion d'une classe via l'API admin
+ */
 database.get('/admin/delete_Classes', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.classe_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Classes?admin_user=<username>&admin_password=<user_password>&classe_id=<elem_id>", res);
@@ -672,6 +705,11 @@ database.get('/admin/delete_Classes', (req, res) => {
   }
 });
 
+
+/**
+ * 
+ * suppresion de la description d'une activite l'API admin
+ */
 database.get('/admin/delete_DescriptionActivites', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.activite_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_DescriptionActivites?admin_user=<username>&admin_password=<user_password>&activite_id=<activity_id>", res);
@@ -681,6 +719,10 @@ database.get('/admin/delete_DescriptionActivites', (req, res) => {
   }
 });
 
+/**
+ * 
+ * suppresion d'une difficulte l'API admin
+ */
 database.get('/admin/delete_Difficultes', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Difficultes?admin_user=<username>&admin_password=<user_password>&nom=<difficulty_name>", res);
@@ -699,6 +741,10 @@ database.get('/admin/delete_Longueurs', (req, res) => {
   }
 });
 
+/**
+ * 
+ * suppresion d'un mot via l'API admin
+ */
 database.get('/admin/delete_Mots', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.mot_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Mots?admin_user=<username>&admin_password=<user_password>&mot_id=<mot_id>", res);
@@ -708,6 +754,10 @@ database.get('/admin/delete_Mots', (req, res) => {
   }
 });
 
+/**
+ * 
+ * suppresion d'un type l'API admin
+ */
 database.get('/admin/delete_Types', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.type_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Types?admin_user=<username>&admin_password=<user_password>&type_id=<type_id>", res);
@@ -717,6 +767,10 @@ database.get('/admin/delete_Types', (req, res) => {
   }
 });
 
+/**
+ * 
+ * suppresion d'un utilisateur l'API admin
+ */
 database.get('/admin/delete_Users', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_Users?admin_user=<username>&admin_password=<user_password>&user_id=<user_id>", res);
