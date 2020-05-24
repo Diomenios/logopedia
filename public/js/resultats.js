@@ -65,6 +65,8 @@ var listePatient = new Vue({
     afficherResulat : afficherResulats,
   }
 })
+
+
 function afficherResulats(element){
   let indexPatient = 0;
   let resultattexte = "";
@@ -237,6 +239,11 @@ var listePatient = new Vue({
   },
 })
 
+
+/**
+ * 
+ * Display the patients in the HTML via CSS
+ */
 function AfficherPatients(){
   document.getElementById('divResulats').style.display = "none";
   document.getElementById('divRecherche').style.display = "block";
@@ -247,10 +254,11 @@ function AfficherPatients(){
 
 /*---------------------------*/
 /**
-*partie pour l'autocomplétion
-*@param inp : champ html où est envoyé le résultat
-*@param 'arr' : Array dans lequel se fait la recherche
-*/
+ *
+ * partie pour l'autocomplétion
+ * @param {string} inp : champ html où est envoyé le résultat
+ * @param {string} 'arr' : Array dans lequel se fait la recherche
+ */
 function autocomplete(inp, arr) {
 
   var currentFocus;
@@ -321,17 +329,17 @@ function autocomplete(inp, arr) {
     }
   });
 
-  //partie pour le clavier;
+  //keyboard use;
   inp.addEventListener("keydown", function(e) {
       var x = document.getElementById(this.id + "autocomplete-list");
       if (x) x = x.getElementsByTagName("div");
       if (e.keyCode == 40) {
         currentFocus++;
         addActive(x);
-      } else if (e.keyCode == 38) { // touche up
+      } else if (e.keyCode == 38) { // up key
         currentFocus--;
         addActive(x);
-      } else if (e.keyCode == 13) { //si ENTER est  préssé
+      } else if (e.keyCode == 13) { //if ENTER key is pressed
         e.preventDefault();
         if (currentFocus > -1) {
           if (x) x[currentFocus].click();
@@ -352,7 +360,11 @@ function autocomplete(inp, arr) {
       x[i].classList.remove("autocomplete-active");
     }
   }
-
+  
+/**
+ * 
+ * @param {string} 
+ */
   function closeAllLists(elmnt) {
     var x = document.getElementsByClassName("autocomplete-items");
     for (var i = 0; i < x.length; i++) {
@@ -371,6 +383,10 @@ autocomplete(document.getElementById("recherche"), tabPatient);
 
 /**************************  Fonctions GET database  **************************/
 
+/**
+ * 
+ * get activity from the database
+ */
 function getActivites() {
   let xhttp = new XMLHttpRequest();
 
@@ -388,6 +404,10 @@ function getActivites() {
   xhttp.send();
 }
 
+/**
+ * 
+ * get result from the database
+ */
 function getResultats() {
   let xhttp = new XMLHttpRequest();
 
@@ -405,6 +425,10 @@ function getResultats() {
   xhttp.send();
 }
 
+/**
+ * 
+ * Get patients from the database
+ */
 function getPatients() {
   let xhttp = new XMLHttpRequest();
 
