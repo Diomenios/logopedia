@@ -488,7 +488,10 @@ database.get('/admin/table_x', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "SELECT * FROM "+req.query.table,[], res);
   }
 });
-
+/**
+ * 
+ * recuperer les donnes d'une colonne dans un tableau via l'API admin
+ */
 database.get('/admin/table_columns_x', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.table === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_column_x?admin_user=<username>&admin_password=<user_password>&table=<table_name>", res);
@@ -498,6 +501,10 @@ database.get('/admin/table_columns_x', (req, res) => {
   }
 });
 
+/**
+ * 
+ * ajout d'une classe via l'API admin
+ */
 database.get('/admin/add_Classes', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.classe_nom === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Classes?admin_user=<username>&admin_password=<user_password>&classe_nom=<class_name>", res);
@@ -507,6 +514,10 @@ database.get('/admin/add_Classes', (req, res) => {
   }
 });
 
+/**
+ * 
+ * ajout d'une description d'activite via l'API admin
+ */
 database.get('/admin/add_DescriptionActivites', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.activite_url === undefined || req.query.activite_nom === undefined || req.query.description === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_DescriptionActivites?admin_user=<username>&admin_password=<user_password>&activite_url=<activity_url>" +
@@ -518,6 +529,10 @@ database.get('/admin/add_DescriptionActivites', (req, res) => {
   }
 });
 
+/**
+ * 
+ * ajout d'une difficulte via l'API admin
+ */
 database.get('/admin/add_Difficultes', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.nombre_mots === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Difficultes?user=<username>&password=<user_password>&nom=<difficulty_name>&nombre_mots=<number_of_words>", res);
@@ -526,7 +541,10 @@ database.get('/admin/add_Difficultes', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Difficultes (nom, nombre_mots) VALUES (?, ?)",[req.query.nom, req.query.nombre_mots], res);
   }
 });
-
+/**
+ * 
+ * ajout d'une longueur d'activite via l'API admin
+ */
 database.get('/admin/add_Longueurs', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.nombre_images === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Longueurs?admin_user=<username>&admin_password=<user_password>&nom=<length_name>&nombre_images=<number_of_pictures>", res);
@@ -535,7 +553,10 @@ database.get('/admin/add_Longueurs', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Longueurs (nom, nombre_images) VALUES (?, ?)",[req.query.nom, req.query.nombre_images], res);
   }
 });
-
+/**
+ * 
+ * ajout d'un mot via l'API admin
+ */
 database.get('/admin/add_Mots', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.mot === undefined || req.query.distracteur === undefined || req.query.type_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Mots?admin_user=<username>&admin_password=<user_password>&mot=<word>&distracteur=<1(false)_or_0(true)>&type_id=<type_id>", res);
@@ -544,7 +565,10 @@ database.get('/admin/add_Mots', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Mots (mot, distracteur, type_id) VALUES (?, ?, ?)",[req.query.mot, req.query.distracteur, req.query.type_id], res);
   }
 });
-
+/**
+ * 
+ * ajout d'un type via l'API admin
+ */
 database.get('/admin/add_Types', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.type_nom === undefined || req.query.classe_id === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Types?admin_user=<username>&admin_password=<user_password>&type_nom=<type_name>&classe_id=<classe_id>", res);
@@ -553,7 +577,10 @@ database.get('/admin/add_Types', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Types (type_nom, classe_id) VALUES (?, ?)",[req.query.type_nom, req.query.classe_id], res);
   }
 });
-
+/**
+ * 
+ * ajout d'un user (root ou non) via l'API admin
+ */
 database.get('/admin/add_Users', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.user_name === undefined || req.query.password === undefined || req.query.root === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Users?admin_user=<username>&admin_password=<user_password>&user_name=<new_user_name>&password=<new_user_password>" +
