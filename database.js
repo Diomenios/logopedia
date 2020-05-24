@@ -304,7 +304,9 @@ database.get('/activites_list', (req, res) => {
     res.send(rows);
   });
 });
-
+/**
+* Recupere les resultats
+*/
 database.get('/resultats', (req, res) => {
   conn.query("SELECT * FROM Resultats", (err, rows) => {
     if (err) {
@@ -313,7 +315,9 @@ database.get('/resultats', (req, res) => {
     sendJsons(rows, res);
   });
 });
-
+/**
+* Recupere les patients 
+*/
 database.get('/patients', (req, res) => {
   conn.query("SELECT * FROM Patients", (err, rows) => {
     if (err) {
@@ -368,6 +372,10 @@ database.get('/activites/categorie_random_images', (req, res) => {
   }
 });
 
+/**
+ * 
+ * connexion a la DB
+ */
 database.get('/first_root_user', (req, res) =>{
   if (req.query.validate === undefined || req.query.user === undefined || req.query.password === undefined) {
     sendMessage("Erreur, veuillez introduire l\'url sous la forme : /first_root_user?validate=<pass_key>&user=<username>&password=<mot_de_passe>", res);
