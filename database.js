@@ -467,7 +467,7 @@ database.get('/add_Resultats', (req, res) => {
 /**
  * 
  * cette partie partie du code est dedie a l'API utilisable uniquement par l'administration du site, 
- * c'est dans cette partie que l'admin ferra des requêtes a la database
+ * c'est dans cette partie que l'admin ferra des requêtes a la database.
  */
 
 
