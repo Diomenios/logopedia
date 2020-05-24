@@ -374,7 +374,7 @@ database.get('/activites/categorie_random_images', (req, res) => {
 
 /**
  * 
- * connexion a la DB
+ * connexion a la DB 
  */
 database.get('/first_root_user', (req, res) =>{
   if (req.query.validate === undefined || req.query.user === undefined || req.query.password === undefined) {
@@ -407,6 +407,10 @@ database.get('/first_root_user', (req, res) =>{
   }
 });
 
+/**
+ * 
+ * ajout ou confirmation d'un utilisateur
+ */
 database.get('/addOrConfirmUser', (req, res) => {
   if (req.query.nom === undefined || req.query.prenom === undefined || req.query.email === undefined || req.query.age === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/addOrConfirmUser?nom=<patient_name>&prenom=<patient_prenom>&email=<patient_email>&age=<patient_age>", res);
@@ -436,6 +440,10 @@ database.get('/addOrConfirmUser', (req, res) => {
   }
 });
 
+/**
+ * 
+ * ajout de resultat dans la Database
+ */
 database.get('/add_Resultats', (req, res) => {
   if (req.query.numero_patient === undefined || req.query.resultat_image === undefined || req.query.nombre_image === undefined|| req.query.feedback === undefined ||
         req.query.date_activite === undefined || req.query.id_activites === undefined) {
@@ -454,8 +462,15 @@ database.get('/add_Resultats', (req, res) => {
   }
 });
 
+/*----------------------------------------------------Debut de la PARTIE ADMINISTRATION----------------------------------------------------*/
 
-//TODO preciser le format d'envois
+/**
+ * 
+ * cette partie partie du code est dedie a l'API utilisable uniquement par l'administration du site, 
+ * c'est dans cette partie que l'admin ferra des requêtes a la database
+ */
+
+
 database.get('/admin/tables_name', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/tables_name?admin_user=<username>&admin_password=<user_password>", res);
@@ -720,6 +735,8 @@ database.get('/admin/delete_Users', (req, res) => {
     });
   }
 });
+
+/*----------------------------------------------------FIN de la PARTIE ADMINISTRATION----------------------------------------------------*/
 
 /**
 * Fait le tri dans les images se trouvant dans le dossier "public/images"
