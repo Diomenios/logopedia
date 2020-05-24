@@ -470,7 +470,10 @@ database.get('/add_Resultats', (req, res) => {
  * c'est dans cette partie que l'admin ferra des requêtes a la database.
  */
 
-
+/**
+ * 
+ * recuperer les noms des tables via l'API admin
+ */
 database.get('/admin/tables_name', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/tables_name?admin_user=<username>&admin_password=<user_password>", res);
@@ -479,7 +482,10 @@ database.get('/admin/tables_name', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "SHOW tables",[], res);
   }
 });
-
+/**
+ * 
+ * recuperer les donnees d'une table via l'API admin
+ */
 database.get('/admin/table_x', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.table === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/table_x?admin_user=<username>&admin_password=<user_password>&table=<table_name>", res);
@@ -490,7 +496,7 @@ database.get('/admin/table_x', (req, res) => {
 });
 /**
  * 
- * recuperer les donnes d'une colonne dans un tableau via l'API admin
+ * recuperer les donnees d'une colonne dans un table via l'API admin
  */
 database.get('/admin/table_columns_x', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.table === undefined) {
@@ -1147,6 +1153,12 @@ function writeImage(pictureName, body, res, callback){
   });
 }
 
+/**
+ * 	
+ * generation d'un nombre aleatoire
+ * @param {int}  a 	nombre seed pour le PRNG
+ * @return {int} a	nombre produit par le PRNG
+ */
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1155,6 +1167,14 @@ function shuffle(a) {
     return a;
 }
 
+/**
+ * 
+ * @param {string} user			nom d'utilisateur
+ * @param {string} password		mot de passe de l'utilisateur
+ * @param {string} queryDatas	donnees de la requete
+ * @param {string} query		requete sql pour la database
+ * @param {string} res          L'objet representant la reponse HTTP d'une app ExpressJS
+ */
 function secureDatabaseQuery(user, password, query, queryDatas, res){
   conn.query("SELECT salt, password, root FROM Users WHERE user_name=?", [user], (err, rows) =>{
     if (err) {
