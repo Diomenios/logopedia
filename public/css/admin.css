@@ -29,7 +29,6 @@ th{
   height: 90vh;
   display: block;
   overflow-y: auto;
-  width: 69%;
   margin: auto;
 }
 
@@ -61,8 +60,11 @@ th{
 
 #tableBody{
   min-height: 70%;
-  min-width: 50%;
+  width: 60%;
+  min-width: 450px;
   display: none;
+  margin: auto;
+  margin-right: 10px;
   align-items: center;
   justify-content: space-around;
 }
@@ -78,8 +80,10 @@ th{
 
 #updateTable{
   min-height: 70%;
-  min-width: 50%;
+  width: 300px;
   display: none;
+  margin: auto;
+  margin-left: 10px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
