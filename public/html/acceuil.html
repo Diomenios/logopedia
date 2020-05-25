@@ -6,6 +6,7 @@
       <title>Logopédie</title>
       <meta charset="utf-8">
       <script src="/static/js/vue.js"></script>
+      <script src="/static/js/global.js"></script>
 			<script src="/static/js/acceuil.js"></script>
 			<!-- Required meta tags -->
 			<meta charset="utf-8">
@@ -51,28 +52,23 @@
 				</div>
 			</nav>
 	</header>
-  <body onload="InformationLogopede(),NewSite()">
+  <body onload="NewSite()">
 
     <section class="main_Box">
-      <div id="section_logopedie">
-					<h1 class="titre_section">Information Logopèdes</h1>
-
-          <div id="info_logopede">
-						<div id="informations">
-  						<p style="color:red;">Nom: </p>
-  						<p style="color:green;">Prénom:</p>
-  						<p style="color:blue;">Email:</p>
-					  </div>
-		       </div>
-			</div>
-
 			<div id="section_news">
         <h1 class="titre_section">News du Site</h1>
 
-				<div id="news_site">
-					<p style="color:red;">A p element</p>
-					<p style="color:green;">A p element</p>
-					<p style="color:blue;">A p element</p>
+				<div>
+          <table class='table table-hover table-bordered'>
+            <thead class='thead-dark'>
+              <tr>
+                <th scope='col' class='th'> Version </th>
+        	      <th scope='col' class='th'> Description de la version </th>
+              </tr>
+            </thead>
+            <tbody id="news_site">
+            </tbody>
+          </table>
 			  </div>
 		  </div>
 

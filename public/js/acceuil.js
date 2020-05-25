@@ -1,10 +1,10 @@
 'use strict'
 
-const ACTIVITIES_LIST = ["Orthographe", "Vocabulair","Drag et Drop"];
+const ACTIVITIES_LIST = ["Orthographe", "Vocabulaire","Drag et Drop"];
 
 
 /**
- * 
+ *
  * connection module
  */
 function connexion(){
@@ -23,26 +23,29 @@ function connexion(){
 }
 
 //var tabPhotoProfil = ["../img/photo_de profil_test.jpg","../img/photo_de profil_test2.jpg"];
-function InformationLogopede() {
-	var sectionLogo = document.getElementById("section_logopedie");
-	var elmnt = document.getElementById("info_logopede");
-	var nombreLogo = 5; // Modifier il faut remplacer 5 par un lien avec la BD
-	var i;
-	for( i = 0; i < nombreLogo; i++){
-		var cln = elmnt.cloneNode(true);
-		sectionLogo.appendChild(cln);
-	}
-  }
 
   function NewSite() {
-	var sectionNews = document.getElementById("section_news");
-	var elmnt = document.getElementById("news_site");
-	var nombreLogo = 5; // Modifier il faut remplacer 5 par un lien avec la BD
-	var i;
-	for( i = 0; i < nombreLogo; i++){
-		var cln = elmnt.cloneNode(true);
-		sectionNews.appendChild(cln);
-	}
+	var sectionNews = document.getElementById("news_site");
+
+	let info_news = "";
+	let xhttp = new XMLHttpRequest();
+
+		xhttp.onreadystatechange = function() {
+					 if (this.readyState == 4 && this.status == 200) {
+							let returnValues = JSON.parse(this.responseText);
+							for (let i = 0; i < Object.keys(returnValues).length ; i++) {
+
+								info_news += "<tr><td class='td'>"+returnValues[i].version +"</td><td class='td'>"+returnValues[i].modification +"</td></tr></tbody></table>";
+
+							}
+							console.log(sectionNews.innerHTML );
+							sectionNews.innerHTML = info_news;
+					}
+
+		};
+		xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/news", true);
+		xhttp.send();
+
   }
 
 /*Partie pour l'activité orthographe*/

@@ -35,58 +35,7 @@ footer > p{
 }
 
 /*Début contenu page*/
-#section_logopedie{
-	min-width:320px;
-	max-width:640px;
-  width:50%;
-  max-height:718px;
-	min-height:358px;
-  height: 100%;
-  overflow: auto;
-  margin-left: auto;
-  margin-right: auto;
-  float: left;
-}
 
-#info_logopede{
-  border:1px solid black;
-  width: 80%;
-  height: 20%;
-  top: 5%;
-  left: 5%;
-  margin: 10%;
-  /*TODO : remove the display none*/
-  display: none;
-}
-
-#informations{
-  float: left;
-}
-
-#section_news{
-	min-width:320px;
-	max-width:640px;
-  width:50%;
-  max-height:718px;
-	min-height:358px;
-  height: 100%;
-  overflow: auto;
-  margin-left: auto;
-  margin-right: auto;
-  float: right;
-}
-
-#news_site{
-  /*background-color: aqua;*/
-  border:1px solid black;
-  width: 80%;
-  height: 20%;
-  top: 5%;
-  left: 5%;
-  margin: 10%;
-  /*TODO : remove the display none*/
-  display: none;
-}
 
 #bouton_activités{
   width: 50%;
@@ -282,4 +231,3 @@ font-family: 'Roboto';
   background-color: rgb(30, 33, 33);
   border: 1.5px solid whitesmoke;
 }
-
