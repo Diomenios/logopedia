@@ -1,5 +1,5 @@
 var express = require('express');
-var database = require('./database');
+var database = require('./API/database');
 const mariadb = require('mariadb');
 var rateLimit = require('express-rate-limit');
 
@@ -43,6 +43,10 @@ app.get('/', function(req, res) {
 
 .get('/resultats', function(req, res) {
     res.sendFile('/public/html/resultats.html', {root: __dirname });
+})
+
+.get('/tests', function(req, res) {
+    res.sendFile('/public/html/tests.html', {root: __dirname });
 })
 
 // ... Tout le code de gestion des routes (app.get) se trouve au-dessus
