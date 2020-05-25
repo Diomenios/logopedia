@@ -67,3 +67,9 @@ CREATE TABLE Users(
   root INT NOT NULL,
   PRIMARY KEY(user_id)
 );
+
+CREATE TABLE News(
+	news_id INT AUTO_INCREMENT,
+	news_info VARCHAR(400) NOT NULL,
+	PRIMARY KEY(news_id)
+);
