@@ -67,3 +67,11 @@ CREATE TABLE Users(
   root INT NOT NULL,
   PRIMARY KEY(user_id)
 );
+
+CREATE TABLE News(
+  id_news INT AUTO_INCREMENT NOT NULL,
+  version INT,
+  modification VARCHAR(255),
+  PRIMARY KEY(id_news),
+  UNIQUE(version)
+);
