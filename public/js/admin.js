@@ -249,6 +249,11 @@ function getTableBody(tableName){
   xhttp.send();
 }
 
+/**
+ * 
+ * ajout de donnees dans une table
+ * @param {string} datas donnees a ajouter dans la database
+ */
 function updateTable(datas){
   let xhttp = new XMLHttpRequest();
 
@@ -268,6 +273,11 @@ function updateTable(datas){
   xhttp.send();
 }
 
+/**
+ * 
+ * mise a jour de donnees dans une table
+ * @param {string} datas donnees a ajouter dans la database
+ */
 function updateRow(datas){
   let xhttp = new XMLHttpRequest();
 
@@ -289,6 +299,11 @@ function updateRow(datas){
   xhttp.send();
 }
 
+/**
+ * 
+ * suppression de donnees dans une table
+ * @param {string} datas donnees a supprimer dans la database
+ */
 function deleteRow(datas){
   let xhttp = new XMLHttpRequest();
 
