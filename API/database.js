@@ -326,7 +326,16 @@ database.get('/patients', (req, res) => {
     sendJsons(rows, res);
   });
 });
-
+/**
+* Recupere les news 
+*/
+database.get('/news', (req, res) => {
+	conn.query("SELECT * FROM News", (err, rows) => {
+		if (err) {
+		throw err;
+		}
+	sendJsons(rows, res); });
+});
 
 /**
 * Recupere un nombre defini d'images de classe (categorie) random
@@ -482,6 +491,7 @@ database.get('/admin/tables_name', (req, res) => {
     secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "SHOW tables",[], res);
   }
 });
+
 /**
  * 
  * recuperer les donnees d'une table via l'API admin
