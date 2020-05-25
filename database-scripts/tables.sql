@@ -70,7 +70,7 @@ CREATE TABLE Users(
 
 CREATE TABLE News(
   id_news INT AUTO_INCREMENT NOT NULL,
-  version INT,
+  version FLOAT,
   modification VARCHAR(255),
   PRIMARY KEY(id_news),
   UNIQUE(version)
