@@ -130,10 +130,14 @@ function updateDatabaseTable(){
     //inputToDatabase.push({[mvTableBody.columns[i].name] : mvTableBody.columns[i].value});
     inputToDatabase[mvTableBody.columns[i].name] = mvTableBody.columns[i].value;
   }
-
   updateTable(inputToDatabase);
 }
 
+/**
+ * 
+ * vérification et validation de la connexion pour d'un utilisateur
+ * affichage de la GUI sinon message d'erreur
+ */
 function validateConnection(user, password){
 	let xhttp = new XMLHttpRequest();
 
@@ -158,6 +162,10 @@ function validateConnection(user, password){
   xhttp.send();
 }
 
+/**
+ * 
+ * recuperation des noms des tables dans la database 
+ */
 function getTablesNames(){
   let xhttp = new XMLHttpRequest();
 
@@ -178,7 +186,11 @@ function getTablesNames(){
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/tables_name?admin_user=" + USERNAME + "&admin_password=" + PASSWORD, true);
   xhttp.send();
 }
-
+/**
+ * 
+ * recuperation dans la database des titres de colonne de la table entree en parametre
+ * @param {string} tableName nom de la table
+ */
 function getTableColumnsTitle(tableName){
   let xhttp = new XMLHttpRequest();
 
@@ -203,7 +215,11 @@ function getTableColumnsTitle(tableName){
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_columns_x?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + "&table=" +tableName, true);
   xhttp.send();
 }
-
+/**
+ * 
+ * recuperation dans la database des donnees de la table entree en parametre
+ * @param {string} tableName nom de la table
+ */
 function getTableBody(tableName){
   let xhttp = new XMLHttpRequest();
 
