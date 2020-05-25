@@ -17,6 +17,8 @@ CREATE TABLE Resultats(
   id_activites INT NOT NULL,
   PRIMARY KEY(id_sauvegarde),
   FOREIGN KEY(numero_patient)
-    REFERENCES Patients(numero_patient)
+    REFERENCES Patients(numero_patient),
+  FOREIGN KEY(id_activites)
+    REFERENCES DescriptionActivites(activite_id)
     ON UPDATE CASCADE ON DELETE RESTRICT
 );

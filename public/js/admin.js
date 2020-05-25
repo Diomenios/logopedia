@@ -10,6 +10,10 @@ let mvTablesList;
 let mvTableBody;
 let mvUpdateRow;
 
+/**
+ * 
+ * Chargement de la page d'administration
+ */
 function onload(){
 
   mvWindowTitle  = new Vue({
@@ -35,6 +39,11 @@ function onload(){
   });
 }
 
+/**
+ * 
+ * initialisation de l'interface graphique de la page Admin
+ * affichage des elements caches apres connexion
+ */
 function startAmdinistrationGUI() {
   mvTablesList = new Vue({
     el:"#tablesList",
@@ -109,6 +118,10 @@ function startAmdinistrationGUI() {
 
 }
 
+/**
+ * 
+ * mise a jour de la database via des appels a l'API
+ */
 function updateDatabaseTable(){
 
   let inputToDatabase={};
@@ -117,10 +130,14 @@ function updateDatabaseTable(){
     //inputToDatabase.push({[mvTableBody.columns[i].name] : mvTableBody.columns[i].value});
     inputToDatabase[mvTableBody.columns[i].name] = mvTableBody.columns[i].value;
   }
-
   updateTable(inputToDatabase);
 }
 
+/**
+ * 
+ * vérification et validation de la connexion pour d'un utilisateur
+ * affichage de la GUI sinon message d'erreur
+ */
 function validateConnection(user, password){
 	let xhttp = new XMLHttpRequest();
 
@@ -145,6 +162,10 @@ function validateConnection(user, password){
   xhttp.send();
 }
 
+/**
+ * 
+ * recuperation des noms des tables dans la database 
+ */
 function getTablesNames(){
   let xhttp = new XMLHttpRequest();
 
@@ -165,7 +186,11 @@ function getTablesNames(){
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/tables_name?admin_user=" + USERNAME + "&admin_password=" + PASSWORD, true);
   xhttp.send();
 }
-
+/**
+ * 
+ * recuperation dans la database des titres de colonne de la table entree en parametre
+ * @param {string} tableName nom de la table
+ */
 function getTableColumnsTitle(tableName){
   let xhttp = new XMLHttpRequest();
 
@@ -190,7 +215,11 @@ function getTableColumnsTitle(tableName){
  	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/admin/table_columns_x?admin_user=" + USERNAME + "&admin_password=" + PASSWORD + "&table=" +tableName, true);
   xhttp.send();
 }
-
+/**
+ * 
+ * recuperation dans la database des donnees de la table entree en parametre
+ * @param {string} tableName nom de la table
+ */
 function getTableBody(tableName){
   let xhttp = new XMLHttpRequest();
 
@@ -220,6 +249,11 @@ function getTableBody(tableName){
   xhttp.send();
 }
 
+/**
+ * 
+ * ajout de donnees dans une table
+ * @param {string} datas donnees a ajouter dans la database
+ */
 function updateTable(datas){
   let xhttp = new XMLHttpRequest();
 
@@ -239,6 +273,11 @@ function updateTable(datas){
   xhttp.send();
 }
 
+/**
+ * 
+ * mise a jour de donnees dans une table
+ * @param {string} datas donnees a ajouter dans la database
+ */
 function updateRow(datas){
   let xhttp = new XMLHttpRequest();
 
@@ -260,6 +299,11 @@ function updateRow(datas){
   xhttp.send();
 }
 
+/**
+ * 
+ * suppression de donnees dans une table
+ * @param {string} datas donnees a supprimer dans la database
+ */
 function deleteRow(datas){
   let xhttp = new XMLHttpRequest();
 

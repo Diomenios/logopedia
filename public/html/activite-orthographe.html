@@ -58,17 +58,17 @@
 			<div id="boite">
 				<div id="divParametre" v-bind:style={display:display}>
 
-          <select v-model="selectLongueur">
+          <select id="selectModel" v-model="selectLongueur">
 						<option disabled value="">Longueur</option>
 						<option v-for="longueur in longueurs" v-bind:value="longueur.nombre_images" class="selectOptions">{{longueur.nom}}</option>
 					</select>
 
-					<select v-model="selectClasse" v-on:click="checkImages(selectClasse)">
+					<select id="selectModel" v-model="selectClasse" v-on:click="checkImages(selectClasse)">
 						<option disabled value="">Catégorie</option>
 						<option v-for="classe in classes" v-bind:value="classe.classe_id" class="selectOptions">{{classe.classe_nom}}</option>
 					</select>
 
-					<select v-model="selectDifficulte">
+					<select id="selectModel" v-model="selectDifficulte">
 							<option disabled value="">Difficulté</option>
 						<option v-for="difficulte in difficulties" v-bind:value="difficulte.nombre_mots" class="selectOptions">{{difficulte.nom}}</option>
 					</select>
