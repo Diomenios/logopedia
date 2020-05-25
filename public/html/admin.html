@@ -13,7 +13,7 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 			<!-- Bootstrap CSS -->
-			<link href="/static/css/bootstrap.css" rel="stylesheet">
+			<link rel="stylesheet" type = "text/css" href="/static/css/bootstrap.css">
       <link rel="stylesheet" type = "text/css" href="/static/css/structure.css" />
 			<link rel="stylesheet" type = "text/css" href="/static/css/admin.css" />
   </head>
@@ -60,19 +60,18 @@
       </section>
 
   <section id="administration">
-    <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce/ces  boutons ? -->
    <div id="tablesList" v-bind:style="{display:display}">
-     <button class="tablesButtons" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
+     <button class="tablesButtons btn btn-sunny text-uppercase btn-sm" v-for="table in tables" v-on:click="loadTable(table)"><span>{{table}}</span></button>
    </div>
 
     <div id="tableDescription">
       <!-- TODO : Emile Tu saurais ameliorer l'apparence de ce tableau ? -->
       <div id="tableBody" v-bind:style="{display:displayBody}">
-          <table>
+          <table class="table table-hover">
 
-            <thead>
+            <thead class="thead-dark">
               <tr>
-                <th class="th" v-for="column in columns"> {{column.name}} </th>
+                <th scope="col" class="th" v-for="column in columns"> {{column.name}} </th>
               </tr>
             </thead>
 
@@ -109,11 +108,11 @@
 
         <form onsubmit="updateDatabaseTable(); return false;">
 
-          <div v-for="column in columns">
+          <div class="form-group row" v-for="column in columns">
 
-            <label v-bind:for="column.name" >{{column.name}}</label>
-            <input v-if="column.requested === 'NO'" type="text" v-bind:name="column.name" v-model="column.value" required>
-            <input v-else type="text" v-bind:name="column.name" v-model="column.value">
+            <label for="colFormLabel" class="col-sm-2 col-form-label" v-bind:for="column.name" >{{column.name}}</label>
+            <input class="form-control" id="colFormLabel" placeholder="col-form-label" v-if="column.requested === 'NO'" type="text" v-bind:name="column.name" v-model="column.value" required>
+            <input class="form-control" id="colFormLabel" placeholder="col-form-label" v-else type="text" v-bind:name="column.name" v-model="column.value">
 
           </div>
 

@@ -29,6 +29,8 @@ th{
   height: 90vh;
   display: block;
   overflow-y: auto;
+  width: 69%;
+  margin: auto;
 }
 
 #deleteUpdateButton{
