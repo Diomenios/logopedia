@@ -69,7 +69,9 @@ CREATE TABLE Users(
 );
 
 CREATE TABLE News(
-	news_id INT AUTO_INCREMENT,
-	news_info VARCHAR(400) NOT NULL,
-	PRIMARY KEY(news_id)
+  id_news INT AUTO_INCREMENT NOT NULL,
+  version INT,
+  modification VARCHAR(255),
+  PRIMARY KEY(id_news),
+  UNIQUE(version)
 );
