@@ -10,6 +10,10 @@ let mvTablesList;
 let mvTableBody;
 let mvUpdateRow;
 
+/**
+ * 
+ * Chargement de la page d'administration
+ */
 function onload(){
 
   mvWindowTitle  = new Vue({
@@ -35,6 +39,11 @@ function onload(){
   });
 }
 
+/**
+ * 
+ * initialisation de l'interface graphique de la page Admin
+ * affichage des elements caches apres connexion
+ */
 function startAmdinistrationGUI() {
   mvTablesList = new Vue({
     el:"#tablesList",
@@ -109,6 +118,10 @@ function startAmdinistrationGUI() {
 
 }
 
+/**
+ * 
+ * mise a jour de la database via des appels a l'API
+ */
 function updateDatabaseTable(){
 
   let inputToDatabase={};

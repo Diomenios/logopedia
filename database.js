@@ -765,6 +765,10 @@ database.get('/admin/delete_Difficultes', (req, res) => {
   }
 });
 
+/**
+ * 
+ * suppresion d'une longueur d'activite l'API admin
+ */
 database.get('/admin/delete_Longueurs', (req, res) => {
   if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_Longueurs?admin_user=<username>&admin_password=<user_password>&nom=<length_name>", res);
