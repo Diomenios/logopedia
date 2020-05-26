@@ -33,6 +33,7 @@ function connexion(){
 		xhttp.onreadystatechange = function() {
 					 if (this.readyState == 4 && this.status == 200) {
 							let returnValues = JSON.parse(this.responseText);
+							returnValues.reverse();
 							for (let i = 0; i < Object.keys(returnValues).length ; i++) {
 
 								info_news += "<tr><td class='td'>"+returnValues[i].version +"</td><td class='td'>"+returnValues[i].modification +"</td></tr></tbody></table>";

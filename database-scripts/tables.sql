@@ -61,7 +61,7 @@ CREATE TABLE DescriptionActivites(
 
 CREATE TABLE Users(
   user_id  INT AUTO_INCREMENT,
-  user_name VARCHAR(30) NOT NULL UNIQUE,  
+  user_name VARCHAR(30) NOT NULL UNIQUE,
   password VARCHAR(200) NOT NULL,
   salt VARCHAR(50) NOT NULL,
   root INT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE Users(
 
 CREATE TABLE News(
   id_news INT AUTO_INCREMENT NOT NULL,
-  version FLOAT,
+  version VARCHAR(20),
   modification VARCHAR(255),
   PRIMARY KEY(id_news),
   UNIQUE(version)
