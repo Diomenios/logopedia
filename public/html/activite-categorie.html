@@ -106,20 +106,23 @@
 
   				</div>
           <div id="zoneSauvegarde" v-bind:style="{display:display}">
-            <label for="name">Nom Patient:</label>
-            <input v-model="nom" type="text" name="name" required minlength="4" maxlength="255" size="10">
-            <label for="name">Prénom Patient:</label>
-            <input v-model="prenom" type="text" name="name" required minlength="4" maxlength="255" size="10"><br>
+            <div v-bind:style="{display:formDisplay}">
+              <label for="name">Nom Patient:</label>
+              <input v-model="nom" type="text" name="name" required minlength="4" maxlength="255" size="10">
+              <label for="name">Prénom Patient:</label>
+              <input v-model="prenom" type="text" name="name" required minlength="4" maxlength="255" size="10"><br>
 
-            <label for="name">Age Patient:</label>
-            <input v-model="age" type="number" name="name" required minlength="4" maxlength="255" size="10">
+              <label for="name">Age Patient:</label>
+              <input v-model="age" type="number" name="name" required minlength="4" maxlength="255" size="10">
 
-            <label for="name">Email Patient:</label>
-            <input v-model="email" type="email" name="name" required minlength="4" maxlength="255" size="10"><br><br>
+              <label for="name">Email Patient:</label>
+              <input v-model="email" type="email" name="name" required minlength="4" maxlength="255" size="10"><br><br>
 
-            <button class="submit" type="submit" v-on:click="sauvegarde()">Confirmer</button>
+              <button class="submit" type="submit" v-on:click="sauvegarde()">Confirmer</button>
+            </div>
+            <span v-bind:style="{display:messageDisplay}"> {{message}} </span>
           </div>
-    
+
 				</div>
 			</div>
 

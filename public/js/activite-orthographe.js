@@ -86,6 +86,8 @@ function onload(){
 				age:undefined,
 				email: "",
 				display: "none",
+				formDisplay: "none",
+				messageDisplay: "none",
 				message:""
 			},
 			methods:{
@@ -400,6 +402,7 @@ function formatFeedback(){
 
 function AfficherZoneSauvegarde(){
 	mvSauvegarde.display="block";
+	mvSauvegarde.formDisplay="block";
 }
 /***********************  fonctions de GET database  **************************/
 
@@ -719,7 +722,9 @@ function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateA
 				 let returnValues = JSON.parse(this.responseText);
 
 				 if (returnValues.status == 1) {
-					 	console.log("ajout réussi");
+					 mvSauvegarde.formDisplay = "none";
+					 mvSauvegarde.messageDisplay = "block";
+					 mvSauvegarde.message = "Le résultat a bien été sauvegardé !"; 
 				 }
 			 }
 	 };
