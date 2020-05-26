@@ -277,7 +277,7 @@ function autocomplete(inp, arr) {
       a.setAttribute("class", "autocomplete-items");
       this.parentNode.appendChild(a);
       if(inp.value.length >= 3){
-      for (let i = 0; i < arr.length; i++) {
+      for (i = 0; i < arr.length; i++) {
 
         if (arr[i].nom.substr(0, val.length).toUpperCase() == val.toUpperCase()) { //condition si on fait une recherche par le nom
           b = document.createElement("DIV");
