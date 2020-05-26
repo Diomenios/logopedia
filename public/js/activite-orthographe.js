@@ -704,7 +704,7 @@ function addOrConfirmUser(nom, prenom, email, age){
 					 	for (let elem of feedbackList) {
 							let date = "";
 							let now = new Date()
-							date += formatDay(now.getDay()) + " " + formatMonth(now.getMonth()) + " " + now.getDate() + "-" + now.getMonth()+1 + "-" + now.getFullYear();
+							date += formatDay(now.getDay()) + " " + formatMonth(now.getMonth()) + " " + now.getDate() + "-" + (now.getMonth()+1) + "-" + now.getFullYear();
 							addResultat(returnValues.numero_patient, score, MAX_IMAGES, elem.feedback, date, ACTIVITY_ID);
 					 	}
  				 	}

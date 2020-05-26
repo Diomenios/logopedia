@@ -308,7 +308,7 @@ database.get('/activites_list', (req, res) => {
 * Recupere les resultats
 */
 database.get('/resultats', (req, res) => {
-  conn.query("SELECT * FROM Resultats", (err, rows) => {
+  conn.query("SELECT numero_patient, resultat_image, nombre_image, group_concat(feedback SEPARATOR ' <br>') as t_feedback, date_activite, id_activites FROM Resultats GROUP BY date_activite", (err, rows) => {
     if (err) {
       throw err;
     }
@@ -316,7 +316,7 @@ database.get('/resultats', (req, res) => {
   });
 });
 /**
-* Recupere les patients 
+* Recupere les patients
 */
 database.get('/patients', (req, res) => {
   conn.query("SELECT * FROM Patients", (err, rows) => {
@@ -327,7 +327,7 @@ database.get('/patients', (req, res) => {
   });
 });
 /**
-* Recupere les news 
+* Recupere les news
 */
 database.get('/news', (req, res) => {
 	conn.query("SELECT * FROM News", (err, rows) => {
@@ -382,8 +382,8 @@ database.get('/activites/categorie_random_images', (req, res) => {
 });
 
 /**
- * 
- * connexion a la DB 
+ *
+ * connexion a la DB
  */
 database.get('/first_root_user', (req, res) =>{
   if (req.query.validate === undefined || req.query.user === undefined || req.query.password === undefined) {
@@ -417,7 +417,7 @@ database.get('/first_root_user', (req, res) =>{
 });
 
 /**
- * 
+ *
  * ajout ou confirmation d'un utilisateur
  */
 database.get('/addOrConfirmUser', (req, res) => {
@@ -450,7 +450,7 @@ database.get('/addOrConfirmUser', (req, res) => {
 });
 
 /**
- * 
+ *
  * ajout de resultat dans la Database
  */
 database.get('/add_Resultats', (req, res) => {
@@ -474,13 +474,13 @@ database.get('/add_Resultats', (req, res) => {
 /*----------------------------------------------------Debut de la PARTIE ADMINISTRATION----------------------------------------------------*/
 
 /**
- * 
- * cette partie partie du code est dedie a l'API utilisable uniquement par l'administration du site, 
+ *
+ * cette partie partie du code est dedie a l'API utilisable uniquement par l'administration du site,
  * c'est dans cette partie que l'admin ferra des requêtes a la database.
  */
 
 /**
- * 
+ *
  * recuperer les noms des tables via l'API admin
  */
 database.get('/admin/tables_name', (req, res) => {
@@ -493,7 +493,7 @@ database.get('/admin/tables_name', (req, res) => {
 });
 
 /**
- * 
+ *
  * recuperer les donnees d'une table via l'API admin
  */
 database.get('/admin/table_x', (req, res) => {
@@ -505,7 +505,7 @@ database.get('/admin/table_x', (req, res) => {
   }
 });
 /**
- * 
+ *
  * recuperer les donnees d'une colonne dans un table via l'API admin
  */
 database.get('/admin/table_columns_x', (req, res) => {
@@ -518,7 +518,7 @@ database.get('/admin/table_columns_x', (req, res) => {
 });
 
 /**
- * 
+ *
  * ajout d'une classe via l'API admin
  */
 database.get('/admin/add_Classes', (req, res) => {
@@ -531,7 +531,7 @@ database.get('/admin/add_Classes', (req, res) => {
 });
 
 /**
- * 
+ *
  * ajout d'une description d'activite via l'API admin
  */
 database.get('/admin/add_DescriptionActivites', (req, res) => {
@@ -546,7 +546,7 @@ database.get('/admin/add_DescriptionActivites', (req, res) => {
 });
 
 /**
- * 
+ *
  * ajout d'une difficulte via l'API admin
  */
 database.get('/admin/add_Difficultes', (req, res) => {
@@ -558,7 +558,7 @@ database.get('/admin/add_Difficultes', (req, res) => {
   }
 });
 /**
- * 
+ *
  * ajout d'une longueur d'activite via l'API admin
  */
 database.get('/admin/add_Longueurs', (req, res) => {
@@ -570,7 +570,7 @@ database.get('/admin/add_Longueurs', (req, res) => {
   }
 });
 /**
- * 
+ *
  * ajout d'un mot via l'API admin
  */
 database.get('/admin/add_Mots', (req, res) => {
@@ -582,7 +582,7 @@ database.get('/admin/add_Mots', (req, res) => {
   }
 });
 /**
- * 
+ *
  * ajout d'un type via l'API admin
  */
 database.get('/admin/add_Types', (req, res) => {
@@ -594,7 +594,7 @@ database.get('/admin/add_Types', (req, res) => {
   }
 });
 /**
- * 
+ *
  * ajout d'un user (root ou non) via l'API admin
  */
 database.get('/admin/add_Users', (req, res) => {
@@ -610,7 +610,7 @@ database.get('/admin/add_Users', (req, res) => {
   }
 });
 /**
- * 
+ *
  * mise a jour d'une classe via l'API admin
  */
 database.get('/admin/update_Classes', (req, res) => {
@@ -624,7 +624,7 @@ database.get('/admin/update_Classes', (req, res) => {
 });
 
 /**
- * 
+ *
  * mise a jour d'une description d'activite via l'API admin
  */
 database.get('/admin/update_DescriptionActivites', (req, res) => {
@@ -640,7 +640,7 @@ database.get('/admin/update_DescriptionActivites', (req, res) => {
 });
 
 /**
- * 
+ *
  * mise a jour de la difficulte via l'API admin
  */
 database.get('/admin/update_Difficultes', (req, res) => {
@@ -652,7 +652,7 @@ database.get('/admin/update_Difficultes', (req, res) => {
   }
 });
 /**
- * 
+ *
  * mise a jour de la longueur des activites via l'API admin
  */
 database.get('/admin/update_Longueurs', (req, res) => {
@@ -664,7 +664,7 @@ database.get('/admin/update_Longueurs', (req, res) => {
   }
 });
 /**
- * 
+ *
  * mise a jour d'un mot via l'API admin
  */
 database.get('/admin/update_Mots', (req, res) => {
@@ -680,7 +680,7 @@ database.get('/admin/update_Mots', (req, res) => {
 });
 
 /**
- * 
+ *
  * ajout d'un patient via l'API admin
  */
 database.get('/admin/add_Patients', (req, res) => {
@@ -694,7 +694,7 @@ database.get('/admin/add_Patients', (req, res) => {
 });
 
 /**
- * 
+ *
  * mise a jour d'un type via l'API admin
  */
 database.get('/admin/update_Types', (req, res) => {
@@ -708,7 +708,7 @@ database.get('/admin/update_Types', (req, res) => {
 });
 
 /**
- * 
+ *
  * mise a jour des donnees d'un utilisateur via l'API admin
  */
 database.get('/admin/update_Users', (req, res) => {
@@ -736,7 +736,7 @@ database.get('/admin/update_Users', (req, res) => {
 });
 
 /**
- * 
+ *
  * suppresion d'une classe via l'API admin
  */
 database.get('/admin/delete_Classes', (req, res) => {
@@ -750,7 +750,7 @@ database.get('/admin/delete_Classes', (req, res) => {
 
 
 /**
- * 
+ *
  * suppresion de la description d'une activite l'API admin
  */
 database.get('/admin/delete_DescriptionActivites', (req, res) => {
@@ -763,7 +763,7 @@ database.get('/admin/delete_DescriptionActivites', (req, res) => {
 });
 
 /**
- * 
+ *
  * suppresion d'une difficulte l'API admin
  */
 database.get('/admin/delete_Difficultes', (req, res) => {
@@ -776,7 +776,7 @@ database.get('/admin/delete_Difficultes', (req, res) => {
 });
 
 /**
- * 
+ *
  * suppresion d'une longueur d'activite l'API admin
  */
 database.get('/admin/delete_Longueurs', (req, res) => {
@@ -789,7 +789,7 @@ database.get('/admin/delete_Longueurs', (req, res) => {
 });
 
 /**
- * 
+ *
  * suppresion d'un mot via l'API admin
  */
 database.get('/admin/delete_Mots', (req, res) => {
@@ -802,7 +802,7 @@ database.get('/admin/delete_Mots', (req, res) => {
 });
 
 /**
- * 
+ *
  * suppresion d'un type l'API admin
  */
 database.get('/admin/delete_Types', (req, res) => {
@@ -815,7 +815,7 @@ database.get('/admin/delete_Types', (req, res) => {
 });
 
 /**
- * 
+ *
  * suppresion d'un utilisateur l'API admin
  */
 database.get('/admin/delete_Users', (req, res) => {
@@ -1168,7 +1168,7 @@ function writeImage(pictureName, body, res, callback){
 }
 
 /**
- * 	
+ *
  * generation d'un nombre aleatoire
  * @param {int}  a 	nombre seed pour le PRNG
  * @return {int} a	nombre produit par le PRNG
@@ -1182,7 +1182,7 @@ function shuffle(a) {
 }
 
 /**
- * 
+ *
  * @param {string} user			nom d'utilisateur
  * @param {string} password		mot de passe de l'utilisateur
  * @param {string} queryDatas	donnees de la requete

@@ -68,7 +68,7 @@ var listePatient = new Vue({
 })
 
 /**
- * Display result of the activity in the HTML 
+ * Display result of the activity in the HTML
  * @param {object} : result of the activity
  */
 function afficherResulats(element){
@@ -119,7 +119,7 @@ function afficherResulats(element){
           tabDataX.push(e.date_activite);
         }
 
-      resultattexte += `Résultat: ${e.resultat_image}/${e.nombre_image} <br> Feedback: ${e.feedback} <br> Date: ${e.date_activite} <br> Activité: ${nomActivite}
+      resultattexte += `Résultat: ${e.resultat_image}/${e.nombre_image} <br> Feedback: ${e.t_feedback} <br> Date: ${e.date_activite} <br> Activité: ${nomActivite}
       <br>-------------------<br>`;
     }
   }
@@ -245,7 +245,7 @@ var listePatient = new Vue({
 
 
 /**
- * 
+ *
  * Display the patients in the HTML via CSS
  */
 function AfficherPatients(){
@@ -364,10 +364,10 @@ function autocomplete(inp, arr) {
       x[i].classList.remove("autocomplete-active");
     }
   }
-  
+
 /**
- * 
- * @param {string} 
+ *
+ * @param {string}
  */
   function closeAllLists(elmnt) {
     var x = document.getElementsByClassName("autocomplete-items");
@@ -388,7 +388,7 @@ autocomplete(document.getElementById("recherche"), tabPatient);
 /**************************  Fonctions GET database  **************************/
 
 /**
- * 
+ *
  * get activity from the database
  */
 function getActivites() {
@@ -409,7 +409,7 @@ function getActivites() {
 }
 
 /**
- * 
+ *
  * get result from the database
  */
 function getResultats() {
@@ -430,7 +430,7 @@ function getResultats() {
 }
 
 /**
- * 
+ *
  * Get patients from the database
  */
 function getPatients() {
