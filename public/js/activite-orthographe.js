@@ -789,7 +789,6 @@ function maxActivityNumber(patient){
 				let returnValues = JSON.parse(this.responseText);
 
  				 	if (returnValues[0].max == null) {
-						console.log("is null");
 					 	for (let elem of feedbackList) {
 							let date = "";
 							let now = new Date()
@@ -798,7 +797,6 @@ function maxActivityNumber(patient){
 					 	}
  				 	}
 					else{
-						console.log("is not null");
 					 	for (let elem of feedbackList) {
 							let date = "";
 							let now = new Date();
@@ -827,8 +825,6 @@ function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateA
 				 }
 			 }
 	 };
-	 console.log("https://"+ DOMAIN_IP +"/api/add_Resultats?numero_patient="+ numeroPatient +"&resultat_image="+ resultatImage +"&nombre_image="+ nombreImages
-								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites +"&nombre_activite"+ activity_number);
 	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/add_Resultats?numero_patient="+ numeroPatient +"&resultat_image="+ resultatImage +"&nombre_image="+ nombreImages
 								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites +"&nombre_activite="+ activity_number, true);
 	 xhttp.send();
