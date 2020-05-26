@@ -616,10 +616,11 @@ function addOrConfirmUser(nom, prenom, email, age){
 				let returnValues = JSON.parse(this.responseText);
 
  				 	if (returnValues.status == 1) {
-						console.log(feedbackList);
 					 	for (let elem of feedbackList) {
-							console.log("send");
-							addResultat(returnValues.numero_patient, score, MAX_IMAGES, elem.feedback, new Date(), ACTIVITY_ID);
+							let date = "";
+							let now = new Date()
+							date += formatDay(now.getDay()) + " " + formatMonth(now.getMonth()) + " " + now.getDate() + "-" + now.getMonth()+1 + "-" + now.getFullYear();
+							addResultat(returnValues.numero_patient, score, MAX_IMAGES, elem.feedback, date, ACTIVITY_ID);
 					 	}
  				 	}
 			 }
@@ -627,6 +628,77 @@ function addOrConfirmUser(nom, prenom, email, age){
 
 	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/addOrConfirmUser?nom="+ nom +"&prenom="+ prenom +"&email="+ email +"&age="+ age, true);
 	xhttp.send();
+}
+
+function formatDay(day){
+	switch (day) {
+		case 0:
+			return "Lundi";
+			break;
+		case 1:
+			return "Mardi";
+		 	break;
+		case 2:
+			return "Mercredi";
+		 	break;
+		case 3:
+			return "Jeudi";
+		 	break;
+		case 4:
+			return "Vendredi";
+			break;
+		case 5:
+			return "Samedi";
+		 	break;
+		case 6:
+			return "Dimanche";
+		 	break;
+		default:
+
+	}
+}
+
+function formatMonth(month){
+	switch (month) {
+		case 0:
+			return "janvier";
+			break;
+		case 1:
+			return "Février";
+		 	break;
+		case 2:
+			return "Mars";
+		 	break;
+		case 3:
+			return "Avril";
+		 	break;
+		case 4:
+			return "Mai";
+			break;
+		case 5:
+			return "Juin";
+		 	break;
+		case 6:
+			return "Juillet";
+		 	break;
+		case 7:
+			return "Août";
+			break;
+		case 8:
+			return "Septembre";
+		 	break;
+		case 9:
+			return "Octobre";
+		 	break;
+		case 10:
+			return "Novembre";
+		 	break;
+		case 11:
+			return "Décembre";
+			break;
+		default:
+
+	}
 }
 
 function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateActivite, idActivites){
@@ -639,7 +711,7 @@ function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateA
 				 if (returnValues.status == 1) {
 					 	mvSauvegarde.formDisplay = "none";
 						mvSauvegarde.messageDisplay = "block";
-						mvSauvegarde.message = "Le résultat a bien été sauvegardé !"; 
+						mvSauvegarde.message = "Le résultat a bien été sauvegardé !";
 				 }
 			 }
 	 };
