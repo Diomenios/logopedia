@@ -265,10 +265,10 @@ function AfficherPatients(){
  */
 function autocomplete(inp, arr) {
 
-  var currentFocus;
+  let currentFocus;
   inp.addEventListener("input", function(e) {
 
-      var a, b, i, val = this.value;
+      let a, b, i, val = this.value;
       closeAllLists();
       if (!val) { return false;}
       currentFocus = -1;
@@ -277,7 +277,7 @@ function autocomplete(inp, arr) {
       a.setAttribute("class", "autocomplete-items");
       this.parentNode.appendChild(a);
       if(inp.value.length >= 3){
-      for (i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
 
         if (arr[i].nom.substr(0, val.length).toUpperCase() == val.toUpperCase()) { //condition si on fait une recherche par le nom
           b = document.createElement("DIV");
