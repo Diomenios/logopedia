@@ -218,16 +218,3 @@ font-family: 'Roboto';
     color: #777;
   }
 }
-
-::-webkit-scrollbar{
-  width: 14px;
-  height: 14px;
-  background-color: rgba(36, 158, 77,0.8);
-}
-
-::-webkit-scrollbar-thumb{
-  width: 14px;
-  height: 14px;
-  background-color: rgb(30, 33, 33);
-  border: 1.5px solid whitesmoke;
-}
