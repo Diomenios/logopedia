@@ -698,15 +698,10 @@ function addOrConfirmUser(nom, prenom, email, age){
 
 	xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-				let returnValues = JSON.parse(this.responseText);
+					let returnValues = JSON.parse(this.responseText);
 
- 				 	if (returnValues.status == 1) {
-					 	for (let elem of feedbackList) {
-							let date = "";
-							let now = new Date()
-							date += formatDay(now.getDay()) + " " + formatMonth(now.getMonth()) + " " + now.getDate() + "-" + (now.getMonth()+1) + "-" + now.getFullYear();
-							addResultat(returnValues.numero_patient, score, MAX_IMAGES, elem.feedback, date, ACTIVITY_ID);
-					 	}
+			 		if (returnValues.status == 1) {
+					 	maxActivityNumber(returnValues.numero_patient);
  				 	}
 			 }
 	 };
@@ -786,7 +781,39 @@ function formatMonth(month){
 	}
 }
 
-function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateActivite, idActivites){
+function maxActivityNumber(patient){
+	let xhttp = new XMLHttpRequest();
+
+	xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+				let returnValues = JSON.parse(this.responseText);
+
+ 				 	if (returnValues[0].max == null) {
+						console.log("is null");
+					 	for (let elem of feedbackList) {
+							let date = "";
+							let now = new Date()
+							date += formatDay(now.getDay()) + " " + formatMonth(now.getMonth()) + " " + now.getDate() + "-" + (now.getMonth()+1) + "-" + now.getFullYear();
+							addResultat(patient, score, MAX_IMAGES, elem.feedback, date, ACTIVITY_ID, 1);
+					 	}
+ 				 	}
+					else{
+						console.log("is not null");
+					 	for (let elem of feedbackList) {
+							let date = "";
+							let now = new Date();
+							date += formatDay(now.getDay()) + " " + formatMonth(now.getMonth()) + " " + now.getDate() + "-" + (now.getMonth()+1) + "-" + now.getFullYear();
+							addResultat(patient, score, MAX_IMAGES, elem.feedback, date, ACTIVITY_ID, returnValues[0].max+1);
+					 	}
+					}
+			 }
+	 };
+
+	xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/max_resultats", true);
+	xhttp.send();
+}
+
+function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateActivite, idActivites, activity_number){
 	let xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
@@ -800,8 +827,9 @@ function addResultat(numeroPatient, resultatImage, nombreImages, feedback, dateA
 				 }
 			 }
 	 };
-
+	 console.log("https://"+ DOMAIN_IP +"/api/add_Resultats?numero_patient="+ numeroPatient +"&resultat_image="+ resultatImage +"&nombre_image="+ nombreImages
+								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites +"&nombre_activite"+ activity_number);
 	 xhttp.open("GET", "https://"+ DOMAIN_IP +"/api/add_Resultats?numero_patient="+ numeroPatient +"&resultat_image="+ resultatImage +"&nombre_image="+ nombreImages
-								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites, true);
+								+"&feedback="+ feedback +"&date_activite="+ dateActivite +"&id_activites="+ idActivites +"&nombre_activite="+ activity_number, true);
 	 xhttp.send();
 }

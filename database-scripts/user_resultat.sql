@@ -9,6 +9,7 @@ CREATE TABLE Patients(
 
 CREATE TABLE Resultats(
   id_sauvegarde INT AUTO_INCREMENT NOT NULL,
+  nombre_activite INT NOT NULL, 
   numero_patient INT NOT NULL,
   resultat_image INT NOT NULL,
   nombre_image INT NOT NULL,

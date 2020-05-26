@@ -308,13 +308,26 @@ database.get('/activites_list', (req, res) => {
 * Recupere les resultats
 */
 database.get('/resultats', (req, res) => {
-  conn.query("SELECT numero_patient, resultat_image, nombre_image, group_concat(feedback SEPARATOR ' <br>') as t_feedback, date_activite, id_activites FROM Resultats GROUP BY date_activite", (err, rows) => {
+  conn.query("SELECT numero_patient, resultat_image, nombre_image, group_concat(feedback SEPARATOR ' <br>') as t_feedback, date_activite, id_activites FROM Resultats GROUP BY nombre_activite", (err, rows) => {
     if (err) {
       throw err;
     }
     sendJsons(rows, res);
   });
 });
+
+/**
+* Recupere les patients
+*/
+database.get('/max_resultats', (req, res) => {
+  conn.query("SELECT MAX(nombre_activite) as max FROM Resultats", (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    sendJsons(rows, res);
+  });
+});
+
 /**
 * Recupere les patients
 */
@@ -455,14 +468,14 @@ database.get('/addOrConfirmUser', (req, res) => {
  */
 database.get('/add_Resultats', (req, res) => {
   if (req.query.numero_patient === undefined || req.query.resultat_image === undefined || req.query.nombre_image === undefined|| req.query.feedback === undefined ||
-        req.query.date_activite === undefined || req.query.id_activites === undefined) {
+        req.query.date_activite === undefined || req.query.id_activites === undefined || req.query.nombre_activite === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/add_Resultats?numero_patient=<patient_number>&resultat_image=<resultat>&nombre_image=<number_of_sequence>&"+
-                  "feedback=<image_feedback>&date_activite=<date>&id_activites=<activity_id>", res);
+                  "feedback=<image_feedback>&date_activite=<date>&id_activites=<activity_id>&nombre_activite=<activity_number>", res);
                   console.log("error");
   }
   else {
-    conn.query("INSERT INTO Resultats (numero_patient, resultat_image, nombre_image, feedback, date_activite, id_activites) VALUES (?, ?, ?, ?, ?, ?)",
-                  [req.query.numero_patient, req.query.resultat_image, req.query.nombre_image, req.query.feedback, req.query.date_activite, req.query.id_activites], (err, rows) =>{
+    conn.query("INSERT INTO Resultats (numero_patient, resultat_image, nombre_image, feedback, date_activite, id_activites, nombre_activite) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                  [req.query.numero_patient, req.query.resultat_image, req.query.nombre_image, req.query.feedback, req.query.date_activite, req.query.id_activites, req.query.nombre_activite], (err, rows) =>{
       if (err) {
         throw err;
       }
