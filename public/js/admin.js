@@ -11,7 +11,7 @@ let mvTableBody;
 let mvUpdateRow;
 
 /**
- * 
+ *
  * Chargement de la page d'administration
  */
 function onload(){
@@ -40,7 +40,7 @@ function onload(){
 }
 
 /**
- * 
+ *
  * initialisation de l'interface graphique de la page Admin
  * affichage des elements caches apres connexion
  */
@@ -119,7 +119,7 @@ function startAmdinistrationGUI() {
 }
 
 /**
- * 
+ *
  * mise a jour de la database via des appels a l'API
  */
 function updateDatabaseTable(){
@@ -134,7 +134,7 @@ function updateDatabaseTable(){
 }
 
 /**
- * 
+ *
  * vérification et validation de la connexion pour d'un utilisateur
  * affichage de la GUI sinon message d'erreur
  */
@@ -163,8 +163,8 @@ function validateConnection(user, password){
 }
 
 /**
- * 
- * recuperation des noms des tables dans la database 
+ *
+ * recuperation des noms des tables dans la database
  */
 function getTablesNames(){
   let xhttp = new XMLHttpRequest();
@@ -174,7 +174,9 @@ function getTablesNames(){
             let returnValues = JSON.parse(this.responseText);
             if (returnValues.boolean) {
               for (let i = 0; i < Object.keys(returnValues.requestBody).length ; i++) {
-                mvTablesList.tables.push(returnValues.requestBody[i].Tables_in_logopedia);
+                if (returnValues.requestBody[i].Tables_in_logopedia !="Patients" && returnValues.requestBody[i].Tables_in_logopedia !="Resultats") {
+                  mvTablesList.tables.push(returnValues.requestBody[i].Tables_in_logopedia);
+                }
               }
             }
             else{
@@ -187,7 +189,7 @@ function getTablesNames(){
   xhttp.send();
 }
 /**
- * 
+ *
  * recuperation dans la database des titres de colonne de la table entree en parametre
  * @param {string} tableName nom de la table
  */
@@ -216,7 +218,7 @@ function getTableColumnsTitle(tableName){
   xhttp.send();
 }
 /**
- * 
+ *
  * recuperation dans la database des donnees de la table entree en parametre
  * @param {string} tableName nom de la table
  */
@@ -250,7 +252,7 @@ function getTableBody(tableName){
 }
 
 /**
- * 
+ *
  * ajout de donnees dans une table
  * @param {string} datas donnees a ajouter dans la database
  */
@@ -274,7 +276,7 @@ function updateTable(datas){
 }
 
 /**
- * 
+ *
  * mise a jour de donnees dans une table
  * @param {string} datas donnees a ajouter dans la database
  */
@@ -300,7 +302,7 @@ function updateRow(datas){
 }
 
 /**
- * 
+ *
  * suppression de donnees dans une table
  * @param {string} datas donnees a supprimer dans la database
  */

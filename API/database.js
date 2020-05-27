@@ -697,12 +697,25 @@ database.get('/admin/update_Mots', (req, res) => {
  * ajout d'un patient via l'API admin
  */
 database.get('/admin/add_Patients', (req, res) => {
-  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.prenom === undefined || req.query.email === undefined) {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.nom === undefined || req.query.prenom === undefined || req.query.email === undefined || req.query.age === undefined) {
     sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Patients?admin_user=<username>&admin_password=<user_password>&nom=<patient_name>&prenom=<patient_prenom>" +
                   "&email=<patient_email>", res);
   }
   else {
-    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Patients (nom, prenom, email) VALUES (?, ?, ?)",[req.query.nom, req.query.prenom, req.query.email], res);
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO Patients (nom, prenom, email, age) VALUES (?, ?, ?, ?)",[req.query.nom, req.query.prenom, req.query.email, req.query.age], res);
+  }
+});
+
+/**
+ *
+ * ajout d'une news via l'API admin
+ */
+database.get('/admin/add_News', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.version === undefined || req.query.modification === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/add_Newss?admin_user=<username>&admin_password=<user_password>&version=<version>&modification=<modif>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "INSERT INTO News (version, modification) VALUES (?, ?)",[req.query.version, req.query.modification], res);
   }
 });
 
@@ -745,6 +758,19 @@ database.get('/admin/update_Users', (req, res) => {
                                   ,[req.query.user_name, passwordData.passwordHash, password_salt, req.query.root, req.query.user_id], res);
       }
     });
+  }
+});
+
+/**
+ *
+ * mise a jour d'une news via l'API admin
+ */
+database.get('/admin/update_News', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.version === undefined || req.query.modification === undefined || req.query.id_news === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/update_News?admin_user=<username>&admin_password=<user_password>&version=<version>&modification=<modif>&id_news=<id_news>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "UPDATE News SET version=?, modification=? WHERE id_news=?",[req.query.version, req.query.modification, req.query.id_news], res);
   }
 });
 
@@ -847,6 +873,19 @@ database.get('/admin/delete_Users', (req, res) => {
         secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM Users WHERE user_id=?", [req.query.user_id], res);
       }
     });
+  }
+});
+
+/**
+ *
+ * suppression d'une news via l'API admin
+ */
+database.get('/admin/delete_News', (req, res) => {
+  if (req.query.admin_user === undefined || req.query.admin_password === undefined || req.query.id_news === undefined) {
+    sendMessage("Veuillez introduire la requête sous la forme : /api/admin/delete_News?admin_user=<username>&admin_password=<user_password>&id_news=<id_news>", res);
+  }
+  else {
+    secureDatabaseQuery(req.query.admin_user, req.query.admin_password, "DELETE FROM News WHERE id_news=?",[req.query.id_news], res);
   }
 });
 
